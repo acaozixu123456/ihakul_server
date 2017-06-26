@@ -1,0 +1,92 @@
+/**系统导航**/
+.nav{width: 100%; min-width: 1000px; height: 80px; position: relative; z-index: 3; FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#60b4f3,endColorStr=#3a82ba);/*IE6*/
+	background:#2096D8;
+	background:-moz-linear-gradient(top,#60b4f3,#3a82ba);/*非IE6的其它*/
+	background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#60b4f3), to(#3a82ba));/*非IE6的其它*/}
+.nav .logo{width: 260px; height: 40px; text-align: center; padding: 20px 0;}
+.nav .system{padding: 16px 15px 0 15px;}
+.nav .system li{ float: left; padding:0 15px; line-height: 44px; }
+.nav .system li a{color: #fff;}
+.nav .system li a:hover{color: #c0f2ff}
+.nav .system li .user_icon{width: 40px; height: 40px; border-radius: 50%; border: 4px #d5edff solid; overflow: hidden; margin-right: 8px;}
+.nav .system li .user_icon img{width: 100%;}
+.nav .system li:nth-child(2),.nav .system li:nth-child(3){background: url(../images/nav_li_bg.png) no-repeat left center;}
+.nav .system li i{display:inline-block;width: 20px; height: 20px; float: left; margin: 12px 5px 0 0;}
+.nav .system li .off{ background-position: 0 0}
+.nav .system li .cog{background-position: -20px 0}
+
+/**系统菜单**/
+.menu{width: 260px; background: url(../images/menu_bg.png) repeat; position: absolute;left: 0; top: 80px; bottom: 0; z-index: 2;overflow: auto}
+.menu ul{ border-bottom: 1px #678bac solid;}
+.menu li{border-bottom: 1px #3a5a7a solid;}
+.menu li a{ display: block; color: #aed8f7; line-height: 80px; text-align: center; font-size: 20px;padding-left: 5px; border-top: 1px #678bac solid;}
+.menu li.curr a,.menu li a:hover{border-left: 5px #dd5365 solid; padding-left: 0; background: #436382;border-top: 1px #436382 solid;}
+
+/**内容框架**/
+.main_box{position: absolute;top: 80px; left: 260px; right: 0; bottom: 60px; z-index: 1; background: #eef3f8; }
+.main{width: 100%; min-width: 760px; height: 100%;}
+.container{padding:20px; }
+.fga{ text-align: center;padding:20px;}
+/**版权信息**/
+.copyright{position: absolute; left: 260px; right: 0;bottom: 0; height: 60px; background: #dee8f1; font-size: 14px; padding-left: 20px;}
+.copyright p{margin-top: 5px; line-height:20px;}
+
+
+/*================================main=================================*/
+
+/*广告列表*/
+，faminame{width: 25%; padding-left: 80px; box-sizing:border-box;}
+.ad_list_search{padding:15px;border: 1px #cfdde9 solid;}
+.ad_list_search li{float: left; position: relative; margin-right: 2%}
+.ad_list_search li input,.ad_list_search li select{width: 100%;}
+.ad_list_search li label{position: absolute; left: 0; top: 9px;}
+.ad_list_search li.name,.ad_list_search li.time_from{width: 25%; padding-left: 80px; box-sizing:border-box;}
+.ad_list_search li.name label,.ad_list_search li.time_from label{width: 120px;}
+
+.ad_list_search li.time_to{width: 21%;padding-left: 32px; box-sizing:border-box;}
+.ad_list_search li.time_to label{width: 32px;}
+.ad_list_search li.state{width: 21%;padding-left: 48px; box-sizing:border-box;}
+.ad_list_search li.state label{width: 48px;}
+.ad_list_search li.search_btn{width: 8%;margin-right: 0}
+.ad_list_search li.search_btn button{width: 100%; height: 38px; background:#4ca2e5; color: #fff; text-align: center; border:none; }
+.ad_list_search li.search_btn button:active{background: #3e93d6;}
+.fs{float:left}
+.tdd td{text-align: center;padding: 0 20px; border-left: 1px #cfdde9 solid}
+.table_2 td{text-align: left; padding: 0 20px; border-left: 1px #cfdde9 solid}
+.table_2 .check_label label{ float: left; border: 1px #ccc dashed; -moz-user-select:none; -webkit-user-select:none;user-select:none; margin:10px 15px 10px 0; line-height: 30px; padding-right: 5px;}
+.table_2 .check_label label input{margin: 9px 5px 5px 5px; height: auto; float: left;}
+.table_2 .file_img{ display: inline-block; width: 100px;height: 100px; background: #eee; border-radius: 4px; overflow: hidden; margin: 20px 20px 20px 0; float: left;}
+.table_2 .file_img img{width: 100%;}
+
+.table_2 .file_btn{ display: inline-block; width: 98px;height: 98px; background: #eee; border-radius: 4px; overflow: hidden; margin: 20px 20px 20px 0; float: left; font-size: 120px; border: 1px #ccc dashed; text-align: center; line-height: 75px;  position: relative;}/*大上传按钮*/
+.table_2 .file_btn a{color: #c0c0c0;}
+.table_2 .file_btn .file_btn_opc{width: 100px; height: 100px; position: absolute; left: 0; top: 0;filter: alpha(opacity=0);-moz-opacity: 0;opacity: 0;}
+
+.table_2 .file_btn_small{ display: inline-block;position: relative;}
+.table_2 .file_btn_small .file_btn_opc_small{width: 55px; height: 38px; position: absolute; left: 10px; top: 5px;filter: alpha(opacity=0);-moz-opacity: 0;opacity: 0;}
+
+.table_2 .zone_num{width: 80px;}
+
+.tab{width:50%; text-align:center;}
+/*油价管理*/
+.oil_box .table{width: 49%; margin-bottom: 20px;}
+
+/*终端管理*/
+.terminal_num{ position: relative;}
+.terminal_num .popup{width: 280px; height: auto; position: absolute; right: 30%; top: 40px; z-index: 10;background: #eef3f8\9; background: rgba(238, 243, 248, 0.8); border: 1px #ccc solid; box-shadow: 0 0  5px rgba(0,0,0,0.3); text-align: left;padding-bottom: 10px; border-radius: 5px;}
+.terminal_num .popup h3{font-size: 16px; line-height: 45px; font-weight: normal; border-bottom: 1px #ccc solid; padding: 0 15px;margin-bottom: 10px;}
+.terminal_num .popup p{padding: 0 10px; font-size: 14px; line-height: 25px;}
+
+/*登录页面*/
+.login_container{width: 100%; height: 100%; background:#2b76c5 url(../images/login_bg.jpg) no-repeat center top; background-size: cover;}
+.login_main{width: 100%; height: 200px; position: absolute; top: 50%; margin-top: -100px; background: rgba(42, 117, 196, .3);}
+.login_box{width: 530px; height: 450px; margin:-10% auto 0; padding: 0 88px;background: url(../images/login_shadow.png) no-repeat center 380px;}
+.login_box .login_logo{margin-bottom: 10px;}
+.login_info_bd{ background: #78c7f1\9; background: rgba(150, 213, 245, .15); border: 1px rgba(192, 234, 250, .3) solid; padding: 10px;border-radius: 5px;}
+.login_info_bd .info{background: #fff;border-radius: 5px;padding: 30px 40px 10px;}
+.login_info_bd .info li{padding: 0 0 20px;}
+.login_info_bd .info li label{width: 70px; display: inline-block;}
+.login_info_bd .info li .input{background: #dbe6f0; width: 335px; height: 50px; color: #7d8c9a}
+.login_info_bd .info li .remb{margin-left: 70px; line-height: 38px;}
+.login_info_bd .info li .remb input{float: left; height: auto; margin: 13px 5px 0 0;}
+.login_btn{ width: 50%; height: 50px; background: #df5c6e; color: #fff; border: none; font-size: 25px;}

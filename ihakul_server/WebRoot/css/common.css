@@ -1,0 +1,121 @@
+/****/
+* { margin: 0; outline: 0; padding: 0; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);}
+html { height: 100%; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+body { margin: 0; font-size: 16px; color: #404850; font-family: "microsoft yahei"; overflow-x: hidden; width: 100%; height: 100%; min-height: 100%; display: -webkit-box; -webkit-box-orient: vertical; -webkit-box-align: stretch;-webkit-tap-highlight-color:rgba(0,0,0,0) }
+ol, ul, li, dl, dt, dd, form, p, input, img, div, span,h1,h2, h3, h4, h5 { margin: 0; padding: 0; }
+ul, dl, li { list-style-type: none; }
+table { border-collapse: collapse; border-spacing: 0; width: 100%; }
+th, td { vertical-align: middle; }
+
+textarea { width: 80%; resize: none;border: 1px #cfdde9 solid; background: #fff; font-family: "microsoft yahei"; font-size: 16px; margin: 10px 0; padding:5px;border-radius: 4px; }
+div{word-break: break-all;}
+a,a:link,a:visited { color: #404850; text-decoration: none; }
+input,select{ height: 38px; border: 1px #cfdde9 solid; background: #fff; font-family: "microsoft yahei"; font-size: 16px; padding: 0; text-indent: .5em; border-radius: 4px;}
+button,input[type="button"]{cursor: pointer;font-family: "microsoft yahei"; font-size: 16px;  border-radius: 4px;}
+em{ color: #B9B9B9; font-style: normal; padding: 0 15px}
+small{ color: #B9B9B9; font-style: normal;}
+label{ -moz-user-select:none; -webkit-user-select:none;user-select:none; }
+
+
+.clear { clear: both; height: 0; width: 100%; }
+.clearfix:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
+.clearfix { zoom: 1; clear: both; }
+
+
+/*读取icon图标*/
+.nav .system li i,.main_title i{background: url(../images/icon.png) no-repeat left top}
+
+/*面包屑*/
+.main_title{ height: 80px; background: #dee8f1; line-height: 80px; padding:0 20px;color: #859aab;}
+.main_title i{display: inline-block; float: left; width: 20px; height: 20px; background-position: -40px 0; margin: 30px 5px 0 0;}
+.main_title a{color: #859aab;}
+.main_title a:hover,.main_title a strong{color: #52789b;}
+
+/*滑动标签*/
+
+.tabs_2 li{width: 50%}/*滑动标签数量2*/
+.tabs_3 li{width: 50%}/*滑动标签数量3*/
+.tabs_4 li{width: 100%}
+.tabs {border-bottom: 2px #dd5365 solid;}
+
+
+.tabs2 {border-bottom: 5px #dd5365 solid;}
+.tabs li{FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#e1eaf2,endColorStr=#cfdde9);/*IE6*/
+	background:-moz-linear-gradient(top,#e1eaf2,#cfdde9);/*非IE6的其它*/
+	background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#e1eaf2), to(#cfdde9));/*非IE6的其它*/
+ float: left;}
+ .tabs2 li{FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#e1eaf2,endColorStr=#cfdde9);/*IE6*/
+	background:-moz-linear-gradient(top,#e1eaf2,#cfdde9);/*非IE6的其它*/
+	background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#e1eaf2), to(#cfdde9));/*非IE6的其它*/
+ float: left;}
+.tabs li a{ height: 60px; line-height: 60px; text-align: center; color:#3a5a7a;display: block; font-weight: bold;}
+.tabs2 li a{ height: 80px; line-height: 60px; text-align: center; color:#3a5a7a;display: block; font-weight: bold;}
+.tabs li.thistab{FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#f05c70,endColorStr=#dd5365);/*IE6*/
+	background: #dd5365;
+	background:-moz-linear-gradient(top,#f05c70,#dd5365);/*非IE6的其它*/
+	background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#f05c70), to(#dd5365));/*非IE6的其它*/}
+.tabs li.thistab a{color: #fff;}
+.tab_conbox > li{display: none;}
+
+/*通用table*/
+.table{border-collapse: collapse;border-spacing: 0;width: 100%;border: 1px #cfdde9 solid; background: #fcfeff;}
+.table tr:nth-child(2n){ background: #f6f9fb}
+.table th{ background: #dde7f0; font-weight: bold; line-height: 55px; text-align: center;}
+.table td{border-top:1px #cfdde9 solid; text-align: center; line-height: 50px;}
+.table td.management{text-align: left;}
+.table td span.off{color: #dc2a41;}
+.table input[type="checkbox"]{float: left; margin:0 5px 0 18px; height: 50px; background: none; border: none; border-radius: 0}
+.table a.operate{color: #4ca2e5; padding: 0 5px}
+.table a.operate:hover{text-decoration:  underline;color: #146eb4}
+
+.table .thumbnail3{ line-height: 35px; text-align: center; padding:10px 10px; }/*通用table缩略图*/
+.table .thumbnail{ line-height: 35px; text-align: left; padding:10px 20px;}/*通用table缩略图*/
+.table .thumbnail img{ width: 70px; height: 70px; float: left; margin-right: 10px;border-radius: 4px;}
+.table .thumbnail p{}
+
+/*通用按钮/标签*/
+.btn_delete{display: inline-block; border: none; background: #7e848a; color: #fff; padding: 0 15px;  line-height: 30px; border-radius: 4px;}
+.btn_delete:active{ background: #667079}	
+.btn_submit{ display: inline-block; border: none; background: #4ca2e5; color: #fff; padding: 0 15px;  line-height: 40px; border-radius: 4px;}
+.btn_submit:active{ background: #3e93d6}
+
+
+.red_heart{color: #dc2a41; font-style: normal;}
+.line_h2{line-height: 2em!important;}
+.add_btn{height: 38px; border:none; display: inline-block; border-radius: 4px; margin-left: 10px; text-indent: 0; color: #fff; padding: 0 10px; background: #8B8B8B;}
+
+/*翻页*/
+.pages{ padding:0 15px;}
+.pages a{display: inline-block; width: 25px; text-align: center;}
+.pages a:hover,.pages a.curr{color: #df5466;}
+
+/*设置(放在样式表最下面)*/
+.fl{float: left;}
+.fr{float: right;}
+.mt_20{margin-top: 20px;}
+.ms_b{margin-top: 20px;}
+.ms_c{margin-top: 20px;display:none;}
+.ml_20{margin-left: 20px;}
+.mr_0{ margin-right: 0!important}
+.mt_8{margin-top: 8px;}
+.p_lr_15{padding: 0 15px;}
+.blue{color: #1c84d4}
+.yyc{display:none;}
+
+.yc{display:block;color: #dc2a41;}
+.hj{display:none;color: #dc2a41;}
+
+.di{ width:50%}
+ .foat1{float:left; margin:50px}
+.inputsss{
+    border-radius: 25px;　　/*设置输入框两边的边框半径，可以使两边变成弧形*/
+    width: 270px;　　　　　　 /*设置输入框宽度*/
+    outline: none;　　　　　　/*当鼠标点击输入框后“边框不会变蓝”*/
+    background-image:url(http://xxx.xx.xxx.xx/Public/img/title_search.png);　　/*给输入框里面加一个搜索按钮的图标*/
+    background-repeat: no-repeat;　　/*如果不设置这项，图标会不断重复出现*/
+    background-size: 21px 21px;     /*设置图标的大小*/
+    background-position: 95%;       /*对图标的位置进行定位*/
+}
+
+.tttl {  text-align:center;  }  
+

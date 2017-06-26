@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <!-- 开启使用开发模式，详细错误提示 -->
+  <!--   <constant name="struts.devMode" value="true"/> -->
+
+    <!-- 关闭使用开发模式，关闭错误提示 -->
+    <constant name="struts.devMode" value="false"/>
+    
+    <!--设置utf-8格式  -->
+    <constant name="struts.i18n.encoding" value="utf-8" />
+    
+    <!-- 设置最大上传为50M -->
+    <constant name="struts.multipart.maxSize" value="50000000"></constant>
+    <!-- 将对象交给spring管理 -->
+    <constant name="struts.objectFactory" value="spring"/>
+    <!-- 默认后缀名 -->
+    <constant name="struts.action.extension" value="do,action"/>
+    <package name="defau" namespace="" extends="json-default,struts-default">
+    	<!-- 拦截器 -->
+    	<interceptors>
+    		<interceptor name="adminInterceptor" class="com.xiaoai.web.interceptors.AdminInterceptor"></interceptor>
+    		<interceptor name="LoginInterceptor" class="com.xiaoai.web.interceptors.LoginInterceptor"/>
+    		
+    		 <!-- 定义公共的拦截器链，在action标签中只需要引用拦截器链 -->  
+        	<interceptor-stack name="defaultinter">  
+            	<interceptor-ref name="adminInterceptor"></interceptor-ref>
+            	<interceptor-ref name="LoginInterceptor"></interceptor-ref> 
+            	<interceptor-ref name="defaultStack"></interceptor-ref>  
+        	</interceptor-stack>  
+    	</interceptors>
+    	<!-- 定义默认的拦截器栈，会自动注册到action中 , 配置struts2框架运行时，默认执行自定义拦截器栈 -->  
+    	<default-interceptor-ref name="defaultinter"></default-interceptor-ref>  
+    	
+    	
+    	 <!--小艾后台管理登入  -->
+    	<!-- 管理员 -->
+    	<!-- 管理员登入 -->
+    	<!--  name jsp调用 ; class  java中的注解调用 ...Action  @Controller("adminAction"); method 使用方法 -->
+    	<action name="loginAction" class="adminAction" method="adminLogin">
+    		<result name="success">main.jsp</result>
+    		<result name="error">login.jsp</result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+            <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	
+    	<!-- 查询所有管理员-->
+    	<action name="showAllAdminAction" class="adminAction" method="selectAlladmin">
+    		<result name="success" >admin_main.jsp</result>
+    		 <!-- 设置登录拦截器 -->
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+            <interceptor-ref name="LoginInterceptor"></interceptor-ref>    
+            <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	
+    	<!-- 添加 -->
+    	<action name="insertAdmin" class="adminAction" method="insertAdmin">
+    		<result name="success">login.jsp</result>
+    		<result name="error">login.jsp</result>
+    		<interceptor-ref name = "tokenSession" ></interceptor-ref>
+    		<result name="invalid.token">message.jsp</result>
+    		<interceptor-ref name="LoginInterceptor"></interceptor-ref>    
+    		<interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	
+    	<!-- 删除 -->
+    	<action name="deleteAdmin" class="adminAction" method="deleteAdmin">
+    		<result name="success" type="json"></result>
+    	</action>
+    	<!-- 根据id查询 -->
+    	<action name="getAdmin" class="adminAction" method="selectAdminByid">
+    		<result name="success">admin_edit.jsp</result>
+    		<result name="error">admin_main.jsp</result>
+    		<interceptor-ref name="adminInterceptor"></interceptor-ref>  
+    		<interceptor-ref name="LoginInterceptor"></interceptor-ref>    
+    		<interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	
+    	<!-- 根据管理员用户名查询 -->
+    	<action name="getAdminByaname" class="adminAction" method="selectAdminByan">
+    			<result type="json"></result>
+ 			<interceptor-ref name="defaultStack"/>	    
+    		<interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	<!-- 修改 -->
+    	<action name="updateAdmin" class="adminAction" method="updateAdminByid">
+    		<result name="success" >admin_main.jsp</result>
+    		<result name="error">admin_edit.jsp</result>
+    		<interceptor-ref name="adminInterceptor"></interceptor-ref>  
+    		<interceptor-ref name="LoginInterceptor"></interceptor-ref>    
+    		<interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+	 
+    	
+    	<!-- 家庭组 -->
+    	<!-- 按条件查询 -->
+    	<action name="showAllFanily" class="familygroupAction" method="selectAllFamily">
+    		<result name="success" >familygroup.jsp</result>
+    		<result name="error"  >familygroup.jsp</result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        	<interceptor-ref name="LoginInterceptor"></interceptor-ref>    
+        	<interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	<!-- 删除 -->
+    	<action name="deleteFamily" class="familygroupAction" method="delete">
+    		<result name="success" type="json" ></result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+         <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	<!-- 添加 -->
+    	<action  name="addFamily" class="familygroupAction" method="insertFamily">
+    		<result name="success"  >familygroup.jsp</result>
+    		<result name="error" >familygroup.jsp</result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+       <interceptor-ref name="LoginInterceptor"></interceptor-ref>    
+        <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	<!-- 根据id查询 -->
+    	<action  name="selectFami" class="familygroupAction" method="selectFgByid">
+    		<result name="success">familygroup_infor.jsp</result>
+    		<result name="error">familygroup.jsp</result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="LoginInterceptor"></interceptor-ref>    
+        <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	<!-- 修改 -->
+    	<action  name="updateFamily" class="familygroupAction" method="updateFamily">
+    		<result name="success">familygroup.jsp</result>
+    		<result name="error">familygroup_infor.jsp</result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="LoginInterceptor"></interceptor-ref>    
+        <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	
+    	<!-- 根据名字查询 -->
+    	<action  name="findFamily" class="familygroupAction" method="selectFamilyByname">
+    		<result name="success" type="json">user_management.jsp</result>
+    		<result name="error" type="json">user_management.jsp</result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	
+    	
+    	<!-- 终端小艾 -->
+    	<!-- 根据编号查询 -->
+    	<action name="getXiaoi" class="xiaoiAction" method="getXiaoi">
+    		<result name="success" type="json">familygroup.jsp</result>
+    		<result name="error" type="json">familygroup.jsp</result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	<!-- 条件分页查询 -->
+    	<action name="findAllXiaoi" class="xiaoiAction" method="findAll">
+    		<result name="success" >xiaoai.jsp</result>
+    		<result name="error" >xiaoai.jsp</result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	<!-- 删除 -->
+    	<action name="deleteXiaoi" class="xiaoiAction" method="deleteXiaoi">
+    		<result name="success" >xiaoai.jsp</result>
+    		<result name="error" >xiaoai.jsp</result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	<!-- 根据id查询 -->
+    	<action name="selectXiaoiByid" class="xiaoiAction" method="getXiaoiByid">
+    		<result name="success" >xiaoai_edit.jsp</result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>  	
+    	</action>
+    	<!-- 修改 -->
+    	<action name="updateXiaoi" class="xiaoiAction" method="updateXiaoi">
+    		<result name="success" >xiaoai.jsp</result>	
+    		<result name="error" >xiaoai.jsp</result>	
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	
+    	<!-- 添加 -->
+    	<action name="addXiaoi" class="xiaoiAction" method="addXiaoai">
+    		<result name="success" >xiaoai.jsp</result>	
+    		<result name="error" >xiaoai.jsp</result>	
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	
+    	
+    
+
+    	
+    	
+    	<!-- 用户管理 -->
+    	<!-- 条件查询 -->
+    	<action name="findAllUsers" class="usersAction" method="findAll">
+    		<result name="success" >user_management.jsp </result>
+    		<result name="error" >user_management.jsp</result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	
+    	<!-- 删除用户 -->
+    	<action name="deleteUsers" class="usersAction" method="deleteUsers">
+    		<result name="success" type="json" >user_management.jsp </result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+ 		
+ 		<!-- 添加用户 -->
+ 		<action name="insertUsers" class="usersAction" method="insertUsers"> 
+ 			<result name="success">user_management.jsp</result>
+ 			<result name="error">user_management.jsp</result>
+        	<interceptor-ref name="defaultStack"/>  
+ 		</action>
+ 		<!-- 根据用户id查询 -->
+ 		<action name="getUser" class="usersAction" method="getUsers"> 
+ 			<result name="success">user_edit.jsp</result>
+ 			<result name="error">user_management.jsp</result>
+        	<interceptor-ref name="defaultStack"/>  
+ 		</action>
+ 		<!-- 修改 -->
+ 		<action name="updateUser" class="usersAction" method="updateUsers"> 
+ 			<result name="success" >user_management.jsp</result>
+ 			<result name="error" >user_management.jsp</result>
+        	<interceptor-ref name="defaultStack"/>  
+ 		</action>
+ 		
+ 		<!-- 家电管理 -->
+ 		<!-- 条件查询 -->
+ 		<action name="houseHoldfind" class="houseHoldAction" method="findAll">
+ 			<result name="success" > household_appliances.jsp</result>
+ 			<interceptor-ref name="defaultStack"/>  
+ 		</action>
+ 		
+ 		<action name="findAllhhold" class="houseHoldAction" method="findAll">
+ 			<result name="success" >house_logbookquery.jsp</result>
+ 			<interceptor-ref name="defaultStack"/>  
+ 		</action>
+ 		
+ 		<action name="findHouseHold" class="houseHoldAction" method="findAll"> 
+ 			<result name="success" type="json" >household.jsp</result>
+        	<interceptor-ref name="defaultStack"/>  
+ 		</action>
+ 		<!-- 删除 -->
+ 		<action name="deleteHousehold" class="houseHoldAction" method="detelete" >
+ 			<result name="success"  type="json">household.jsp</result>
+        	<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 根据id查询 -->
+ 		<action name="shullHousehold" class="houseHoldAction" method="selectByid">
+ 			<result name="success"  >house_xianqing.jsp</result>
+        	<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		
+ 		<action name="getHousehold" class="houseHoldAction" method="selectByid" >
+ 			<result name="success"  >updateHousehold.jsp</result>
+ 			
+        	<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 修改 -->
+ 		<action name="updateHousehold" class="houseHoldAction" method="update" >
+ 			<result name="success"  >household.jsp</result>
+ 			<result name="error"  >household.jsp</result>
+        	<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		
+ 		<!-- 工作日志 -->
+ 		<!-- 查询 -->
+ 		<action name="showXiaolog" class="xiaoilogAction" method="select">
+ 			<result name="success">xiaoilog.jsp</result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 导出报表 -->
+ 		<action name="exportExcell" class="xiaoilogAction" method="exportExcel">
+ 			<result name="success" >logbook.jsp</result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 添加 -->
+ 		<action name="addXiaolog" class="xiaoilogAction" method="exportExcel">
+ 			<result  type="json"></result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		
+ 		
+ 		<!-- 版本管理 -->
+ 		<!-- 查询 -->
+ 		<action name="findVersion" class="versionAction" method="findAllVersion">
+ 			<result name="success">versions_management.jsp</result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 添加 -->
+ 		<action name="upload" class="versionAction" method="uploadVersion">
+ 			<result name="success">versions_management.jsp</result>
+ 			<result name="error">versions_management.jsp </result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 根据id查询 -->
+ 		<action name="findVersionByid" class="versionAction" method="findVersionByid">
+ 			<result name="success">versions_edit.jsp</result>
+ 			<result name="error">error.jsp</result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 修改 -->
+ 		<action name="update" class="versionAction" method="updateVersion">
+ 			<result name="success">versions_management.jsp</result>
+ 			<result name="error">error.jsp</result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 删除 -->
+ 		<action name="deleteVersion" class="versionAction" method="deleteVersion">
+ 			<result name="success" type="json">versions_management.jsp</result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		
+ 		<!-- 判段版本号是否已使用 -->
+ 		<action name="queryNumber" class="versionAction" method="queryNumber">
+ 			<result type="json"></result>
+ 			<interceptor-ref name="defaultStack"/>	
+ 		</action>
+ 		
+ 		<!-- 判段版本号在改包名下是否存在 -->
+ 		<action name="queryPackageNumber" class="versionAction" method="queryPackageNumber">
+ 			<result type="json"></result>
+ 			<interceptor-ref name="defaultStack"/>	
+ 		</action>
+ 		
+ 		<!-- 终端更新接口 -->
+ 		<action name="queryverNumber" class="versionAction" method="appQuary">
+ 			<result type="json"></result>
+ 			<interceptor-ref name="defaultStack"/>	
+ 		</action>
+ 		
+ 		
+ 		
+ 		<!-- 数据字典-->
+ 		<!-- 查询字典数据 -->
+ 		<action name="queryHouseUser" class="datadicAction" method="find">
+ 			<result name="success">homeuser_query.jsp</result>
+ 			<result name="effor">homeuser_query.jsp</result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 添加字典数据 -->
+ 		<action name="insertDatadictroy" class="datadicAction" method="insert">
+ 			<result name="success">datadictionary_main.jsp</result>
+ 			<result name="error"> datadictionary_insert.jsp</result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 分页条件查询 -->
+ 		<action name="paginFindDatadic" class="datadicAction" method="pagingFind">
+ 			<result name="success">datadictionary_main.jsp</result>
+ 			<result name="error">datadictionary_main.jsp</result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 删除数据字典 -->
+ 		<action name="deleteDatadictory" class="datadicAction" method="delete">
+ 			<result name="success">datadictionary_main.jsp</result>
+ 			<result name="error">datadictionary_main.jsp </result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		
+ 		
+ 		
+ 		<!-- 频道信息 -->
+ 		<!-- 分页查询频道信息 -->
+ 		<action name="appfindChannel" class="channelAction" method="query">
+ 			<result type="json"></result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 添加频道信息 -->
+ 		<action name="appaddChannel" class="channelAction" method="insert">
+ 			<result type="json"></result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 删除频道信息 -->
+ 		<action name="appdeleteChannel" class="channelAction" method="delete">
+ 			<result type="json"></result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+		<!-- 修改频道信息 -->
+		<action name="appupdateChannel" class="channelAction" method="update">
+ 			<result type="json"></result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+    
+   							
+   							
+   							
+   									
+   									
+   										 <!--外部接口调用  -->
+        <!--用户管理  -->    
+        <!-- 用户登入 -->
+ 		<action name="userLogin" class="appUserAction" method="login"> 
+ 			<result  type="json" ></result>
+        	<interceptor-ref name="defaultStack"/>  
+ 		</action>  
+ 		<!--供安卓调用户添加用户 -->
+ 		<action name="aninsertUsers" class="appUserAction" method="insert"> 
+ 			<result type="json" ></result>
+        	<interceptor-ref name="defaultStack"/>  
+ 		</action>
+ 		<!-- 供安卓调用户删除用户 -->
+ 		<action name="andeleteUsers" class="appUserAction" method="delete"> 
+ 			<result  type="json" ></result>
+        	<interceptor-ref name="defaultStack"/>  
+ 		</action>
+ 		<!--供安卓调用户修改用户 -->
+ 		<action name="anupdateUsers" class="appUserAction" method="update"> 
+ 			<result type="json" ></result>
+        	<interceptor-ref name="defaultStack"/>  
+ 		</action>
+ 		<!-- 供安卓调用户根据id得到用户 -->
+ 		<action name="angetUsersByid" class="appUserAction" method="getUsersByid"> 
+ 			<result   type="json"></result>
+        	<interceptor-ref name="defaultStack"/>  
+ 		</action>
+ 		<!-- 供安卓调用户查询到用户 -->
+ 		<action name="anfindUsers" class="appUserAction" method="findUsers"> 
+ 			<result  type="json" ></result>
+        	<interceptor-ref name="defaultStack"/>  
+ 		</action>
+    
+         <!-- 检查版本 -->
+ 		<action name="ancheckversion" class="appUserAction" method="checkVersion"> 
+ 			<result  type="json" ></result>
+        	<interceptor-ref name="defaultStack"/>  
+ 		</action>
+         
+    
+     <!-- 家庭组管理 -->
+    	<!-- 添加家庭组 -->
+    	<action name="appaddFamilygroup" class="appFamilyAction" method="insert">
+    		<result type="json"></result>
+    			 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	<!-- 删除家庭组 -->
+    	<action name="appdeleteFamilygroup" class="appFamilyAction" method="delete">
+    		<result type="json"></result>
+    			 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	<!-- 修改 -->
+    	<action name="appupdateFamilygroup" class="appFamilyAction" method="update">
+    		<result type="json"></result>
+    			 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	<!-- 根据家庭组id查询 -->
+    	<action name="appgetFamilygroup" class="appFamilyAction" method="getFamilygroupByid">
+    		<result type="json"></result>
+    			 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>   	
+    	<!-- 家庭组与用户绑定 -->
+    	<action name="appaddfusers" class="appFauserAction" method="insert">
+    		<result type="json"></result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
+    	
+    	
+    	<!-- 房间管理 -->
+ 		<!-- 查询房间 -->
+ 		<action name="appfindRoom" class="appRoomAction" method="findAllRoom">
+ 			<result type="json"></result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 添加 -->
+ 		<action name="appaddRoom" class="appRoomAction" method="insert">
+ 			<result  type="json"></result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 删除 -->
+ 		<action name="appdeleteRoom" class="appRoomAction" method="delete">
+ 			<result  type="json"></result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 根据id查询 -->
+ 		<action name="appgetRoom" class="appRoomAction" method="getRoomByid">
+ 			<result type="json"></result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 修改 -->
+ 		<action name="appupdateRoom" class="appRoomAction" method="update">
+ 			<result  type="json"></result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!--  切换默认房间 -->
+ 		<action name="appchangeRoom" class="appRoomAction" method="changeRoom">
+ 			<result  type="json"></result>
+ 			<interceptor-ref name="defaultStack"/>
+ 		</action>
+    	
+    	
+    	<!-- 家电管理 -->
+ 		
+ 		<!--新增-->
+ 		<action name="appinserthouseHold" class="apphouseAction" method="insert" >
+ 			<result  type="json"></result>
+        	<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		 <!-- 修改 -->
+ 		<action name="appupdatehouseHold" class="apphouseAction" method="update" >
+ 			<result  type="json" ></result>
+        	<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 删除 -->
+ 		<action name="appdeletehouseHold" class="apphouseAction" method="delete" >
+ 			<result  type="json"></result>
+        	<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		<!-- 根据id查询 -->
+ 		<action name="appgethouseHold" class="apphouseAction" method="selectByid" >
+ 			<result  type="json"  ></result>
+        	<interceptor-ref name="defaultStack"/>
+ 		</action>
+ 		
+ 		<!-- 条件查询 -->
+ 		<action name="appfindhouseHold" class="apphouseAction" method="findAll"> 
+ 			<result  type="json"  ></result>
+        	<interceptor-ref name="defaultStack"/>  
+ 		</action>
+ 		
+    
+    
+          <!--终端管理  -->  
+    	<!-- 安卓调用删除-->
+    	<action name="appdeleteXiaoi" class="appXiaoiAction" method="delete">
+    		<result name="success" type="json" ></result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+        </action>
+        
+        <!-- 安卓调用添加小艾-->
+    	<action name="appaddXiaoi" class="appXiaoiAction" method="insert">
+    		<result  type="json" ></result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+       
+        </action>
+         <!-- 安卓调用修改-->
+    	<action name="appupdateXiaoi" class="appXiaoiAction" method="update">
+    		<result name="success" type="json" ></result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+    	</action>
+    	 <!-- 安卓调用根据id查询-->
+    	<action name="appgetXiaoiByid" class="appXiaoiAction" method="getXiaoiByid">
+    		<result name="success" type="json" ></result>	
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+    	</action>
+		
+         
+       <!--定时任务  -->
+       <!--新增  -->
+       	<action name="appaddXiaoitask" class="appXiaoitask" method="insert">
+    		<result  type="json" ></result>
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+       </action>
+      
+        <!--删除任务  -->
+       	<action name="appdelXiaoitask" class="appXiaoitask" method="delete">
+    		<result  type="json" ></result>
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+       </action>
+       
+         <!--查询单条任务  -->
+       	<action name="appgetXiaoitask" class="appXiaoitask" method="getXiaoitaskBytaskId">
+    		<result  type="json" ></result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+       </action>
+       
+          <!--查询多条任务  -->
+       	<action name="appselectXiaoitask" class="appXiaoitask" method="getXiaoitaskByGroupId">
+    		<result  type="json" ></result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+       </action>
+      
+      <!--测试 -->
+        <action name="apptestXiaoitask" class="appXiaoitask" method="test">
+    		<result  type="json" ></result>
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+       </action>
+      
+      
+         <!--第三方交互接口  -->
+        <!-- 单条短信推送-->
+    	<action name="httpgetSMS" class="httpSms" method="oneTOSMS">
+    		<result name="success" type="json" ></result>	
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+    	</action>
+    	
+    	<!--多条短信推送  -->
+    	<action name="httppushSMS" class="httpSms" method="moreTOSMS">
+    		<result name="success" type="json" ></result>	
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+    	</action>
+    
+    	<!-- 情景模式管理 -->
+    	<action name="appaddXiaoiModeAction" class="appXiaoiModeAction" method="insertMode">
+    		<result name="success" type="json" ></result>	
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+        </action>
+        
+        <action name="appdeleteXiaoiModeAction" class="appXiaoiModeAction" method="deleteMode">
+    		<result name="success" type="json" ></result>	
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+    	</action>
+    	
+    	<!-- id查找 -->
+    	<action name="appgetXiaoiModeAction" class="appXiaoiModeAction" method="getModeById">
+    		<result name="success" type="json" ></result>	
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+    	</action>
+    	<!-- groupNumber查找 -->
+    	<action name="appgetXiaoiModeByGroupNumAction" class="appXiaoiModeAction" method="getAllModeByGroupNum">
+    		<result name="success" type="json" ></result>	
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+    	</action>
+   </package>  
+</struts>

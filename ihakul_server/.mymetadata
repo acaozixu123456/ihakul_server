@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="ihakul_server"
+  id="myeclipse.1481163901376"
+  context-root="/ihakul_server"
+  j2ee-spec="6.0"
+  archive="ihakul_server.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+
