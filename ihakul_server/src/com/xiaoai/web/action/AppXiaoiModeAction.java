@@ -99,7 +99,7 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 				if (!insertMode) {
 					xr=XiaoiResult.build("新增情景模式失败！", XiaoiModeCode.insertFail);
 				}else{
-					json1.put("modeId", xiaoiMode.getId());
+					json1.put("modeId", xiaoiMode.getMode());
 				}
 				
 			} else {
@@ -121,10 +121,6 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 	 * @throws IOException 
 	 */
 	public String deleteMode() throws IOException{
-		success = true;
-		message = null;
-		code = OK;
-
 		PrintWriter out = MyRequest.getResponse();
 		JSONObject json = new JSONObject();
 		JSONObject jsonObject = MyRequest.getParameterNames();
@@ -137,19 +133,15 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 		}
 		if(xr.isSuccess()){
 			//查询当前id是否存在情景模式
-			XiaoiMode xiaoiMode = xiaoiModeService.findModeById(Integer.parseInt(id));
-			if(xiaoiMode!=null){
-				//当前id存在
+			List<XiaoiMode> list = xiaoiModeService.findModeById(Integer.parseInt(id));
+			if(!XATools.isNull(list)){	
 				//?是否需要判断有没有删除权限
-				//TODO
-				boolean result = xiaoiModeService.deleteMode(xiaoiMode);
-				if(!result){
-					//删除失败
-					xr=XiaoiResult.build("情景模式删除失败！", XiaoiModeCode.deleteFail);
+				for (XiaoiMode xiaoiMode2 : list) {
+					boolean result = xiaoiModeService.deleteMode(xiaoiMode2);
 				}
 			}else{
 				//当前id不存在
-				xr=XiaoiResult.build("未找到该任务！", Plan.noExistBean);
+				//xr=XiaoiResult.build("未找到该任务！", Plan.noExistBean);
 			}
 		}
 		json.put("code", xr.getCode());
@@ -160,15 +152,11 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 	}
 	
 	/**
-	 * 通过id获取情景模式
+	 * 通过Modeid获取情景模式
 	 * @return
 	 * @throws IOException 
 	 */
 	public String getModeById() throws IOException{
-		success = true;
-		message = null;
-		code = OK;
-		XiaoiMode xiaoiMode  = null;
 		PrintWriter out = MyRequest.getResponse();
 		JSONObject json = new JSONObject();
 		JSONObject jsonObject = MyRequest.getParameterNames();
@@ -177,18 +165,21 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 		if(XATools.isNull(jsonObject.getString("modeId"))){
 			xr=XiaoiResult.build("情景模式id不能为空！", XiaoiModeCode.emptyId);
 		}
+		List<XiaoiMode> list =  null;
 		if(xr.isSuccess()){
-			xiaoiMode = xiaoiModeService.findModeById(jsonObject.getInteger("modeId"));	
+			list = xiaoiModeService.findModeById(jsonObject.getInteger("modeId"));
 		}
 		
-		if(null==xiaoiMode){
-			xr=XiaoiResult.build("找不到该情景模式！", XiaoiModeCode.noExistBean);
+		JSONObject json3=null;
+		JSONArray array = new JSONArray();
+		for (XiaoiMode xm : list) {
+			json3 = (JSONObject) JSONObject.toJSON(xm);
+			array.add(json3);
 		}
-		JSONObject json3=new JSONObject();
-		json3=(JSONObject) JSONObject.toJSON(xiaoiMode);
+		
 		json.put("code", xr.getCode());
 		json.put("message", xr.getMessage());
-		json.put("result",json3);
+		json.put("result",array);
 		out.print(json);
 		return null;
 	}

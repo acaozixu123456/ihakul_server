@@ -68,4 +68,9 @@ public class XiaoitaskService implements IXiaoitaskService {
 		return xiaoitaskDao.selectXiaoitaskByGroupId(groupId);
 	}
 
+	@Override
+	public List<Xiaoitask> findAllXiaoitasks() {
+		return xiaoitaskDao.findAllXiaoitasks();
+	}
+
 }

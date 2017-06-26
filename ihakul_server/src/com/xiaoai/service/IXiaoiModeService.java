@@ -29,10 +29,17 @@ public interface IXiaoiModeService {
 	 * @param parseInt
 	 * @return
 	 */
-	public XiaoiMode findModeById(int parseInt);
+	public List<XiaoiMode> findModeById(int parseInt);
 	
 	/**
 	 * 根据groupNumber查找情景模式
 	 */
 	public List<XiaoiMode> findModeByGroupNum(int groupNumber);
+
+	/**
+	 * 根据ModeId查情景模式
+	 * @param integer
+	 * @return
+	 */
+	//public List<XiaoiMode> findByModeId(Integer integer);
 }

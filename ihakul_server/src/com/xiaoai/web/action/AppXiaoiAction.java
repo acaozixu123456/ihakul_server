@@ -26,6 +26,7 @@ import com.xiaoai.service.IXiaoiService;
 import com.xiaoai.util.MyRequest;
 import com.xiaoai.util.XATools;
 import com.xiaoai.util.XiaoaiMessage;
+import com.xiaoai.util.XiaoiResult;
 
 @Controller("appXiaoiAction")
 public class AppXiaoiAction extends XiaoaiMessage {
@@ -54,15 +55,12 @@ public class AppXiaoiAction extends XiaoaiMessage {
 	 *            终端小艾名字
 	 * @param xiaoNumber
 	 *            终端小艾编号
-	 * @param xiaoType
-	 *            终端小艾类型(1,普通;2时尚)
+	 * @param versionNumber
+	 *            家庭组版本号
 	 * @return success=false(添加失败)或者success=true(添加成功)
 	 * @throws IOException
 	 */
 	public String insert() throws IOException {
-		success = true;
-		message = null;
-		code = OK;
 		HttpServletRequest request = MyRequest.getRequest();
 		PrintWriter out = MyRequest.getResponse();
 		String xiaoType = "";
@@ -74,41 +72,30 @@ public class AppXiaoiAction extends XiaoaiMessage {
 		String versionNumber = request.getParameter("versionNumber"); // 档案版本号
 		JSONObject json = new JSONObject();
 		Xiaoi xiao1 = new Xiaoi();
+		XiaoiResult xr = new XiaoiResult();
 		if (XATools.isNull(xiaoName)) {
-			code = XiaoiCode.emptyName;
-			success = false;
-			message = "小艾名称不能为空!";
+			xr = XiaoiResult.build("小艾名称不能为空!", XiaoiCode.emptyName);
 		}
 		if (XATools.isNull(xiaoIp)) {
-			code = XiaoiCode.emptyIp;
-			success = false;
-			message = "小艾Ip不能为空!";
+			xr = XiaoiResult.build("小艾Ip不能为空!", XiaoiCode.emptyIp);
 		}
 		if (XATools.isNull(xiaoNumber)) {
-			code = XiaoiCode.emptyId;
-			success = false;
-			message = "小艾编号不能为空!";
+			xr = XiaoiResult.build("小艾编号不能为空!", XiaoiCode.emptyId);
 		}
 
 		if (XATools.isNull(groupNumber)) {
-			code = FamilyCode.emptyId;
-			success = false;
-			message = "家庭组编号不能为空!";
+			xr = XiaoiResult.build("家庭组编号不能为空!", FamilyCode.emptyId);
 		} else {
 			if (!XATools.isInteger(groupNumber)) {
-				code = FamilyCode.formatisInconsistent;
-				success = false;
-				message = "家庭组编号格式不符 ";
+				xr = XiaoiResult.build("家庭组编号格式不符 ", FamilyCode.formatisInconsistent);	
 			}
 		}
 
 		if (XATools.isNull(versionNumber)) {
-			code = FamilyCode.emptyVersion;
-			success = false;
-			message = "家庭组版本号不能为空!";
+			xr = XiaoiResult.build("家庭组版本号不能为空!", FamilyCode.emptyVersion);
 		}
 
-		if (success) {
+		if (xr.isSuccess()) {
 			xiaoType = xiaoNumber.substring(xiaoNumber.length() - 1,
 					xiaoNumber.length());
 			Familygroup family = familyService.getFamilygroupByNumber(Integer
@@ -124,31 +111,25 @@ public class AppXiaoiAction extends XiaoaiMessage {
 				xiao.setXiaoIp(xiaoIp);
 				xiao.setVolume(50); // 设置默认音量
 				if (xiao1 == null) { // 如果查不到，说明该小艾可以添加;否则，更新小艾
-					success = xiaoiService.insertXiaoi(xiao);
+					xr.setSuccess(xiaoiService.insertXiaoi(xiao));
 					family.setVersionNumber(Integer.parseInt(versionNumber));
 					familyDao.updateFamily(family);
-					if (success == false) {
-						code = XiaoiCode.insertFalse;
-						success = false;
-						message = "添加小艾是失败!";
+					if (xr.isSuccess() == false) {
+						xr = XiaoiResult.build("添加小艾失败!", XiaoiCode.insertFalse);
 					}
 				} else {
 					xiao.setXid(xiao1.getXid());
-					success = xiaoiService.updateXiaoi(xiao);
-					if (success == false) {
-						code = XiaoiCode.updateFalse;
-						success = false;
-						message = "修改小艾失败!";
+					xr.setSuccess(xiaoiService.updateXiaoi(xiao));
+					if (xr.isSuccess() == false) {
+						xr = XiaoiResult.build("修改小艾失败!", XiaoiCode.updateFalse);
 					}
 				}
 			} else {
-				code = FamilyCode.noExistBean;
-				success = false;
-				message = "没有该家庭组";
+				xr = XiaoiResult.build("没有该家庭组", FamilyCode.noExistBean);
 			}
 		}
-		json.put("code", code);
-		json.put("message", message);
+		json.put("code", xr.getCode());
+		json.put("message", xr.getMessage());
 		logger.info("添加终端出参:" + json);
 		out.print(json);
 		return null;
@@ -225,10 +206,8 @@ public class AppXiaoiAction extends XiaoaiMessage {
 	 * @throws IOException
 	 */
 	public String delete() throws IOException {
-		success = true;
-		message = null;
-		code = OK;
 		JSONObject json = new JSONObject();
+		XiaoiResult xr = new XiaoiResult();
 		HttpServletRequest request = MyRequest.getRequest();
 		PrintWriter out = MyRequest.getResponse();
 		MyRequest.printParameterNames("删除终端的入参");
@@ -241,21 +220,18 @@ public class AppXiaoiAction extends XiaoaiMessage {
 		Xiaoi xiaoi = null;
 		FamilyUser fu1 = null;
 		if (XATools.isNull(xiaoNumber)) {
-			code = XiaoiCode.emptyId;
-			success = false;
-			message = "小艾编号不能为空!";
+			xr = XiaoiResult.build("小艾编号不能为空!", XiaoiCode.emptyId);
 		}
 		if (XATools.isNull(userId)) {
-			code = UserCode.emptyId;
-			message = "用户id不能为空";
-			success = false;
+			xr = XiaoiResult.build("用户id不能为空", UserCode.emptyId);
 		}
 		if (XATools.isNull(groupNumber)) {
-			code = FamilyCode.emptyId;
-			success = false;
-			message = "家庭组编号不能为空!";
+			xr = XiaoiResult.build("家庭组编号不能为空!", FamilyCode.emptyId);
 		}
-		if (success) {
+		if (XATools.isNull(versionNumber)) {
+			xr = XiaoiResult.build("档案版本号不能为空!", VersionCode.emptyVersion);
+		}
+		if (xr.isSuccess()) {
 			users = usersService.selectUsersByid(Integer.parseInt(userId));
 			if (users != null) {
 				xiaoi = xiaoiService.selectXiaoiByNumber(xiaoNumber);
@@ -270,9 +246,9 @@ public class AppXiaoiAction extends XiaoaiMessage {
 						if (fu1 != null) {
 							if (userId.equals(fu1.getDna())) { // 判断该家庭组是不是该用户创建
 								if(XATools.isNull(newxiaoNumber)){ //如果为空，则为删除终端; 否则更换终端 
-									success = xiaoiService.delete(xiaoi);
+									xr.setSuccess(xiaoiService.delete(xiaoi));
 								}else{
-									success = xiaoiService.change(xiaoNumber, newxiaoNumber);
+									xr.setSuccess(xiaoiService.change(xiaoNumber, newxiaoNumber));
 								}
 								Xiaoi xi=xiaoiService.selectXiaoiByFa(family);
 								if(xi!=null){
@@ -283,38 +259,26 @@ public class AppXiaoiAction extends XiaoaiMessage {
 									PushMessage.push2Xiao(json2);
 								}
 								if (success == false) {
-									code = XiaoiCode.deleteFalse;
-									success = false;
-									message = "删除小艾失败!";
+									xr = XiaoiResult.build("删除小艾失败!", XiaoiCode.deleteFalse);
 								}
 							} else {
-								code = FamilyCode.privilegeMaster;
-								success = false;
-								message = "您不是群主，没有权限操作!";
+								xr = XiaoiResult.build("您不是群主，没有权限操作!", FamilyCode.privilegeMaster);
 							}
 						} else {
-							code = FamilyCode.noExistUser;
-							success = false;
-							message = "该家庭组中不存在该用户";
+							xr = XiaoiResult.build("该家庭组中不存在该用户", FamilyCode.noExistUser);
 						}
 					} else {
-						code = FamilyCode.noExistBean;
-						success = false;
-						message = "没有该家庭组";
+						xr = XiaoiResult.build("没有该家庭组", FamilyCode.noExistBean);
 					}
 				} else {
-					code = XiaoiCode.noExistBean;
-					success = false;
-					message = "没有该小艾!";
+					xr = XiaoiResult.build("没有该小艾!", XiaoiCode.noExistBean);
 				}
 			} else {
-				code = UserCode.noExistBean;
-				success = false;
-				message = "没有该用户!";
+				xr = XiaoiResult.build("没有该用户!", UserCode.noExistBean);
 			}
 		}
-		json.put("code", code);
-		json.put("message", message);
+		json.put("code", xr.getCode());
+		json.put("message", xr.getMessage());
 		out.print(json.toString());
 		logger.info("删除终端的出参:" + json);
 		return null;
@@ -328,24 +292,20 @@ public class AppXiaoiAction extends XiaoaiMessage {
 	 * @throws IOException
 	 */
 	public String getXiaoiByid() throws IOException {
-		success = true;
-		message = null;
-		code = OK;
 		JSONObject json = new JSONObject();
 		JSONObject json5 = new JSONObject();
 		JSONArray array = new JSONArray();
+		XiaoiResult xr = new XiaoiResult();
 		HttpServletRequest request = MyRequest.getRequest();
 		PrintWriter out = MyRequest.getResponse();
 		MyRequest.printParameterNames("查询终端的入参");
 		String xiaoNumber = request.getParameter("xiaoNumber");
 		Xiaoi xiaoi = null;
 		if (XATools.isNull(xiaoNumber)) {
-			code = XiaoiCode.emptyId;
-			success = false;
-			message = "小艾编号不能为空!";
+			xr = XiaoiResult.build("小艾编号不能为空!", XiaoiCode.emptyId);
 		}
 
-		if (success) {
+		if (xr.isSuccess()) {
 			xiaoi = xiaoiService.selectXiaoiByNumber(xiaoNumber);
 			if (xiaoi != null) {
 				json5.put("xname", xiaoi.getXname());
@@ -358,13 +318,11 @@ public class AppXiaoiAction extends XiaoaiMessage {
 				json5.put("volume", xiaoi.getVolume());// 声音
 				array.add(json5);
 			} else {
-				code = XiaoiCode.noExistBean;
-				success = false;
-				message = "没有该小艾!";
+				xr = XiaoiResult.build("没有该小艾!", XiaoiCode.noExistBean);
 			}
 		}
-		json.put("code", code);
-		json.put("message", message);
+		json.put("code", xr.getCode());
+		json.put("message", xr.getMessage());
 		json.put("result", array);
 		logger.info("查询终端出参:" + json);
 		out.print(json.toString());

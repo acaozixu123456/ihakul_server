@@ -2,7 +2,7 @@ package com.xiaoai.util;
 
 import java.io.Serializable;
 
-public class XiaoiResult implements Serializable{
+public final class XiaoiResult implements Serializable{
 
 	/**
 	 * 

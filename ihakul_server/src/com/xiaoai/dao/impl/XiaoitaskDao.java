@@ -44,6 +44,12 @@ public class XiaoitaskDao implements IXiaoitaskDao {
 	public List<Xiaoitask> selectXiaoitaskByGroupId(int groupId) {
 		return hibernateTemplate.find("from Xiaoitask where groupId=?", groupId);
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Xiaoitask> findAllXiaoitasks() {
+		return hibernateTemplate.find("from Xiaoitask");
+	}
 	
 	
 

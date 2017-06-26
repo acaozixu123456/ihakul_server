@@ -28,7 +28,7 @@ public interface IXiaoiModeDao {
 	 * @param id
 	 * @return
 	 */
-	public XiaoiMode findModeById(int id);
+	public List<XiaoiMode> findModeById(int id);
 	
 	/**
 	 * 根据groupNumer查询所有Mode

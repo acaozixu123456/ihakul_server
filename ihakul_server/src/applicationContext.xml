@@ -4,6 +4,7 @@
        xmlns:context= "http://www.springframework.org/schema/context" xmlns:tx= "http://www.springframework.org/schema/tx"
        xmlns:jpa= "http://www.springframework.org/schema/data/jpa"
        xmlns:security= "http://www.springframework.org/schema/security"
+       xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation= "
             http://www.springframework.org/schema/aop
             http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
@@ -16,10 +17,20 @@
             http://www.springframework.org/schema/tx
             http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
             http://www.springframework.org/schema/context
-            http://www.springframework.org/schema/context/spring-context-4.0.xsd" >
+            http://www.springframework.org/schema/context/spring-context-4.0.xsd
+            http://www.springframework.org/schema/task
+            http://www.springframework.org/schema/task/spring-task-3.2.xsd" >
     <context:annotation-config></context:annotation-config>
 	<!-- 使用annotation 自动注册bean,并保证@Required,@Autowired的属性被注入 -->
     <context:component-scan base-package="com.xiaoai.*" />
+    
+    	<!-- 定时器 -->
+    	<task:annotation-driven/>
+   		<task:scheduled-tasks>   
+			<task:scheduled ref="xiaoiTaskTimer" method="job" cron="0 * * * * ?"/>   
+		</task:scheduled-tasks>
+    
+    
      <!-- 1.配置数据库相关参数properties的属性：${url} -->
 	<context:property-placeholder location="classpath:jdbc.properties" />
   	<!-- 连接池 -->

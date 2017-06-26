@@ -31,8 +31,10 @@ public class XiaoiModeDao implements IXiaoiModeDao {
 	
 	@SuppressWarnings({ "unchecked" })
 	@Override
-	public XiaoiMode findModeById(int id) {
-		return hibernateTemplate.get(XiaoiMode.class, Long.parseLong(String.valueOf(id)));
+	public List<XiaoiMode> findModeById(int id) {
+		//return hibernateTemplate.get(XiaoiMode.class, Long.parseLong(String.valueOf(id)));
+		List<XiaoiMode> list = hibernateTemplate.find("from XiaoiMode where mode = ?",id);
+		return list;
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -47,7 +47,7 @@ public class XiaoiModeService implements IXiaoiModeService {
 	}
 
 	@Override
-	public XiaoiMode findModeById(int id) {
+	public List<XiaoiMode> findModeById(int id) {
 		return xiaoiModeDao.findModeById(id);
 	}
 
@@ -55,5 +55,11 @@ public class XiaoiModeService implements IXiaoiModeService {
 	public List<XiaoiMode> findModeByGroupNum(int groupNumber) {
 		 return xiaoiModeDao.findAllModeByGroupNum(groupNumber);
 	}
+
+	/*@Override
+	public List<XiaoiMode> findByModeId(Integer integer) {
+		
+		return xiaoiModeDao.findModeById(integer);
+	}*/
 
 }

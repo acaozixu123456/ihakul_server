@@ -42,4 +42,8 @@ public interface IXiaoitaskService {
 	 */
 	public List<Xiaoitask> selectXiaoitaskByGroupId(int groupId);
 	
+	/**
+	 * 查找所有计划任务
+	 */
+	public List<Xiaoitask> findAllXiaoitasks();
 }

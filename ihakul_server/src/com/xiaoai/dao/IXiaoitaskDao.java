@@ -42,4 +42,10 @@ public interface IXiaoitaskDao {
 	 * @param id
 	 */
 	public List<Xiaoitask> selectXiaoitaskByGroupId(int groupId);
+
+	/**
+	 * 查找所有计划任务
+	 * @return
+	 */
+	public List<Xiaoitask> findAllXiaoitasks();
 }
