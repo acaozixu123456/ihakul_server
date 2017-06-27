@@ -26,7 +26,7 @@
     
     	<!-- 定时器 -->
     	<task:annotation-driven/>
-   		<task:scheduled-tasks>   
+   		<task:scheduled-tasks>
 			<task:scheduled ref="xiaoiTaskTimer" method="job" cron="0 * * * * ?"/>   
 		</task:scheduled-tasks>
     
@@ -220,9 +220,9 @@
         <constructor-arg type = "org.apache.mina.core.session.IdleStatus" value="BOTH_IDLE" >
        </constructor-arg>
         <!--心跳频率，不设置则默认60s  -->
-        <property name="requestInterval" value="5" />
+        <property name="requestInterval" value="60" />
         <!--心跳超时时间，不设置则默认30s    -->
-        <property name="requestTimeout" value="10" />
+        <property name="requestTimeout" value="30" />
         <!--不设置默认false-->
         <property name="forwardEvent" value="true" />
     </bean> 	

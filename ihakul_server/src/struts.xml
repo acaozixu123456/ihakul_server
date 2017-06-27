@@ -517,9 +517,13 @@
  			<result  type="json"  ></result>
         	<interceptor-ref name="defaultStack"/>
  		</action>
- 		
  		<!-- 条件查询 -->
  		<action name="appfindhouseHold" class="apphouseAction" method="findAll"> 
+ 			<result  type="json"  ></result>
+        	<interceptor-ref name="defaultStack"/>  
+ 		</action>
+ 		<!-- 家电控制（户外） -->
+ 		<action name="appcontrollerhouseHold" class="apphouseAction" method="controllerHouseHold"> 
  			<result  type="json"  ></result>
         	<interceptor-ref name="defaultStack"/>  
  		</action>

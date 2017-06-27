@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
+import org.apache.mina.core.service.IoHandler;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
@@ -92,7 +93,10 @@ public class ServiceMainHandler extends IoHandlerAdapter{
 //	 	logger.info("服务端成功发送数据 :"+message);
 //	 	session.close(); //发送成功后主动断开与客户端的连接 实现短连接
       //  logger.info("服务端发送信息成功...");
-	 	logger.debug("服务端成功发送数据 :"+message);
+	 	//logger.debug("服务端成功发送数据 :"+message);
+	 	logger.info("服务端成功发送数据 :"+message);
+	 	//IoHandler handler = session.getHandler();
+	 	
 	    }
 	
 	//建立连接时

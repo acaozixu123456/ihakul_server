@@ -146,6 +146,10 @@ public class XiaoaiMessage {
 		public static final int emptyName=512;
 		/**家电类别ID不能为空*/
 		public static final int emptyClassId=513;
+		/**requestUri不能为空！*/
+		public static final int emptyRequestUri=514;
+		/**Keys不能为空！*/
+		public static final int emptyKeys=515;
 		
 		/**该电器已存在 */
 		public static final int conflictBean=531;
@@ -167,6 +171,7 @@ public class XiaoaiMessage {
 		public static final int updateFalse=572;
 		/**删除家电失败! */
 		public static final int deleteFalse=573;
+		
 	}
    
 	

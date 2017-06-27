@@ -8,6 +8,9 @@ import java.net.InetAddress;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
 
+import org.apache.mina.core.future.IoFuture;
+import org.apache.mina.core.future.IoFutureListener;
+import org.apache.mina.core.future.WriteFuture;
 import org.apache.mina.core.session.IoSession;
 
 
@@ -274,12 +277,18 @@ public class XiaoaiSession implements Serializable {
 /*	 将消息对象 message发送到当前连接的对等体。该方法是异步的，当消息被真正发送到对等体的时候，
 	IoHandler.messageSent(IoSession,Object)会被调用。如果需要的话，
 	也可以等消息真正发送出去之后再继续执行后续操作。*/
-	public void write(Object msg) {
+	public boolean write(Object msg) {
 		if(session!=null)
 		{
-			session.write(msg).isWritten();
-			
+			WriteFuture write = session.write(msg);
+			boolean awaitUninterruptibly = write.awaitUninterruptibly(5000);
+			//boolean written = session.write(msg).isWritten();
+			if(write.isWritten()){
+				return true;
+			}
+		
 		}
+		return false;
 	}
 	
 	

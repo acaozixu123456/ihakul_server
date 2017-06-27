@@ -1,6 +1,5 @@
 package com.xiaoai.TaskJob;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -28,7 +27,7 @@ public class XiaoiTaskTimer {
 	 * 定时清除器
 	 */
 	public void job(){
-		logger.info("计划任务定时清除器被触发!");
+		//logger.info("计划任务定时清除器被触发!");
 		//取出所有计划任务
 		List<Xiaoitask> list = xiaoitaskService.findAllXiaoitasks();
 		//判断

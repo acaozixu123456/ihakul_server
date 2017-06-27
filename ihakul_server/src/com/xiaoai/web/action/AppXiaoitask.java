@@ -125,7 +125,28 @@ public class AppXiaoitask extends XiaoaiMessage{
 			json2.put("key", "appgetXiaoitask");
 			json2.put("code", xiaoitask.getId());
 			json2.put("xiaoNumber", xiaoi.getXiaoNumber());
-			PushMessage.push2Xiao(json2);
+			boolean flag = PushMessage.push2Xiao(json2);
+			if(!flag){
+				//当前终端推送失败，推送当前家庭组下的其他在线终端
+				//Familygroup familygroupByid = familyDao.getFamilygroupByid(family.getGroupId());
+				List<Xiaoi> xiaois = xiaoiService.selectXiaoiByid(family.getGroupId());
+				for (Xiaoi xiaoi2 : xiaois) {
+					//判断当前小艾是否在线
+					if(xiaoi2.getOnlineState()==1){
+						//在线，推送
+						json2=new JSONObject();
+						json2.put("key", "appgetXiaoitask");
+						json2.put("code", xiaoitask.getId());
+						json2.put("xiaoNumber", xiaoi2.getXiaoNumber());
+						flag = PushMessage.push2Xiao(json2);
+						if(flag){
+							break;
+						}
+					}else{
+						//所有终端都推送失败。。
+					}
+				}
+			}
 			json1.put("taskId", xiaoitask.getId());
 		}else{
 			code=Plan.insertFalse;

@@ -66,7 +66,7 @@ public class XiaoiMode implements Serializable{
 	public void setOrders(String orders) {
 		this.orders = orders;
 	}
-	@Column(name = "eaNumber",length = 32)
+	@Column(name = "eaNumber",length = 100)
 	public String getEaNumber() {
 		return eaNumber;
 	}
