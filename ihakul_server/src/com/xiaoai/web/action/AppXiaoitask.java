@@ -74,6 +74,12 @@ public class AppXiaoitask extends XiaoaiMessage{
 		String rules=request.getParameter("rules");
 		String object=request.getParameter("object");
 		String orders=request.getParameter("orders");
+		String xiaoNumber=request.getParameter("xiaoNumber");
+		if(XATools.isNull(xiaoNumber)){
+			code=XiaoiCode.emptyId;
+			success=false;
+			message="小艾编号不能为空!";
+		}
 		if(XATools.isNull(groupNumber)){
 			code=FamilyCode.emptyId;
 			success=false;
@@ -109,7 +115,8 @@ public class AppXiaoitask extends XiaoaiMessage{
 	if(success){
 		Familygroup  family=familyDao.getFamilygroupByNumber(Integer.parseInt(groupNumber));
 		if(family!=null){
-		Xiaoi xiaoi=xiaoiService.selectXiaoiByFa(family);
+		//Xiaoi xiaoi=xiaoiService.selectXiaoiByFa(family);
+		Xiaoi xiaoi = xiaoiService.selectXiaoiByNumber(xiaoNumber);
 		if(xiaoi!=null){
 		Xiaoitask xiaoitask=new Xiaoitask();
 		xiaoitask.setCreationTime(create);
@@ -231,6 +238,11 @@ public class AppXiaoitask extends XiaoaiMessage{
 			success=false;
 			message="任务ID不能为空!";
 		}
+		if(XATools.isNull(groupNumber)){
+			code=FamilyCode.emptyId;
+			success=false;
+			message="家庭组编号不能为空!";
+		}
 		if(success){
 			xiaoitask=xiaoitaskService.selectXiaoitaskById(Long.parseLong(taskId));
 			if(xiaoitask!=null){
@@ -291,6 +303,7 @@ public class AppXiaoitask extends XiaoaiMessage{
 		}		
 		if(success){
 			xiaoitask=xiaoitaskService.selectXiaoitaskById(Long.parseLong(taskId));
+			json1.put("taskId", xiaoitask.getId());
 			json1.put("trigger", xiaoitask.getTriggerTime());
 			json1.put("create", xiaoitask.getCreationTime());
 			json1.put("things", xiaoitask.getThings());

@@ -77,7 +77,7 @@ public class Xiaoitask implements java.io.Serializable {
 		this.things = things;
 	}
 
-	@Column(name = "orders", length = 10)
+	@Column(name = "orders", length = 20)
 	public String getOrders() {
 		return orders;
 	}

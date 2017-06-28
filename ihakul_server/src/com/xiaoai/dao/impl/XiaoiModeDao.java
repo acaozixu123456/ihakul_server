@@ -43,5 +43,10 @@ public class XiaoiModeDao implements IXiaoiModeDao {
 		List<XiaoiMode> list = hibernateTemplate.find("from XiaoiMode where groupNumber = ?",groupNumber);
 		return list;
 	}
+	@Override
+	public List<XiaoiMode> findById(int parseInt) {
+		List<XiaoiMode> list = hibernateTemplate.find("from XiaoiMode where id = ?",parseInt);
+		return list;
+	}
 
 }

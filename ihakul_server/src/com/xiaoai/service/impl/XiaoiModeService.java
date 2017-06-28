@@ -56,6 +56,12 @@ public class XiaoiModeService implements IXiaoiModeService {
 		 return xiaoiModeDao.findAllModeByGroupNum(groupNumber);
 	}
 
+	@Override
+	public List<XiaoiMode> findById(int parseInt) {
+		// TODO Auto-generated method stub
+		return xiaoiModeDao.findById(parseInt);
+	}
+
 	/*@Override
 	public List<XiaoiMode> findByModeId(Integer integer) {
 		

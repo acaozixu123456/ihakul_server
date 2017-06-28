@@ -133,7 +133,8 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 		}
 		if(xr.isSuccess()){
 			//查询当前id是否存在情景模式
-			List<XiaoiMode> list = xiaoiModeService.findModeById(Integer.parseInt(id));
+			//List<XiaoiMode> list = xiaoiModeService.findModeById(Integer.parseInt(id));
+			List<XiaoiMode> list = xiaoiModeService.findById(Integer.parseInt(id));
 			if(!XATools.isNull(list)){	
 				//?是否需要判断有没有删除权限
 				for (XiaoiMode xiaoiMode2 : list) {

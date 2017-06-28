@@ -685,7 +685,9 @@ public class AppHouseholdAction extends XiaoaiMessage {
 		}
 
 		if (xr.isSuccess()) {
-			Familygroup familygroup = familyService.getFamilygroupByid(Integer
+			/*Familygroup familygroup = familyService.getFamilygroupByid(Integer
+					.parseInt(groupId));*/
+			Familygroup familygroup = familyService.getFamilygroupByNumber(Integer
 					.parseInt(groupId));
 			if (familygroup != null) {
 				// 取得小艾

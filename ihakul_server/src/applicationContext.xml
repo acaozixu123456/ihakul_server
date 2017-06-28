@@ -27,7 +27,7 @@
     	<!-- 定时器 -->
     	<task:annotation-driven/>
    		<task:scheduled-tasks>
-			<task:scheduled ref="xiaoiTaskTimer" method="job" cron="0 * * * * ?"/>   
+			<task:scheduled ref="xiaoiTaskTimer" method="job" cron="0 * * * * ?"/>  
 		</task:scheduled-tasks>
     
     

@@ -36,6 +36,8 @@ public interface IXiaoiModeService {
 	 */
 	public List<XiaoiMode> findModeByGroupNum(int groupNumber);
 
+	public List<XiaoiMode> findById(int parseInt);
+
 	/**
 	 * 根据ModeId查情景模式
 	 * @param integer
