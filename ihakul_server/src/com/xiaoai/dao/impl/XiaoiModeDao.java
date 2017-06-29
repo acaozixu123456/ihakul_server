@@ -44,8 +44,8 @@ public class XiaoiModeDao implements IXiaoiModeDao {
 		return list;
 	}
 	@Override
-	public List<XiaoiMode> findById(int parseInt) {
-		List<XiaoiMode> list = hibernateTemplate.find("from XiaoiMode where id = ?",parseInt);
+	public List<XiaoiMode> findById(long id) {
+		List<XiaoiMode> list = hibernateTemplate.find("from XiaoiMode where id = ?",id);
 		return list;
 	}
 

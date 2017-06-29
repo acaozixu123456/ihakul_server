@@ -4,7 +4,9 @@ package com.xiaoai.dao.impl;
 
 
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -16,7 +18,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IFamilygroupDao;
+import com.xiaoai.entity.FamilyUser;
 import com.xiaoai.entity.Familygroup;
+import com.xiaoai.entity.Room;
 import com.xiaoai.entity.Users;
 import com.xiaoai.util.XATools;
 /**
@@ -25,7 +29,6 @@ import com.xiaoai.util.XATools;
  *
  */
 @Repository("familyDao")
-@Transactional
 public class FamilygroupDao implements IFamilygroupDao {
 	
 	@Resource(name="hibernateTemplate")
@@ -81,7 +84,7 @@ public class FamilygroupDao implements IFamilygroupDao {
 	 */
 	public void deleteFamilygroup(Familygroup family) {
 		hibernateTemplate.delete(family);
-		
+		//hibernateTemplate.deleteAll(entities)
 	}
 
 	/**
@@ -101,7 +104,14 @@ public class FamilygroupDao implements IFamilygroupDao {
 		String hql="from Familygroup where groupNumber=?";
 		 List<Familygroup> fa=  hibernateTemplate.find(hql,groupNumber);
 		 if(!XATools.isNull(fa)){
-			 return fa.get(0);
+			 Familygroup familygroup = fa.get(0);
+			 /*
+			 System.out.println("-----------------"+familygroup.getUsers());
+			 System.out.println(familygroup.getFamilyUsers());
+			 System.out.println(familygroup.getHouseholds());
+			 System.out.println(familygroup.getRooms());
+			 System.out.println(familygroup.getUsers()+""+familygroup.getXiaois());*/
+			 return familygroup;
 		 }
 		return  null;
 	}
@@ -149,6 +159,18 @@ public class FamilygroupDao implements IFamilygroupDao {
 		query.setParameter("family", fa);
 		List<Users> list=query.list();
 		return list;
+	}
+
+
+	@Override
+	public Familygroup getFamilygroupByNumberNow(int groupNumber) {
+		String hql="from Familygroup where groupNumber=?";
+		List<Familygroup> fa = hibernateTemplate.find(hql,groupNumber);
+		 if(!XATools.isNull(fa)){
+			 Familygroup familygroup = fa.get(0);
+			 return familygroup;
+		 }
+		return null;
 	}
 	
 	

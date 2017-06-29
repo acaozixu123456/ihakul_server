@@ -35,5 +35,7 @@ public interface IXiaoiModeDao {
 	 */
 	public List<XiaoiMode> findAllModeByGroupNum(int groupNumber);
 
-	public List<XiaoiMode> findById(int parseInt);
+	public List<XiaoiMode> findById(long id);
+
+	
 }

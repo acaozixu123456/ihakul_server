@@ -24,14 +24,15 @@ public class XiaoiModeService implements IXiaoiModeService {
 	private IXiaoiModeDao xiaoiModeDao;
 	@Override
 	public boolean insertMode(XiaoiMode xiaoiMode) {
-		boolean flag = true;
-		try {
+		/*boolean flag = true;
+		try {*/
 			xiaoiModeDao.insertMode(xiaoiMode);
-		} catch (Exception e) {
+		/*} catch (Exception e) {
 			e.printStackTrace();
 			flag = false;
 		}
-		return flag;
+		return flag;*/
+			return true;
 	}
 	
 	@Override
@@ -57,9 +58,9 @@ public class XiaoiModeService implements IXiaoiModeService {
 	}
 
 	@Override
-	public List<XiaoiMode> findById(int parseInt) {
+	public List<XiaoiMode> findById(long id) {
 		// TODO Auto-generated method stub
-		return xiaoiModeDao.findById(parseInt);
+		return xiaoiModeDao.findById(id);
 	}
 
 	/*@Override

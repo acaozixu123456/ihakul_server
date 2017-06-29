@@ -49,7 +49,7 @@ public class Familygroup implements java.io.Serializable {
 	private Set<FamilyUser> familyUsers = new HashSet<FamilyUser>(0);
 	private Set<Xiaoi> xiaois = new HashSet<Xiaoi>(0);
 	private Set<Users> users=new HashSet<Users>(0);
-	private Set<Channel> channels=new HashSet<Channel>(0);
+	/*private Set<Channel> channels=new HashSet<Channel>(0);*/
 	// Constructors
 
 	/** default constructor */
@@ -61,7 +61,7 @@ public class Familygroup implements java.io.Serializable {
 			Integer groupNumber, String state, String city, String district,
 			String groupPassword, Set<Household> households, Set<Room> rooms,
 			Set<FamilyUser> familyUsers, Set<Xiaoi> xiaois,Set<Users> users,
-			Set<Channel> channels,Integer managerId,Integer versionNumber) {
+			/*Set<Channel> channels,*/Integer managerId,Integer versionNumber) {
 		this.groupName = groupName;
 		this.creationTime = creationTime;
 		this.groupNumber = groupNumber;
@@ -74,7 +74,7 @@ public class Familygroup implements java.io.Serializable {
 		this.familyUsers = familyUsers;
 		this.xiaois = xiaois;
 		this.users=users;
-		this.channels=channels;
+		/*this.channels=channels;*/
 		this.managerId=managerId;
 		this.versionNumber=versionNumber;
 	}
@@ -224,6 +224,7 @@ public class Familygroup implements java.io.Serializable {
 		this.users = users;
 	}
 	//当前是急加载  EAGER  查询速度慢  改成懒加载  LAZY 试试
+	/*@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "familygroup")
 	public Set<Channel> getChannels() {
 		return channels;
@@ -231,6 +232,6 @@ public class Familygroup implements java.io.Serializable {
 
 	public void setChannels(Set<Channel> channels) {
 		this.channels = channels;
-	}
+	}*/
 	
 }

@@ -2,6 +2,8 @@ package com.xiaoai.web.action;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xiaoai.dao.IFamilygroupDao;
+import com.xiaoai.entity.Channel;
 import com.xiaoai.entity.FamilyUser;
 import com.xiaoai.entity.Familygroup;
 import com.xiaoai.entity.Users;
@@ -215,10 +218,11 @@ public class AppXiaoiAction extends XiaoaiMessage {
 		String xiaoNumber = request.getParameter("xiaoNumber");
 		String groupNumber = request.getParameter("groupNumber");
 		String versionNumber = request.getParameter("versionNumber");
-		String newxiaoNumber = request.getParameter("xiaoNumber");
+		//String newxiaoNumber = request.getParameter("xiaoNumber");
 		Users users = null;
 		Xiaoi xiaoi = null;
 		FamilyUser fu1 = null;
+		Familygroup family = null;
 		if (XATools.isNull(xiaoNumber)) {
 			xr = XiaoiResult.build("小艾编号不能为空!", XiaoiCode.emptyId);
 		}
@@ -236,7 +240,7 @@ public class AppXiaoiAction extends XiaoaiMessage {
 			if (users != null) {
 				xiaoi = xiaoiService.selectXiaoiByNumber(xiaoNumber);
 				if (xiaoi != null) {
-					Familygroup family = familyService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
+					family = familyService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
 					if (family != null) {
 						if (Integer.parseInt(versionNumber) > family.getVersionNumber()) { // 如果终端的版本号大于服务端
 							family.setVersionNumber(Integer.parseInt(versionNumber));
@@ -245,11 +249,11 @@ public class AppXiaoiAction extends XiaoaiMessage {
 						fu1 = fauserService.selectFamilyUserByGNU(users, family);
 						if (fu1 != null) {
 							if (userId.equals(fu1.getDna())) { // 判断该家庭组是不是该用户创建
-								if(XATools.isNull(newxiaoNumber)){ //如果为空，则为删除终端; 否则更换终端 
+								//if(XATools.isNull(newxiaoNumber)){ //如果为空，则为删除终端; 否则更换终端 
 									xr.setSuccess(xiaoiService.delete(xiaoi));
-								}else{
+								/*}else{
 									xr.setSuccess(xiaoiService.change(xiaoNumber, newxiaoNumber));
-								}
+								}*/
 								Xiaoi xi=xiaoiService.selectXiaoiByFa(family);
 								if(xi!=null){
 									JSONObject json2=new JSONObject();
@@ -258,8 +262,12 @@ public class AppXiaoiAction extends XiaoaiMessage {
 									json2.put("xiaoNumber", xiaoNumber);
 									PushMessage.push2Xiao(json2);
 								}
-								if (success == false) {
+								if (!xr.isSuccess()) {
 									xr = XiaoiResult.build("删除小艾失败!", XiaoiCode.deleteFalse);
+								}else{
+									//删除成功！
+									//返回家庭组信息
+									//family=familyService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
 								}
 							} else {
 								xr = XiaoiResult.build("您不是群主，没有权限操作!", FamilyCode.privilegeMaster);
@@ -277,10 +285,20 @@ public class AppXiaoiAction extends XiaoaiMessage {
 				xr = XiaoiResult.build("没有该用户!", UserCode.noExistBean);
 			}
 		}
-		json.put("code", xr.getCode());
-		json.put("message", xr.getMessage());
-		out.print(json.toString());
-		logger.info("删除终端的出参:" + json);
+		
+		//Familygroup familygroup = familyService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
+		JSONObject familyGroup = familyService.getFamilyGroup(groupNumber);
+		if(xr.getCode()==0){
+			out.print(familyGroup);
+			logger.info("删除终端的出参:" + familyGroup);
+		}else{
+			json.put("code", xr.getCode());
+			json.put("message", xr.getMessage());
+			
+			json.put("result", familyGroup);
+			out.print(json);
+			logger.info("删除终端的出参:" + json);
+		}
 		return null;
 	}
 

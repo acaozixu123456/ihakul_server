@@ -126,6 +126,7 @@ public class BindHandler implements RequestHandler{
 				 success=false;
 				 json1.put("code",XiaoaiMessage.XiaoiCode.noExistBean);
 			//	 xiaoiService.insertXiaoi(xiao);
+			//	 xiaoiService.delete(xiao);
 			  }else{
 				  xiao.setXid(xiao1.getXid());
 				  xiaoiService.updateXiaoi(xiao);

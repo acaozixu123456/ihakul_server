@@ -80,4 +80,10 @@ public interface IFamilygroupDao {
 	 * @return
 	 */
 	public List<Users> selectusersByFamilygroup(Familygroup fa);
+
+	/**
+	 * 获得该家庭组所有信息（级联）
+	 * @return
+	 */
+	public Familygroup getFamilygroupByNumberNow(int groupNumber);
 }

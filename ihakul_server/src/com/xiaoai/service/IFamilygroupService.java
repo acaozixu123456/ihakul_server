@@ -6,6 +6,8 @@ import java.util.List;
 
 
 
+
+import com.alibaba.fastjson.JSONObject;
 import com.xiaoai.entity.Familygroup;
 import com.xiaoai.entity.Users;
 /**
@@ -78,5 +80,13 @@ public interface IFamilygroupService {
 	 * @return 返回(多对多)查询出的家庭组集合
 	 */
 	public List<Users> selectusersByFamilygroup(Familygroup fa);
+	
+	public JSONObject getFamilyGroup(String groupNumber);
+	/**
+	 * 获得家庭组的所有信息（级联其他）
+	 * @param parseInt
+	 * @return
+	 */
+	public Familygroup getFamilygroupByNumberNow(int groupNumber);
 }
 

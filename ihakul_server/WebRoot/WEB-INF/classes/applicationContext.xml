@@ -25,10 +25,10 @@
     <context:component-scan base-package="com.xiaoai.*" />
     
     	<!-- 定时器 -->
-    	<task:annotation-driven/>
+    	<!-- <task:annotation-driven/>
    		<task:scheduled-tasks>
 			<task:scheduled ref="xiaoiTaskTimer" method="job" cron="0 * * * * ?"/>  
-		</task:scheduled-tasks>
+		</task:scheduled-tasks> -->
     
     
      <!-- 1.配置数据库相关参数properties的属性：${url} -->

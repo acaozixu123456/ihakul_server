@@ -95,12 +95,18 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 			if (family != null) {
 				XiaoiMode xiaoiMode = new XiaoiMode();
 				xiaoiMode=JSON.toJavaObject(jsonObject, XiaoiMode.class);
-				boolean insertMode = xiaoiModeService.insertMode(xiaoiMode);
-				if (!insertMode) {
+				try {
+					xiaoiModeService.insertMode(xiaoiMode);
+					json1.put("modeId", xiaoiMode.getMode());
+				} catch (Exception e) {
+					xr=XiaoiResult.build("新增情景模式失败！", XiaoiModeCode.insertFail);
+					e.printStackTrace();
+				}
+				/*if (!insertMode) {
 					xr=XiaoiResult.build("新增情景模式失败！", XiaoiModeCode.insertFail);
 				}else{
 					json1.put("modeId", xiaoiMode.getMode());
-				}
+				}*/
 				
 			} else {
 				xr=XiaoiResult.build("没有该家庭组！", FamilyCode.noExistBean);
@@ -133,8 +139,7 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 		}
 		if(xr.isSuccess()){
 			//查询当前id是否存在情景模式
-			//List<XiaoiMode> list = xiaoiModeService.findModeById(Integer.parseInt(id));
-			List<XiaoiMode> list = xiaoiModeService.findById(Integer.parseInt(id));
+			List<XiaoiMode> list = xiaoiModeService.findById(Long.parseLong(id));
 			if(!XATools.isNull(list)){	
 				//?是否需要判断有没有删除权限
 				for (XiaoiMode xiaoiMode2 : list) {

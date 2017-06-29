@@ -96,7 +96,7 @@ public class RoomDao implements IRoomDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Room> getRoomByCreateor(String createor) {
-		String hql="from Room where createor=?";
+		String hql="from Room where creator=?";
 		return hibernateTemplate.find(hql,createor);
 	}
 	
