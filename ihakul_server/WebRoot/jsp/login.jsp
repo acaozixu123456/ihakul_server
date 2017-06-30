@@ -10,9 +10,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 	<meta charset="UTF-8">
 	<title>用户登录小艾后台管理系统</title>
-	<script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="../css/common.css" />
-	<link type="text/css" rel="stylesheet" href="../css/main.css" />
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/vendor/jquery-1.9.1.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/main.css" />
 </head>
 <body>
 
@@ -21,7 +21,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div class="login_box">
 			<div class="login_logo"><h1>小艾后台管理系统</h1></div>
 			<div class="login_info_bd">
-			<form  action="loginAction.action" method="post">
+			<form  action="${pageContext.request.contextPath }/loginAction.action" method="post">
 				<ul class="info">
 					<li><label>账号：</label><input type="text" class="input" id="a" name="aname"></li>
 					<li><label>密码：</label><input type="password" class="input" id="pass" name="password"></li>
@@ -35,7 +35,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <script type="text/javascript">
 	function addAdmin(){
-		window.location.href="add_admin.jsp"; 
+		window.location.href="${pageContext.request.contextPath }/jsp/add_admin.jsp"; 
 	}
 
 </script>

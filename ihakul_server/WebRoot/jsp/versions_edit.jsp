@@ -9,18 +9,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 	<meta charset="UTF-8">
 	<title>小艾后台管理系统-版本管理</title>
-	<script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="../css/common.css" />
-	<link type="text/css" rel="stylesheet" href="../css/main.css" />
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/vendor/jquery-1.9.1.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/main.css" />
 </head>
 <body>
 <div class="main_title">
-	<div class="fr blue"><a href="versions_management.html">返回&gt;&gt;</a></div>
+	<div class="fr blue"><a href="${pageContext.request.contextPath }/jsp/versions_management.html">返回&gt;&gt;</a></div>
 	<i></i><a href="">小艾</a>><a href="">版本管理</a>><a href=""><strong>版本编辑</strong></a>
 </div>
 
 <div class="container">
-	<form action="update.action" method="post">
+	<form action="${pageContext.request.contextPath }/update.action" method="post">
 	<table class="table mt_20 p_lr_15 table_2">
 		<tr>
 			<td width="150"><i class="red_heart">*</i>版本号：</td>

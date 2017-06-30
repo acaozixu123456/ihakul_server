@@ -23,4 +23,9 @@ public interface IRoleService {
 	 * @return
 	 */
 	public Role selectRoleByname(String name);
+	/**
+	 * 初始化角色
+	 * @return
+	 */
+	public Role InitRole();
 }

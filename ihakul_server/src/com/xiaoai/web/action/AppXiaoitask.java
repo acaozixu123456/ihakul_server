@@ -303,13 +303,19 @@ public class AppXiaoitask extends XiaoaiMessage{
 		}		
 		if(success){
 			xiaoitask=xiaoitaskService.selectXiaoitaskById(Long.parseLong(taskId));
-			json1.put("taskId", xiaoitask.getId());
-			json1.put("trigger", xiaoitask.getTriggerTime());
-			json1.put("create", xiaoitask.getCreationTime());
-			json1.put("things", xiaoitask.getThings());
-			json1.put("object", xiaoitask.getObject());
-			json1.put("rules", xiaoitask.getRules());
-			json1.put("orders", xiaoitask.getOrders());
+			if(xiaoitask!=null){
+				json1.put("taskId", xiaoitask.getId());
+				json1.put("trigger", xiaoitask.getTriggerTime());
+				json1.put("create", xiaoitask.getCreationTime());
+				json1.put("things", xiaoitask.getThings());
+				json1.put("object", xiaoitask.getObject());
+				json1.put("rules", xiaoitask.getRules());
+				json1.put("orders", xiaoitask.getOrders());
+			}else{
+				code=Plan.noExistBean;
+				success=false;
+				message="没有该任务数据！";
+			}
 		//	json1=(JSONObject) JSON.toJSON(xiaoitask);
 		}
 	

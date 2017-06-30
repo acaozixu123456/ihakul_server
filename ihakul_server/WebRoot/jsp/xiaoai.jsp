@@ -10,9 +10,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 	<meta charset="UTF-8">
 	<title>机器人小艾后台管理系统-用户管理</title>
-	<script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="../css/common.css" />
-	<link type="text/css" rel="stylesheet" href="../css/main.css" />
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/vendor/jquery-1.9.1.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/main.css" />
 </head>
 <body>
 <div class="main_title"><i></i><a href="">小艾</a>><a href=""><strong>小艾管理</strong></a></div>
@@ -26,7 +26,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<!-- 小艾列表 -->
 		
 		<li class="tab_con">
-		<form action="findAllXiaoi.action?pageNow=1&showPage=5" method="post">
+		<form action="${pageContext.request.contextPath }/findAllXiaoi.action?pageNow=1&showPage=5" method="post">
 			<ul class="ad_list_search clearfix">
 			
 				<li class="name"><label>家庭名字：</label><input type="text" name="groupName" value=""></li>
@@ -70,8 +70,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</c:if>
 			</td>
 			
-			<td><a href="selectXiaoiByid.action?id=${xiao.xid }" class="operate">编辑</a>
-			<a href="deleteXiaoi.action?id=${xiao.xid }" class="operate">删除</a>
+			<td><a href="${pageContext.request.contextPath }/selectXiaoiByid.action?id=${xiao.xid }" class="operate">编辑</a>
+			<a href="${pageContext.request.contextPath }/deleteXiaoi.action?id=${xiao.xid }" class="operate">删除</a>
 			
 			</td>
 		</tr>
@@ -96,7 +96,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 		<!-- 新增小艾 -->
 		<li class="tab_con">
-			<form action="addXiaoi.action" method="post">
+			<form action="${pageContext.request.contextPath }/addXiaoi.action" method="post">
 			<table class="table mt_20 p_lr_15 table_2">
 				
 				<tr>
@@ -131,7 +131,7 @@ $(document).ready(function() {
 	var refresh=$("#refresh").val();
 	refresh++;
 	if(refresh==2){//修改后返回
-		 window.location.href="findAllXiaoi.action?pageNow=1&showPage=5";
+		 window.location.href="${pageContext.request.contextPath }/findAllXiaoi.action?pageNow=1&showPage=5";
 	}
 	jQuery.jqtab = function(tabtit,tab_conbox,shijian) {
 		$(tab_conbox).find("#tab_conbox > li").hide();
@@ -158,7 +158,7 @@ $(document).ready(function() {
 		if(pageNow+1 >totalPage){
 			alert("已经是最后一页了");
 		}else{
-			window.location.href="findAllXiaoi.action?pageNow="+(pageNow+1)+"&showPage=5";
+			window.location.href="${pageContext.request.contextPath }/findAllXiaoi.action?pageNow="+(pageNow+1)+"&showPage=5";
 		}
 			
 		
@@ -172,7 +172,7 @@ $(document).ready(function() {
 		 if(pageNow-1 ==0){
 			alert("已经是第一页了");
 		 }else{
-			window.location.href="findAllXiaoi.action?pageNow="+(pageNow-1)+"&showPage=5";
+			window.location.href="${pageContext.request.contextPath }/findAllXiaoi.action?pageNow="+(pageNow-1)+"&showPage=5";
 		 }
 	});
 	
@@ -185,7 +185,7 @@ $(document).ready(function() {
 		 if(pageNow==1){
 		 	alert("已经是第一页了");
 		 }else{
-		 	window.location.href="findAllXiaoi.action?pageNow=1&showPage=5";
+		 	window.location.href="${pageContext.request.contextPath }/findAllXiaoi.action?pageNow=1&showPage=5";
 		 }
 	
 	});
@@ -199,7 +199,7 @@ $(document).ready(function() {
 		 if(pageNow==totalPage){
 		 	alert("已经是最后一页了");
 		 }else{
-		 	window.location.href="findAllXiaoi.action?pageNow="+totalPage+"&showPage=5";
+		 	window.location.href="${pageContext.request.contextPath }/findAllXiaoi.action?pageNow="+totalPage+"&showPage=5";
 		 }
 	
 	});

@@ -10,18 +10,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 	<meta charset="UTF-8">
 	<title>机器人小艾后台管理系统-管理员账号管理</title>
-	<script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="../css/common.css" />
-	<link type="text/css" rel="stylesheet" href="../css/main.css" />
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/vendor/jquery-1.9.1.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/main.css" />
 </head>
 <body>
 <div class="main_title">
-	<div class="fr blue"><a href="showAllAdminAction.action?pageNow=1&showPage=5">返回&gt;&gt;</a></div> <!--返回跳转界面  -->
-	<i></i><a href="">机器人小艾</a>><a href="showAllAdminAction.action?pageNow=1&showPage=5">管理员账号管理</a>><a href=""><strong>账号编辑</strong></a>
+	<div class="fr blue"><a href="${pageContext.request.contextPath }/showAllAdminAction.action?pageNow=1&showPage=5">返回&gt;&gt;</a></div> <!--返回跳转界面  -->
+	<i></i><a href="">机器人小艾</a>><a href="${pageContext.request.contextPath }/showAllAdminAction.action?pageNow=1&showPage=5">管理员账号管理</a>><a href=""><strong>账号编辑</strong></a>
 </div>
 
 <div class="container">
-		<form action="updateAdmin.action" method="post">
+		<form action="${pageContext.request.contextPath }/updateAdmin.action" method="post">
 			<table class="table mt_20 p_lr_15 table_2">
 				<tr>
 					<td width="150"><i class="red_heart">*</i>账号：</td>

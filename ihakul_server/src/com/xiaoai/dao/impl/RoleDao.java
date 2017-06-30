@@ -34,5 +34,17 @@ public class RoleDao implements IRoleDao {
 		String hql="from Role where rolename=?";
 		return  hibernateTemplate.find(hql,name);
 	}
+	@Override
+	public void InitRole() {
+		Role super_role = new Role();
+		super_role.setRid(1);
+		super_role.setRolename("高级管理员");
+		
+		Role simple_role = new Role();
+		simple_role.setRid(2);
+		simple_role.setRolename("普通管理员");
+		hibernateTemplate.save(super_role);
+		hibernateTemplate.save(simple_role);
+	}
 
 }

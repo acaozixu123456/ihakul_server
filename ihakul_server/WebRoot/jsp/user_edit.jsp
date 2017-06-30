@@ -9,18 +9,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 	<meta charset="UTF-8">
 	<title>机器人小艾台管理系统-用户管理</title>
-	<script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="../css/common.css" />
-	<link type="text/css" rel="stylesheet" href="../css/main.css" />
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/vendor/jquery-1.9.1.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/main.css" />
 </head>
 <body>
 <div class="main_title">
-	<div class="fr blue"><a href="findAllUsers.action?pageNow=1&showPage=5">返回>></a></div>
-	<i></i><a href="">小艾</a>><a href=""><a href="findAllUsers.action?pageNow=1&showPage=5">用户管理</a>><a href=""><strong>编辑用户</strong></a>
+	<div class="fr blue"><a href="${pageContext.request.contextPath }/findAllUsers.action?pageNow=1&showPage=5">返回>></a></div>
+	<i></i><a href="">小艾</a>><a href=""><a href="${pageContext.request.contextPath }/findAllUsers.action?pageNow=1&showPage=5">用户管理</a>><a href=""><strong>编辑用户</strong></a>
 </div>
 
 <div class="container">
-	<form action="updateUser.action" method="post">
+	<form action="${pageContext.request.contextPath }/updateUser.action" method="post">
 			<table class="table mt_20 p_lr_15 table_2">
 				<tr>
 					<td width="150">用户名：</td>

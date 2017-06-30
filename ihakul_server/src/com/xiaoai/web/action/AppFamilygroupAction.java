@@ -245,14 +245,15 @@ public class AppFamilygroupAction extends XiaoaiMessage{
 		PrintWriter out=MyRequest.getResponse();	
 		MyRequest.printParameterNames("查询家庭组的入参");
 		String groupNumber=request.getParameter("groupNumber");
-		json=getFamilyGroup(groupNumber);
-		out.print(json);
+		//json=getFamilyGroup(groupNumber);
+		com.alibaba.fastjson.JSONObject familyGroup = familyService.getFamilyGroup(groupNumber);
+		out.print(familyGroup);
 		logger.info("查询家庭组的出参:"+json);	
 		return null;
 	}
 	
 	
-	public  JSONObject getFamilyGroup(String groupNumber){
+	/*public  JSONObject getFamilyGroup(String groupNumber){
 		success =true;
 		message =null;
 		code=OK;
@@ -356,7 +357,7 @@ public class AppFamilygroupAction extends XiaoaiMessage{
 		json.put("result", array);   //家庭组信息
 		json.put("result1", array5);   //小艾信息
 		return json;	
-	}
+	}*/
 	
 	
 	

@@ -10,13 +10,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 	<meta charset="UTF-8">
 	<title>机器人小艾后台管理系统-家电信息</title>
-	<script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="../css/common.css" />
-	<link type="text/css" rel="stylesheet" href="../css/main.css" />
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/vendor/jquery-1.9.1.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/main.css" />
 </head>
 <body>
 	<div class="main_title">
-		<div class="fr blue"><a href="homeuser_query.jsp">返回&gt;&gt;</a></div>
+		<div class="fr blue"><a href="${pageContext.request.contextPath }/jsp/homeuser_query.jsp">返回&gt;&gt;</a></div>
 		<div class="main_title"><i></i><a href="">小艾</a>><a href=""><strong>电器使用情况</strong></a></div>
 	</div>
 
@@ -79,7 +79,7 @@ $(document).ready(function(){
 		if(pageNow+1 >totalPage){
 			alert("已经是最后一页了");
 		}else{
-			window.location.href="findAllhhold.action?pageNow="+(pageNow+1)+"&showPage=5";
+			window.location.href="${pageContext.request.contextPath }/findAllhhold.action?pageNow="+(pageNow+1)+"&showPage=5";
 		}
 	});
 	//上一页
@@ -91,7 +91,7 @@ $(document).ready(function(){
 		 if(pageNow-1 ==0){
 			alert("已经是第一页了");
 		 }else{
-			window.location.href="findAllhhold.action.action?pageNow="+(pageNow-1)+"&showPage=5";
+			window.location.href="${pageContext.request.contextPath }/findAllhhold.action.action?pageNow="+(pageNow-1)+"&showPage=5";
 		 }
 	});
 	
@@ -104,7 +104,7 @@ $(document).ready(function(){
 		 if(pageNow==1){
 		 	alert("已经是第一页了");
 		 }else{
-		 	window.location.href="findAllhhold.action.action?pageNow=1&showPage=5";
+		 	window.location.href="${pageContext.request.contextPath }/findAllhhold.action.action?pageNow=1&showPage=5";
 		 }
 	
 	});
@@ -118,7 +118,7 @@ $(document).ready(function(){
 		 if(pageNow==totalPage){
 		 	alert("已经是最后一页了");
 		 }else{
-		 	window.location.href="findAllhhold.action.action?pageNow="+totalPage+"&showPage=5";
+		 	window.location.href="${pageContext.request.contextPath }/findAllhhold.action.action?pageNow="+totalPage+"&showPage=5";
 		 }
 	
 	});

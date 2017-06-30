@@ -25,7 +25,7 @@ public class XiaoiMode implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	private long id ;
-	private long triggerTime;
+	private long trigger;
 	private int classId;
 	private String orders;
 	private String eaNumber;
@@ -44,13 +44,8 @@ public class XiaoiMode implements Serializable{
 		this.id = id;
 	}
 	
-	@Column(name = "triggerTime", length = 20)
-	public long getTriggerTime() {
-		return triggerTime;
-	}
-	public void setTriggerTime(long triggerTime) {
-		this.triggerTime = triggerTime;
-	}
+	
+	
 	@Column(name = "classId")
 	public int getClassId() {
 		return classId;
@@ -58,6 +53,15 @@ public class XiaoiMode implements Serializable{
 	public void setClassId(int classId) {
 		this.classId = classId;
 	}
+	
+	@Column(name = "triggerTime", length = 20)
+	public long getTrigger() {
+		return trigger;
+	}
+	public void setTrigger(long trigger) {
+		this.trigger = trigger;
+	}
+	
 	
 	@Column(name = "orders",length = 10)
 	public String getOrders() {
@@ -99,7 +103,7 @@ public class XiaoiMode implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "XiaoiMode [id=" + id + ", triggerTime=" + triggerTime
+		return "XiaoiMode [id=" + id + ", trigger=" + trigger
 				+ ", classId=" + classId + ", orders=" + orders + ", eaNumber="
 				+ eaNumber + ", argument=" + argument + ", mode=" + mode
 				+ ", groupNumber=" + groupNumber + "]";

@@ -10,9 +10,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
    <meta charset="UTF-8">
 	<title>机器人小艾后台管理系统-日志管理</title>
-	<script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="../css/common.css" />
-	<link type="text/css" rel="stylesheet" href="../css/main.css" />
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/vendor/jquery-1.9.1.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/main.css" />
 </head>
   </head>
   <div class="main_title"><i></i><a href="">小艾</a>><a href="">家庭组</a>><a href="">家电</a>><strong>家电详情</strong></div>
@@ -82,7 +82,7 @@ $(document).ready(function(){
 		if(pageNow+1 >totalPage){
 			alert("已经是最后一页了");
 		}else{
-			window.location.href="shullHousehold.action?hid="+hid+"&pageNow="+(pageNow+1)+"&showPage=5";
+			window.location.href="${pageContext.request.contextPath }/shullHousehold.action?hid="+hid+"&pageNow="+(pageNow+1)+"&showPage=5";
 		}
 			
 		
@@ -98,7 +98,7 @@ $(document).ready(function(){
 		 if(pageNow-1 ==0){
 			alert("已经是第一页了");
 		 }else{
-			window.location.href="shullHousehold.action?hid="+hid+"&pageNow="+(pageNow-1)+"&showPage=5";
+			window.location.href="${pageContext.request.contextPath }/shullHousehold.action?hid="+hid+"&pageNow="+(pageNow-1)+"&showPage=5";
 		 }
 	});
 	
@@ -113,7 +113,7 @@ $(document).ready(function(){
 		 if(pageNow==1){
 		 	alert("已经是第一页了");
 		 }else{
-		 	window.location.href="shullHousehold.action?hid="+hid+"&pageNow=1&showPage=5";
+		 	window.location.href="${pageContext.request.contextPath }/shullHousehold.action?hid="+hid+"&pageNow=1&showPage=5";
 		 }
 	
 	});
@@ -129,7 +129,7 @@ $(document).ready(function(){
 		 if(pageNow==totalPage){
 		 	alert("已经是最后一页了");
 		 }else{
-		 	window.location.href="shullHousehold.action?hid="+hid+"&pageNow="+totalPage+"&showPage=5";
+		 	window.location.href="${pageContext.request.contextPath }/shullHousehold.action?hid="+hid+"&pageNow="+totalPage+"&showPage=5";
 		 }
 	
 	});

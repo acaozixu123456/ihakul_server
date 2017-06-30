@@ -87,16 +87,16 @@ public class AdministraterAction {
 			int id=admin.getRole().getRid();
 			List<Privilege> listPri=privilegeService.findPrivilegeByid(id);	
 			session.setAttribute("privilege", listPri);
-			out.print("<script>alert('登入成功')</script>");  
+			out.print("<html><head><meta charset='UTF-8'></head>"+"<script>alert('登入成功')</script>");  
 			out.flush();   
 			return "success";
 		}else{
-			out.print("<script>alert('密码不正确')</script>");
+			out.print("<html><head><meta charset='UTF-8'></head>"+"<script>alert('密码不正确')</script>");
 			out.flush();   
 			return "error";
 		}
 		}else{
-			out.print("<script>alert('没有该用户')</script>");
+			out.print("<html><head><meta charset='UTF-8'></head>"+"<script>alert('没有该用户')</script>");
 			out.flush();   	
 			return "error";
 		}
@@ -207,11 +207,11 @@ public class AdministraterAction {
 		if(fals){
 			int refreshNumber=1;
 			request.setAttribute("refresh", refreshNumber);
-			out.print("<script>alert('修改成功')</script>"); 
+			out.print("<html><head><meta charset='UTF-8'></head>"+"<script>alert('修改成功')</script>"); 
 			out.flush();
 			return "success";
 		}else{
-			out.print("<script>alert('修改失败')</script>"); 
+			out.print("<html><head><meta charset='UTF-8'></head>"+"<script>alert('修改失败')</script>"); 
 			out.flush();
 			return "error";
 		}
@@ -243,6 +243,10 @@ public class AdministraterAction {
 		String phoneNumber=request.getParameter("phoneNumber");
 		String sex=request.getParameter("sex");
 		Role role=roleService.selectRoleByid(2); //默认设置为普通管理员
+		if(role==null){
+			//第一次启动服务器，还未设置角色
+			
+		}
 		Administrate admin=new Administrate();
 		admin.setAname(aname);
 		admin.setPassword(password);
@@ -255,11 +259,11 @@ public class AdministraterAction {
 		if(fals){//添加持久化操作返回真
 			int refreshNumber=1;
 			request.setAttribute("refresh", refreshNumber);
-			out.print("<script>alert('添加成功')</script>"); 
+			out.print("<html><head><meta charset='UTF-8'></head>"+"<script>alert('添加成功')</script>"); 
 			out.flush();
 			return "success";
 		}else{//添加持久化操作返回假
-			out.print("<script>alert('添加失败')</script>");  
+			out.print("<html><head><meta charset='UTF-8'></head>"+"<script>alert('添加失败')</script>");  
 			out.flush();
 			return "error";
 		}

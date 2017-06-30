@@ -10,9 +10,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 	<meta charset="UTF-8" onload="reurl()">
 	<title>机器人小艾后台管理系统-用户管理</title>
-	<script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="../css/common.css" />
-	<link type="text/css" rel="stylesheet" href="../css/main.css" />
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/vendor/jquery-1.9.1.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/main.css" />
 </head>
 <body>
 <div class="main_title"><i></i><a href="">小艾</a>><a href=""><strong>用户管理</strong></a></div>
@@ -26,7 +26,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<!-- 用户列表 -->
 		
 		<li class="tab_con">
-			<form action="findAllUsers.action" method="post">
+			<form action="${pageContext.request.contextPath }/findAllUsers.action" method="post">
 			<ul class="ad_list_search clearfix">
 				
 				<li class="name"><label>用户名</label><input type="text" name="userName" value=""></li>
@@ -94,7 +94,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 		<!-- 新增用户 -->
 		<li class="tab_con">
-		<form action="insertUsers.action" method="post">
+		<form action="${pageContext.request.contextPath }/insertUsers.action" method="post">
 			<table class="table mt_20 p_lr_15 table_2">
 				<tr>
 					<td width="150"><i class="red_heart">*</i>家庭组名：</td>
@@ -139,7 +139,7 @@ $(document).ready(function() {
 	if(refresh !=null){
 	refresh++;
 	if(refresh==2){//修改后返回
-		 window.location.href="findAllUsers.action?pageNow=1&showPage=5";
+		 window.location.href="${pageContext.request.contextPath }/findAllUsers.action?pageNow=1&showPage=5";
 	}
    }
 	$("#gname").blur(function(){
@@ -191,7 +191,7 @@ $(document).ready(function() {
 		if(pageNow+1 >totalPage){
 			alert("已经是最后一页了");
 		}else{
-			window.location.href="findAllUsers.action?pageNow="+(pageNow+1)+"&showPage=5";
+			window.location.href="${pageContext.request.contextPath }/findAllUsers.action?pageNow="+(pageNow+1)+"&showPage=5";
 		}
 			
 		
@@ -205,7 +205,7 @@ $(document).ready(function() {
 		 if(pageNow-1 ==0){
 			alert("已经是第一页了");
 		 }else{
-			window.location.href="findAllUsers.action?pageNow="+(pageNow-1)+"&showPage=5";
+			window.location.href="${pageContext.request.contextPath }/findAllUsers.action?pageNow="+(pageNow-1)+"&showPage=5";
 		 }
 	});
 	
@@ -218,7 +218,7 @@ $(document).ready(function() {
 		 if(pageNow==1){
 		 	alert("已经是第一页了");
 		 }else{
-		 	window.location.href="findAllUsers.action?pageNow=1&showPage=5";
+		 	window.location.href="${pageContext.request.contextPath }/findAllUsers.action?pageNow=1&showPage=5";
 		 }
 	});
 	
@@ -231,7 +231,7 @@ $(document).ready(function() {
 		 if(pageNow==totalPage){
 		 	alert("已经是最后一页了");
 		 }else{
-		 	window.location.href="findAllUsers.action?pageNow="+totalPage+"&showPage=5";
+		 	window.location.href="${pageContext.request.contextPath }/findAllUsers.action?pageNow="+totalPage+"&showPage=5";
 		 }
 	});
 

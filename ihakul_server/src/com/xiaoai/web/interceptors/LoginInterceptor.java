@@ -31,6 +31,7 @@ public class LoginInterceptor extends AbstractInterceptor {
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out=response.getWriter();
 		HttpSession session= request.getSession();
+		//return invocation.invoke();  
         //取出名为admin的Session属性    
         Administrate admin=(Administrate) session.getAttribute("admin");
         //如果没有登陆，都返回重新登陆    

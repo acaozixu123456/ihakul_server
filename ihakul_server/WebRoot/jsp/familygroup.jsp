@@ -11,12 +11,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta charset="UTF-8">
 	<title>小艾后台管理系统-家庭组管理</title>
 	
-	<script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
-	<script type="text/javascript" src="../date/js/laydate.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/vendor/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath }/date/js/laydate.js"></script>
 	
 
-	<link type="text/css" rel="stylesheet" href="../css/common.css" />
-	<link type="text/css" rel="stylesheet" href="../css/main.css" />
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/main.css" />
 	
 	
 </head>
@@ -32,7 +32,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<ul class="tab_conbox" id="tab_conbox">
 		<!-- 家庭组列表 -->
 		<li class="tab_con">
-		<form action="showAllFanily.action?pageNow=1&showPage=5" method="post">
+		<form action="${pageContext.request.contextPath }/showAllFanily.action?pageNow=1&showPage=5" method="post">
 			<ul class="ad_list_search clearfix">
 				
 				<li class="name"><label>家庭组名字</label>
@@ -62,7 +62,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<tr>
 					
 					<td>${star.index+1 }</td>
-					<td><a href="houseHoldfind.action?id=${fa.groupId }&pageNow=1&showPage=5" class="operate" >${fa.groupName }</a></td>
+					<td><a href="${pageContext.request.contextPath }/houseHoldfind.action?id=${fa.groupId }&pageNow=1&showPage=5" class="operate" >${fa.groupName }</a></td>
 					<td>${fa.creationTime}</td>
 					<td>${fa.city }</td>
 					<%-- <td><a href="selectFami.action?id=${fa.groupId }" class="operate">修改</a><a href="#" onclick="shanchu(${fa.groupId})" class="operate">删除</a></td> --%>
@@ -91,7 +91,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 		<!--添加家庭组 -->
 		<li class="tab_con">
-		<form action="addFamily.action" method="post">
+		<form action="${pageContext.request.contextPath }/addFamily.action" method="post">
 			<table class="table mt_20 p_lr_15 table_2">
 				<tr>
 					<td> 机器人小艾编号</td>
@@ -144,7 +144,7 @@ $(document).ready(function() {
 	if(refresh !=null){
 	refresh++;
 	if(refresh==2){//修改后返回
-		 window.location.href="showAllFanily.action?pageNow=1&showPage=5";
+		 window.location.href="${pageContext.request.contextPath }/showAllFanily.action?pageNow=1&showPage=5";
 	}
    }
 	
@@ -173,7 +173,7 @@ $(document).ready(function() {
 		if(pageNow+1 >totalPage){
 			alert("已经是最后一页了");
 		}else{
-			window.location.href="showAllFanily.action?pageNow="+(pageNow+1)+"&showPage=5";
+			window.location.href="${pageContext.request.contextPath }/showAllFanily.action?pageNow="+(pageNow+1)+"&showPage=5";
 		}
 			
 		
@@ -188,7 +188,7 @@ $(document).ready(function() {
 		 if(pageNow-1 ==0){
 			alert("已经是第一页了");
 		 }else{
-			window.location.href="showAllFanily.action?pageNow="+(pageNow-1)+"&showPage=5";
+			window.location.href="${pageContext.request.contextPath }/showAllFanily.action?pageNow="+(pageNow-1)+"&showPage=5";
 		 }
 	});
 	
@@ -201,7 +201,7 @@ $(document).ready(function() {
 		 if(pageNow==1){
 		 	alert("已经是第一页了");
 		 }else{
-		 	window.location.href="showAllFanily.action?pageNow=1&showPage=5";
+		 	window.location.href="${pageContext.request.contextPath }/showAllFanily.action?pageNow=1&showPage=5";
 		 }
 	
 	});
@@ -215,7 +215,7 @@ $(document).ready(function() {
 		 if(pageNow==totalPage){
 		 	alert("已经是最后一页了");
 		 }else{
-		 	window.location.href="showAllFanily.action?pageNow="+totalPage+"&showPage=5";
+		 	window.location.href="${pageContext.request.contextPath }/showAllFanily.action?pageNow="+totalPage+"&showPage=5";
 		 }
 	
 	});
@@ -226,7 +226,7 @@ function shanchu(id){
   var fals=confirm("你确定要删除吗？");
 	if(fals){
 	$.ajax({
-		url:"deleteFamily.action",
+		url:"${pageContext.request.contextPath }/deleteFamily.action",
 		data:{"id":id},
 		type:"post",
 		dataType:"json",
@@ -258,7 +258,7 @@ function shanchu(id){
 function upperCase(){
 	var xiaoiNumber=$("#da").val();
 	$.ajax({
-		url:"getXiaoi.action",
+		url:"${pageContext.request.contextPath }/getXiaoi.action",
 		type:"post",
 		data:{xiaoiNumber:xiaoiNumber},
 		dataType:"json",

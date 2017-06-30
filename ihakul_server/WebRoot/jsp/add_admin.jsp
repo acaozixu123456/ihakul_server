@@ -10,9 +10,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 	<meta charset="UTF-8">
 	<title>机器人小艾台管理系统-管理员管理</title>
-	<script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="../css/common.css" />
-	<link type="text/css" rel="stylesheet" href="../css/main.css" />
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/vendor/jquery-1.9.1.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/main.css" />
   
 </head>
 <body>
@@ -22,7 +22,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </div>
 
 <div class="container">
-			<form action="insertAdmin.action" method="post" >
+			<form action="${pageContext.request.contextPath }/insertAdmin.action" method="post" >
 			<table class="table mt_20 p_lr_15 table_2">
 				<tr>
 					<td width="150">账号：</td>
@@ -81,7 +81,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		//验证用户名是否已注册
 	function queryName(aname){
 		$.ajax({
-			url:"getAdminByaname.action",
+			url:"${pageContext.request.contextPath }/getAdminByaname.action",
 			type:"post",
 			data:{"aname":aname},
 			dataType:"json",

@@ -23,5 +23,10 @@ public class RoleService implements IRoleService {
 		
 		return roleDao.selectRoleByname(name).get(0);
 	}
+	@Override
+	public Role InitRole() {
+		roleDao.InitRole();
+		return null;
+	}
 
 }

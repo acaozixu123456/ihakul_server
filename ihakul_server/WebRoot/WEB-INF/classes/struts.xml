@@ -40,15 +40,15 @@
     	<!-- 管理员登入 -->
     	<!--  name jsp调用 ; class  java中的注解调用 ...Action  @Controller("adminAction"); method 使用方法 -->
     	<action name="loginAction" class="adminAction" method="adminLogin">
-    		<result name="success">main.jsp</result>
-    		<result name="error">login.jsp</result>
+    		<result name="success">/jsp/main.jsp</result>
+    		<result name="error">/jsp/login.jsp</result>
     		 <!-- 添加defaultStack保证不执行拦截器 -->  
             <interceptor-ref name="defaultStack"></interceptor-ref>  
     	</action>
     	
     	<!-- 查询所有管理员-->
     	<action name="showAllAdminAction" class="adminAction" method="selectAlladmin">
-    		<result name="success" >admin_main.jsp</result>
+    		<result name="success" >/jsp/admin_main.jsp</result>
     		 <!-- 设置登录拦截器 -->
     		 <!-- 添加defaultStack保证不执行拦截器 -->  
             <interceptor-ref name="LoginInterceptor"></interceptor-ref>    
@@ -57,11 +57,11 @@
     	
     	<!-- 添加 -->
     	<action name="insertAdmin" class="adminAction" method="insertAdmin">
-    		<result name="success">login.jsp</result>
-    		<result name="error">login.jsp</result>
+    		<result name="success">/jsp/login.jsp</result>
+    		<result name="error">/jsp/login.jsp</result>
     		<interceptor-ref name = "tokenSession" ></interceptor-ref>
-    		<result name="invalid.token">message.jsp</result>
-    		<interceptor-ref name="LoginInterceptor"></interceptor-ref>    
+    		<result name="invalid.token">/jsp/message.jsp</result>
+    		<!-- <interceptor-ref name="LoginInterceptor"></interceptor-ref> -->    
     		<interceptor-ref name="defaultStack"></interceptor-ref>  
     	</action>
     	
@@ -71,8 +71,8 @@
     	</action>
     	<!-- 根据id查询 -->
     	<action name="getAdmin" class="adminAction" method="selectAdminByid">
-    		<result name="success">admin_edit.jsp</result>
-    		<result name="error">admin_main.jsp</result>
+    		<result name="success">/jsp/admin_edit.jsp</result>
+    		<result name="error">/jsp/admin_main.jsp</result>
     		<interceptor-ref name="adminInterceptor"></interceptor-ref>  
     		<interceptor-ref name="LoginInterceptor"></interceptor-ref>    
     		<interceptor-ref name="defaultStack"></interceptor-ref>  
@@ -86,8 +86,8 @@
     	</action>
     	<!-- 修改 -->
     	<action name="updateAdmin" class="adminAction" method="updateAdminByid">
-    		<result name="success" >admin_main.jsp</result>
-    		<result name="error">admin_edit.jsp</result>
+    		<result name="success" >/jsp/admin_main.jsp</result>
+    		<result name="error">/jsp/admin_edit.jsp</result>
     		<interceptor-ref name="adminInterceptor"></interceptor-ref>  
     		<interceptor-ref name="LoginInterceptor"></interceptor-ref>    
     		<interceptor-ref name="defaultStack"></interceptor-ref>  
@@ -97,8 +97,8 @@
     	<!-- 家庭组 -->
     	<!-- 按条件查询 -->
     	<action name="showAllFanily" class="familygroupAction" method="selectAllFamily">
-    		<result name="success" >familygroup.jsp</result>
-    		<result name="error"  >familygroup.jsp</result>
+    		<result name="success" >/jsp/familygroup.jsp</result>
+    		<result name="error"  >/jsp/familygroup.jsp</result>
     		 <!-- 添加defaultStack保证不执行拦截器 -->  
         	<interceptor-ref name="LoginInterceptor"></interceptor-ref>    
         	<interceptor-ref name="defaultStack"></interceptor-ref>  
@@ -111,24 +111,24 @@
     	</action>
     	<!-- 添加 -->
     	<action  name="addFamily" class="familygroupAction" method="insertFamily">
-    		<result name="success"  >familygroup.jsp</result>
-    		<result name="error" >familygroup.jsp</result>
+    		<result name="success"  >/jsp/familygroup.jsp</result>
+    		<result name="error" >/jsp/familygroup.jsp</result>
     		 <!-- 添加defaultStack保证不执行拦截器 -->  
        <interceptor-ref name="LoginInterceptor"></interceptor-ref>    
         <interceptor-ref name="defaultStack"></interceptor-ref>  
     	</action>
     	<!-- 根据id查询 -->
     	<action  name="selectFami" class="familygroupAction" method="selectFgByid">
-    		<result name="success">familygroup_infor.jsp</result>
-    		<result name="error">familygroup.jsp</result>
+    		<result name="success">/jsp/familygroup_infor.jsp</result>
+    		<result name="error">/jsp/familygroup.jsp</result>
     		 <!-- 添加defaultStack保证不执行拦截器 -->  
         <interceptor-ref name="LoginInterceptor"></interceptor-ref>    
         <interceptor-ref name="defaultStack"></interceptor-ref>  
     	</action>
     	<!-- 修改 -->
     	<action  name="updateFamily" class="familygroupAction" method="updateFamily">
-    		<result name="success">familygroup.jsp</result>
-    		<result name="error">familygroup_infor.jsp</result>
+    		<result name="success">/jsp/familygroup.jsp</result>
+    		<result name="error">/jsp/familygroup_infor.jsp</result>
     		 <!-- 添加defaultStack保证不执行拦截器 -->  
         <interceptor-ref name="LoginInterceptor"></interceptor-ref>    
         <interceptor-ref name="defaultStack"></interceptor-ref>  
@@ -136,8 +136,8 @@
     	
     	<!-- 根据名字查询 -->
     	<action  name="findFamily" class="familygroupAction" method="selectFamilyByname">
-    		<result name="success" type="json">user_management.jsp</result>
-    		<result name="error" type="json">user_management.jsp</result>
+    		<result name="success" type="json">/jsp/user_management.jsp</result>
+    		<result name="error" type="json">/jsp/user_management.jsp</result>
     		 <!-- 添加defaultStack保证不执行拦截器 -->  
         <interceptor-ref name="defaultStack"></interceptor-ref>  
     	</action>
@@ -146,43 +146,43 @@
     	<!-- 终端小艾 -->
     	<!-- 根据编号查询 -->
     	<action name="getXiaoi" class="xiaoiAction" method="getXiaoi">
-    		<result name="success" type="json">familygroup.jsp</result>
-    		<result name="error" type="json">familygroup.jsp</result>
+    		<result name="success" type="json">/jsp/familygroup.jsp</result>
+    		<result name="error" type="json">/jsp/familygroup.jsp</result>
     		 <!-- 添加defaultStack保证不执行拦截器 -->  
         <interceptor-ref name="defaultStack"></interceptor-ref>  
     	</action>
     	<!-- 条件分页查询 -->
     	<action name="findAllXiaoi" class="xiaoiAction" method="findAll">
-    		<result name="success" >xiaoai.jsp</result>
-    		<result name="error" >xiaoai.jsp</result>
+    		<result name="success" >/jsp/xiaoai.jsp</result>
+    		<result name="error" >/jsp/xiaoai.jsp</result>
     		 <!-- 添加defaultStack保证不执行拦截器 -->  
         <interceptor-ref name="defaultStack"></interceptor-ref>  
     	</action>
     	<!-- 删除 -->
     	<action name="deleteXiaoi" class="xiaoiAction" method="deleteXiaoi">
-    		<result name="success" >xiaoai.jsp</result>
-    		<result name="error" >xiaoai.jsp</result>
+    		<result name="success" >/jsp/xiaoai.jsp</result>
+    		<result name="error" >/jsp/xiaoai.jsp</result>
     		 <!-- 添加defaultStack保证不执行拦截器 -->  
         <interceptor-ref name="defaultStack"></interceptor-ref>  
     	</action>
     	<!-- 根据id查询 -->
     	<action name="selectXiaoiByid" class="xiaoiAction" method="getXiaoiByid">
-    		<result name="success" >xiaoai_edit.jsp</result>
+    		<result name="success" >/jsp/xiaoai_edit.jsp</result>
     		 <!-- 添加defaultStack保证不执行拦截器 -->  
         <interceptor-ref name="defaultStack"></interceptor-ref>  	
     	</action>
     	<!-- 修改 -->
     	<action name="updateXiaoi" class="xiaoiAction" method="updateXiaoi">
-    		<result name="success" >xiaoai.jsp</result>	
-    		<result name="error" >xiaoai.jsp</result>	
+    		<result name="success" >/jsp/xiaoai.jsp</result>	
+    		<result name="error" >/jsp/xiaoai.jsp</result>	
     		 <!-- 添加defaultStack保证不执行拦截器 -->  
         <interceptor-ref name="defaultStack"></interceptor-ref>  
     	</action>
     	
     	<!-- 添加 -->
     	<action name="addXiaoi" class="xiaoiAction" method="addXiaoai">
-    		<result name="success" >xiaoai.jsp</result>	
-    		<result name="error" >xiaoai.jsp</result>	
+    		<result name="success" >/jsp/xiaoai.jsp</result>	
+    		<result name="error" >/jsp/xiaoai.jsp</result>	
     		 <!-- 添加defaultStack保证不执行拦截器 -->  
         <interceptor-ref name="defaultStack"></interceptor-ref>  
     	</action>
@@ -195,86 +195,86 @@
     	<!-- 用户管理 -->
     	<!-- 条件查询 -->
     	<action name="findAllUsers" class="usersAction" method="findAll">
-    		<result name="success" >user_management.jsp </result>
-    		<result name="error" >user_management.jsp</result>
+    		<result name="success" >/jsp/user_management.jsp </result>
+    		<result name="error" >/jsp/user_management.jsp</result>
     		 <!-- 添加defaultStack保证不执行拦截器 -->  
         <interceptor-ref name="defaultStack"></interceptor-ref>  
     	</action>
     	
     	<!-- 删除用户 -->
     	<action name="deleteUsers" class="usersAction" method="deleteUsers">
-    		<result name="success" type="json" >user_management.jsp </result>
+    		<result name="success" type="json" >/jsp/user_management.jsp </result>
     		 <!-- 添加defaultStack保证不执行拦截器 -->  
         <interceptor-ref name="defaultStack"></interceptor-ref>  
     	</action>
  		
  		<!-- 添加用户 -->
  		<action name="insertUsers" class="usersAction" method="insertUsers"> 
- 			<result name="success">user_management.jsp</result>
- 			<result name="error">user_management.jsp</result>
+ 			<result name="success">/jsp/user_management.jsp</result>
+ 			<result name="error">/jsp/user_management.jsp</result>
         	<interceptor-ref name="defaultStack"/>  
  		</action>
  		<!-- 根据用户id查询 -->
  		<action name="getUser" class="usersAction" method="getUsers"> 
- 			<result name="success">user_edit.jsp</result>
- 			<result name="error">user_management.jsp</result>
+ 			<result name="success">/jsp/user_edit.jsp</result>
+ 			<result name="error">/jsp/user_management.jsp</result>
         	<interceptor-ref name="defaultStack"/>  
  		</action>
  		<!-- 修改 -->
  		<action name="updateUser" class="usersAction" method="updateUsers"> 
- 			<result name="success" >user_management.jsp</result>
- 			<result name="error" >user_management.jsp</result>
+ 			<result name="success" >/jsp/user_management.jsp</result>
+ 			<result name="error" >/jsp/user_management.jsp</result>
         	<interceptor-ref name="defaultStack"/>  
  		</action>
  		
  		<!-- 家电管理 -->
  		<!-- 条件查询 -->
  		<action name="houseHoldfind" class="houseHoldAction" method="findAll">
- 			<result name="success" > household_appliances.jsp</result>
+ 			<result name="success" >/jsp/household_appliances.jsp</result>
  			<interceptor-ref name="defaultStack"/>  
  		</action>
  		
  		<action name="findAllhhold" class="houseHoldAction" method="findAll">
- 			<result name="success" >house_logbookquery.jsp</result>
+ 			<result name="success" >/jsp/house_logbookquery.jsp</result>
  			<interceptor-ref name="defaultStack"/>  
  		</action>
  		
  		<action name="findHouseHold" class="houseHoldAction" method="findAll"> 
- 			<result name="success" type="json" >household.jsp</result>
+ 			<result name="success" type="json" >/jsp/household.jsp</result>
         	<interceptor-ref name="defaultStack"/>  
  		</action>
  		<!-- 删除 -->
  		<action name="deleteHousehold" class="houseHoldAction" method="detelete" >
- 			<result name="success"  type="json">household.jsp</result>
+ 			<result name="success"  type="json">/jsp/household.jsp</result>
         	<interceptor-ref name="defaultStack"/>
  		</action>
  		<!-- 根据id查询 -->
  		<action name="shullHousehold" class="houseHoldAction" method="selectByid">
- 			<result name="success"  >house_xianqing.jsp</result>
+ 			<result name="success"  >/jsp/house_xianqing.jsp</result>
         	<interceptor-ref name="defaultStack"/>
  		</action>
  		
  		<action name="getHousehold" class="houseHoldAction" method="selectByid" >
- 			<result name="success"  >updateHousehold.jsp</result>
+ 			<result name="success"  >/jsp/updateHousehold.jsp</result>
  			
         	<interceptor-ref name="defaultStack"/>
  		</action>
  		<!-- 修改 -->
  		<action name="updateHousehold" class="houseHoldAction" method="update" >
- 			<result name="success"  >household.jsp</result>
- 			<result name="error"  >household.jsp</result>
+ 			<result name="success"  >/jsp/household.jsp</result>
+ 			<result name="error"  >/jsp/household.jsp</result>
         	<interceptor-ref name="defaultStack"/>
  		</action>
  		
  		<!-- 工作日志 -->
  		<!-- 查询 -->
  		<action name="showXiaolog" class="xiaoilogAction" method="select">
- 			<result name="success">xiaoilog.jsp</result>
+ 			<result name="success">/jsp/xiaoilog.jsp</result>
  			<interceptor-ref name="defaultStack"/>
  		</action>
  		<!-- 导出报表 -->
  		<action name="exportExcell" class="xiaoilogAction" method="exportExcel">
- 			<result name="success" >logbook.jsp</result>
+ 			<result name="success" >/jsp/logbook.jsp</result>
  			<interceptor-ref name="defaultStack"/>
  		</action>
  		<!-- 添加 -->
@@ -287,30 +287,30 @@
  		<!-- 版本管理 -->
  		<!-- 查询 -->
  		<action name="findVersion" class="versionAction" method="findAllVersion">
- 			<result name="success">versions_management.jsp</result>
+ 			<result name="success">/jsp/versions_management.jsp</result>
  			<interceptor-ref name="defaultStack"/>
  		</action>
  		<!-- 添加 -->
  		<action name="upload" class="versionAction" method="uploadVersion">
- 			<result name="success">versions_management.jsp</result>
- 			<result name="error">versions_management.jsp </result>
+ 			<result name="success">/jsp/versions_management.jsp</result>
+ 			<result name="error">/jsp/versions_management.jsp </result>
  			<interceptor-ref name="defaultStack"/>
  		</action>
  		<!-- 根据id查询 -->
  		<action name="findVersionByid" class="versionAction" method="findVersionByid">
- 			<result name="success">versions_edit.jsp</result>
- 			<result name="error">error.jsp</result>
+ 			<result name="success">/jsp/versions_edit.jsp</result>
+ 			<result name="error">/jsp/error.jsp</result>
  			<interceptor-ref name="defaultStack"/>
  		</action>
  		<!-- 修改 -->
  		<action name="update" class="versionAction" method="updateVersion">
- 			<result name="success">versions_management.jsp</result>
- 			<result name="error">error.jsp</result>
+ 			<result name="success">/jsp/versions_management.jsp</result>
+ 			<result name="error">/jsp/error.jsp</result>
  			<interceptor-ref name="defaultStack"/>
  		</action>
  		<!-- 删除 -->
  		<action name="deleteVersion" class="versionAction" method="deleteVersion">
- 			<result name="success" type="json">versions_management.jsp</result>
+ 			<result name="success" type="json">/jsp/versions_management.jsp</result>
  			<interceptor-ref name="defaultStack"/>
  		</action>
  		
@@ -337,26 +337,26 @@
  		<!-- 数据字典-->
  		<!-- 查询字典数据 -->
  		<action name="queryHouseUser" class="datadicAction" method="find">
- 			<result name="success">homeuser_query.jsp</result>
- 			<result name="effor">homeuser_query.jsp</result>
+ 			<result name="success">/jsp/homeuser_query.jsp</result>
+ 			<result name="effor">/jsp/homeuser_query.jsp</result>
  			<interceptor-ref name="defaultStack"/>
  		</action>
  		<!-- 添加字典数据 -->
  		<action name="insertDatadictroy" class="datadicAction" method="insert">
- 			<result name="success">datadictionary_main.jsp</result>
- 			<result name="error"> datadictionary_insert.jsp</result>
+ 			<result name="success">/jsp/datadictionary_main.jsp</result>
+ 			<result name="error">/jsp/datadictionary_insert.jsp</result>
  			<interceptor-ref name="defaultStack"/>
  		</action>
  		<!-- 分页条件查询 -->
  		<action name="paginFindDatadic" class="datadicAction" method="pagingFind">
- 			<result name="success">datadictionary_main.jsp</result>
- 			<result name="error">datadictionary_main.jsp</result>
+ 			<result name="success">/jsp/datadictionary_main.jsp</result>
+ 			<result name="error">/jsp/datadictionary_main.jsp</result>
  			<interceptor-ref name="defaultStack"/>
  		</action>
  		<!-- 删除数据字典 -->
  		<action name="deleteDatadictory" class="datadicAction" method="delete">
- 			<result name="success">datadictionary_main.jsp</result>
- 			<result name="error">datadictionary_main.jsp </result>
+ 			<result name="success">/jsp/datadictionary_main.jsp</result>
+ 			<result name="error">/jsp/datadictionary_main.jsp </result>
  			<interceptor-ref name="defaultStack"/>
  		</action>
  		

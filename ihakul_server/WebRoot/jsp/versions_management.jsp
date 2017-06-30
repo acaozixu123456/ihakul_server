@@ -10,9 +10,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 	<meta charset="UTF-8">
 	<title>小艾后台管理系统-版本管理</title>
-	<script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="../css/common.css" />
-	<link type="text/css" rel="stylesheet" href="../css/main.css" />
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/vendor/jquery-1.9.1.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/main.css" />
 </head>
 <body>
 <div class="main_title"><i></i><a href="">小艾</a>><a href=""><strong>版本管理</strong></a></div>
@@ -25,7 +25,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<ul class="tab_conbox" id="tab_conbox">
 		<!-- 版本列表 -->
 		<li class="tab_con">
-			<form action="findVersion.action?pageNow=1&showPage=5" method="post">
+			<form action="${pageContext.request.contextPath }/findVersion.action?pageNow=1&showPage=5" method="post">
 			<ul class="ad_list_search clearfix">
 				<li class="name"><label>版本号：</label><input type="text" name="versionNumber" value=""></li>
 				<li class="name"><label>版本包名：</label><input type="text" name="versionPackage" value=""></li>
@@ -71,7 +71,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</c:if>
 					</td>
 					<td>${version.versionUrl }</td>
-					<td><a href="findVersionByid.action?id=${version.id }" class="operate">编辑</a>
+					<td><a href="${pageContext.request.contextPath }/findVersionByid.action?id=${version.id }" class="operate">编辑</a>
 						<a href="#"  class="operate" onclick="de(${version.id })">删除</a>
 					</td>
 		 		</tr>
@@ -96,7 +96,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 		<!-- 新增版本 -->
 		<li class="tab_con">
-			<form action="upload.action" name="formMat" method="post" enctype="multipart/form-data" >
+			<form action="${pageContext.request.contextPath }/upload.action" name="formMat" method="post" enctype="multipart/form-data" >
 			<table class="table mt_20 p_lr_15 table_2">
 				<tr>
 					<td width="150"><i class="red_heart">*</i>版本号：</td>
@@ -151,7 +151,7 @@ $(document).ready(function() {
 	if(refresh !=null){
 		refresh++;
 	if(refresh==2){//修改后，添加后返回
-		 window.location.href="findVersion.action?pageNow=1&showPage=5";
+		 window.location.href="${pageContext.request.contextPath }/findVersion.action?pageNow=1&showPage=5";
 	}
 	}
 /* 	$("#vnumber").blur(function (){
@@ -268,7 +268,7 @@ $(document).ready(function() {
 		if(pageNow+1 >totalPage){
 			alert("已经是最后一页了");
 		}else{
-			window.location.href="findVersion.action?pageNow="+(pageNow+1)+"&showPage=5";
+			window.location.href="${pageContext.request.contextPath }/findVersion.action?pageNow="+(pageNow+1)+"&showPage=5";
 		}
 			
 		
@@ -282,7 +282,7 @@ $(document).ready(function() {
 		 if(pageNow-1 ==0){
 			alert("已经是第一页了");
 		 }else{
-			window.location.href="findVersion.action?pageNow="+(pageNow-1)+"&showPage=5";
+			window.location.href="${pageContext.request.contextPath }/findVersion.action?pageNow="+(pageNow-1)+"&showPage=5";
 		 }
 	});
 	
@@ -295,7 +295,7 @@ $(document).ready(function() {
 		 if(pageNow==1){
 		 	alert("已经是第一页了");
 		 }else{
-		 	window.location.href="findVersion.action?pageNow=1&showPage=5";
+		 	window.location.href="${pageContext.request.contextPath }/findVersion.action?pageNow=1&showPage=5";
 		 }
 	
 	});
@@ -309,7 +309,7 @@ $(document).ready(function() {
 		 if(pageNow==totalPage){
 		 	alert("已经是最后一页了");
 		 }else{
-		 	window.location.href="findVersion.action?pageNow="+totalPage+"&showPage=5";
+		 	window.location.href="${pageContext.request.contextPath }/findVersion.action?pageNow="+totalPage+"&showPage=5";
 		 }
 	
 	});

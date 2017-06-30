@@ -11,9 +11,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 	<meta charset="UTF-8">
 	<title>机器人小艾台管理系统-家电</title>
-	<script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="../css/common.css" />
-	<link type="text/css" rel="stylesheet" href="../css/main.css" />
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/vendor/jquery-1.9.1.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/main.css" />
 </head>
 <body>
 <div class="main_title">
@@ -30,7 +30,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<c:forEach items="${houseList }" var="house" varStatus="star">
 				<tr>
 					<td>${star.index+1 }</td>
-					<td><a href="shullHousehold.action?hid=${house.hid }&pageNow=1&showPage=5">${house.eaName }</a></td>
+					<td><a href="${pageContext.request.contextPath }/shullHousehold.action?hid=${house.hid }&pageNow=1&showPage=5">${house.eaName }</a></td>
 				</tr>				
 				</c:forEach>
 

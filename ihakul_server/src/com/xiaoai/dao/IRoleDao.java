@@ -22,4 +22,8 @@ public interface IRoleDao {
 	 * @return
 	 */
 	public List<Role> selectRoleByname(String name);
+	/**
+	 * 初始化角色
+	 */
+	public void InitRole();
 }

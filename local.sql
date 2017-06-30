@@ -34,11 +34,7 @@ CREATE TABLE `administrate` (
   PRIMARY KEY (`aid`),
   KEY `aid_r2` (`rid`),
   CONSTRAINT `aid_r2` FOREIGN KEY (`rid`) REFERENCES `role` (`rid`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
-
-/*Data for the table `administrate` */
-
-insert  into `administrate`(`aid`,`aname`,`password`,`createdate`,`loginLastTime`,`loginNumber`,`rid`,`realName`,`phoneNumber`,`sex`) values (2,'2','2','2017-04-13 15:46:50','2017-04-13 15:46:52',0,2,'2','2',NULL),(9,'c','1','2016-12-28 17:06:55','2017-04-13 16:20:54',16,1,'汉库克','125478794548',NULL),(10,'admin','123','2017-05-17 15:57:21','2017-06-14 15:18:43',54,1,'jack','12345678911','男');
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `channel` */
 
@@ -54,8 +50,6 @@ CREATE TABLE `channel` (
   CONSTRAINT `ci_gid` FOREIGN KEY (`groupId`) REFERENCES `familygroup` (`groupId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Data for the table `channel` */
-
 /*Table structure for table `datadictionary` */
 
 DROP TABLE IF EXISTS `datadictionary`;
@@ -67,10 +61,6 @@ CREATE TABLE `datadictionary` (
   `checkedType` int(2) DEFAULT NULL COMMENT '是否已使用',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
-
-/*Data for the table `datadictionary` */
-
-insert  into `datadictionary`(`id`,`ddName`,`createTime`,`checkedType`) values (1,'空调使用情况','2017-02-07 17:58:38',1),(2,'电视','2017-02-08 11:32:25',NULL),(3,'电风扇','2017-02-08 11:32:43',NULL),(4,'洗衣机',NULL,NULL),(6,'公文',NULL,NULL),(8,'第三个',NULL,NULL),(9,'智能插座',NULL,NULL),(10,'带',NULL,NULL),(12,'gd',NULL,NULL),(13,'af',NULL,NULL),(14,'faa',NULL,NULL),(15,'热水器','2017-02-09 11:16:45',NULL),(16,'1','2017-03-03 02:58:55',NULL),(17,'1','2017-03-03 04:27:11',NULL),(18,'1','2017-04-12 04:40:16',NULL);
 
 /*Table structure for table `family_user` */
 
@@ -86,11 +76,7 @@ CREATE TABLE `family_user` (
   KEY `u_id` (`userId`),
   CONSTRAINT `g_id` FOREIGN KEY (`groupId`) REFERENCES `familygroup` (`groupId`),
   CONSTRAINT `u_id` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
-
-/*Data for the table `family_user` */
-
-insert  into `family_user`(`id`,`groupId`,`userId`,`dna`) values (7,7,2,'2'),(14,13,2,'2'),(21,21,1,'1'),(22,22,6,'6');
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `familygroup` */
 
@@ -110,10 +96,6 @@ CREATE TABLE `familygroup` (
   `groupIp` varchar(20) DEFAULT NULL COMMENT '家庭组IP',
   PRIMARY KEY (`groupId`,`groupName`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
-
-/*Data for the table `familygroup` */
-
-insert  into `familygroup`(`groupId`,`groupName`,`creationTime`,`groupNumber`,`state`,`city`,`district`,`groupPassword`,`managerId`,`versionNumber`,`groupIp`) values (7,'哈酷哈酷','2017-06-09 14:40:03',10007,NULL,NULL,NULL,'0362461236',2,9,NULL),(10,'中科院','2017-06-22 18:39:46',10010,NULL,NULL,NULL,'0018595608',1,2,NULL),(13,'水浒传','2017-06-26 10:47:02',10013,NULL,NULL,NULL,'8966253120',2,3,NULL),(19,'中科院','2017-06-27 15:37:03',10019,NULL,NULL,NULL,'8618639198',1,3,NULL),(21,'中科院','2017-06-28 16:43:46',10021,NULL,NULL,NULL,'7553223115',1,37,NULL),(22,'14','2017-06-29 10:21:01',10022,NULL,NULL,NULL,'7525006981',6,3,NULL);
 
 /*Table structure for table `household` */
 
@@ -142,10 +124,6 @@ CREATE TABLE `household` (
   CONSTRAINT `nk_rid` FOREIGN KEY (`roomId`) REFERENCES `room` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
-/*Data for the table `household` */
-
-insert  into `household`(`hid`,`classId`,`brand`,`model`,`createTime`,`eaName`,`groupId`,`roomId`,`eaNumber`,`prop`,`stub`,`type`,`port`,`status`) values (10,2,NULL,'*','2017-06-29 10:21:50','电冰箱',22,5,'0-0-LIVING_ROOM#288793330400101121',288793330400101121,NULL,NULL,32,-1),(13,1,'LG','*','2017-06-29 17:59:45',NULL,21,10,'0-0-LIVING_ROOM#acLG539',0,539,'ac',NULL,NULL),(14,1,'SANYO','*','2017-06-29 18:00:47',NULL,21,12,'0-0-BALCONY#tvSANYO8058',0,8058,'tv',NULL,NULL);
-
 /*Table structure for table `privilege` */
 
 DROP TABLE IF EXISTS `privilege`;
@@ -160,10 +138,6 @@ CREATE TABLE `privilege` (
   CONSTRAINT `gh_rid` FOREIGN KEY (`rid`) REFERENCES `role` (`rid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
-/*Data for the table `privilege` */
-
-insert  into `privilege`(`id`,`rid`,`priName`,`description`) values (1,2,'家庭组管理','对家庭组的增删改查'),(2,2,'用户管理','对用户的增删改查'),(3,2,'家电管理','对家电的增删改查'),(4,2,'机器人小艾管理','对小艾的增删改查'),(5,2,'日志管理','对日志的增删改查');
-
 /*Table structure for table `role` */
 
 DROP TABLE IF EXISTS `role`;
@@ -173,10 +147,6 @@ CREATE TABLE `role` (
   `rolename` varchar(50) DEFAULT NULL COMMENT '角色名',
   PRIMARY KEY (`rid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
-/*Data for the table `role` */
-
-insert  into `role`(`rid`,`rolename`) values (1,'高级管理员'),(2,'普通管理员');
 
 /*Table structure for table `room` */
 
@@ -198,10 +168,6 @@ CREATE TABLE `room` (
   CONSTRAINT `bn_roi` FOREIGN KEY (`groupId`) REFERENCES `familygroup` (`groupId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
-/*Data for the table `room` */
-
-insert  into `room`(`id`,`roomName`,`createTime`,`groupId`,`roomNickName`,`floor`,`parentId`,`roomNumber`,`robot`,`creator`) values (5,'LIVING_ROOM','2017-06-29 10:21:26',22,NULL,0,NULL,'0-0-LIVING_ROOM','0030000200009902','0030000200009902'),(10,'LIVING_ROOM','2017-06-29 17:59:08',21,NULL,0,NULL,'0-0-LIVING_ROOM','0030000200000102','0030000200000102'),(11,'BED_ROOM','2017-06-29 17:59:26',21,NULL,0,NULL,'0-0-BED_ROOM',NULL,'0030000200000102'),(12,'BALCONY','2017-06-29 18:00:33',21,NULL,0,NULL,'0-0-BALCONY','0030000100009702','0030000100009702'),(13,'STAIRCASE_ROOM','2017-06-29 18:13:11',21,NULL,0,NULL,'0-0-STAIRCASE_ROOM','0030000200000102','0030000200000102'),(14,'DINING_ROOM','2017-06-29 18:13:39',21,NULL,0,NULL,'0-0-DINING_ROOM',NULL,'0030000200000102');
-
 /*Table structure for table `users` */
 
 DROP TABLE IF EXISTS `users`;
@@ -218,11 +184,7 @@ CREATE TABLE `users` (
   `loginLastIp` varchar(20) DEFAULT NULL COMMENT '用户最后登录的IP',
   PRIMARY KEY (`userId`),
   KEY `jk_id` (`loginLastIp`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
-
-/*Data for the table `users` */
-
-insert  into `users`(`userId`,`userName`,`userPassword`,`accessper`,`userPhoneNumber`,`userSex`,`createTime`,`loginLastTimes`,`loginLastIp`) values (1,'jock','e10adc3949ba59abbe56e057f20f883e',1,'15570895417','男士','2017-06-05 16:27:42','2017-06-29 17:57:55','2'),(2,'丘丘','6c2d1c105a9f5d871a6ea5f9496158c6',1,'18923881858','女士','2017-06-06 16:12:30','2017-06-15 14:40:53','2'),(4,'goog','93be52ba8f828a41647f919a5b646221',1,'18086107575','男士','2017-06-07 10:20:11','2017-06-07 10:34:37','2'),(5,'测试','123',1,'18086107515','男','2017-06-09 11:17:17','2017-06-09 15:21:32','2'),(6,'suchun1237','e10adc3949ba59abbe56e057f20f883e',1,'18688707348','男士','2017-06-22 16:29:02','2017-06-29 18:27:42',NULL),(7,'杰','02bd783ae7c2389d200ead9416b9669e',1,'15130933031','男士','2017-06-27 11:56:40','2017-06-28 16:21:32',NULL),(8,'你好啊','e10adc3949ba59abbe56e057f20f883e',1,'12345678910','男','2017-06-29 16:34:29',NULL,NULL);
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `versions` */
 
@@ -239,10 +201,6 @@ CREATE TABLE `versions` (
   `versionUrl` varchar(100) DEFAULT NULL COMMENT '文件地址',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
-
-/*Data for the table `versions` */
-
-insert  into `versions`(`id`,`versionName`,`versionNumber`,`versionPackage`,`upgradeClass`,`upgradeTime`,`versionType`,`versionUrl`) values (1,'0.0.7',7,'com.ihakul.i.listen','test','2017-05-27 15:08:32',3,'/upload/unisound-listen-0.0.7-SNAPSHOT.apk'),(2,'0.0.7',7,'com.ihakul.i.control','test','2017-05-27 15:09:06',3,'/upload/protocol-wrapper-0.0.7-SNAPSHOT.apk'),(3,'0.0.7',7,'com.ihakul.i.server','update','2017-05-27 15:09:38',3,'/upload/i-http-server-0.0.7-SNAPSHOT.apk'),(4,'8',8,'com.ihakul.i.version.update.activity','test','2017-05-27 15:11:49',3,'/upload/Ihakul_VersionUpdate-release-1.8.apk'),(5,'0.0.14',14,'com.ihakul.i.translater','tes','2017-05-27 15:12:29',3,'/upload/Translater-0.1.4-SNAPSHOT.apk');
 
 /*Table structure for table `xiaoaisession` */
 
@@ -269,8 +227,6 @@ CREATE TABLE `xiaoaisession` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Data for the table `xiaoaisession` */
-
 /*Table structure for table `xiaoi` */
 
 DROP TABLE IF EXISTS `xiaoi`;
@@ -291,10 +247,6 @@ CREATE TABLE `xiaoi` (
   CONSTRAINT `xv_hj` FOREIGN KEY (`groupId`) REFERENCES `familygroup` (`groupId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
-/*Data for the table `xiaoi` */
-
-insert  into `xiaoi`(`xid`,`xname`,`onlineState`,`xiaoNumber`,`groupId`,`xiaoType`,`activationTime`,`xiaoIp`,`mode`,`volume`) values (2,'哈酷小ⅰ',0,'0030000200000202',13,2,'2017-06-28 18:02:03','192.168.2.127',NULL,50),(7,'哈酷小ⅰ',1,'0030000200009902',22,2,'2017-06-29 18:06:35','192.168.2.137',NULL,50),(11,'哈酷小ⅰ',0,'0030000200000102',21,2,'2017-06-29 18:13:39','192.168.2.113',NULL,50),(12,'哈酷小ⅰ',1,'0030000100009702',21,2,'2017-06-29 18:06:35','192.168.2.118',NULL,50);
-
 /*Table structure for table `xiaoilog` */
 
 DROP TABLE IF EXISTS `xiaoilog`;
@@ -312,8 +264,6 @@ CREATE TABLE `xiaoilog` (
   CONSTRAINT `ca_xid` FOREIGN KEY (`xid`) REFERENCES `xiaoi` (`xid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Data for the table `xiaoilog` */
-
 /*Table structure for table `xiaoimode` */
 
 DROP TABLE IF EXISTS `xiaoimode`;
@@ -328,11 +278,7 @@ CREATE TABLE `xiaoimode` (
   `mode` int(4) DEFAULT NULL COMMENT '情景模式',
   `groupNumber` int(20) DEFAULT NULL COMMENT '家庭组编号',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-
-/*Data for the table `xiaoimode` */
-
-insert  into `xiaoimode`(`id`,`triggerTime`,`classId`,`orders`,`eaNumber`,`argument`,`mode`,`groupNumber`) values (3,1498645500000,1,'DEVICE_ON','0-0-LIVING_ROOM#acLG539','POWER,POWER_ON',10,10021);
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `xiaoisms` */
 
@@ -346,10 +292,6 @@ CREATE TABLE `xiaoisms` (
   `url` varchar(50) DEFAULT NULL COMMENT 'url地址',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
-/*Data for the table `xiaoisms` */
-
-insert  into `xiaoisms`(`id`,`OperID`,`OperPass`,`AppendID`,`url`) values (1,'ceshfj1','n9JUBHgw',123456,'http://hsms.guodulink.net:9007/QxtSms/QxtFirewall');
 
 /*Table structure for table `xiaoismsmessage` */
 
@@ -365,10 +307,6 @@ CREATE TABLE `xiaoismsmessage` (
   `MessageNumber` varchar(30) DEFAULT NULL COMMENT '消息编号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
-/*Data for the table `xiaoismsmessage` */
-
-insert  into `xiaoismsmessage`(`id`,`HeadMessage`,`YZMessage`,`Messageone`,`Messagetwo`,`minuteTime`,`MessageNumber`) values (1,'【哈酷智能】','您注册的验证码为:',',此验证码','分钟之内有效。',10,NULL),(2,'【哈酷智能】','','祝您快乐生活每一天!',NULL,NULL,NULL);
 
 /*Table structure for table `xiaoitask` */
 
@@ -386,9 +324,7 @@ CREATE TABLE `xiaoitask` (
   PRIMARY KEY (`id`),
   KEY `groupId` (`groupId`),
   CONSTRAINT `xiaoitask_ibfk_1` FOREIGN KEY (`groupId`) REFERENCES `familygroup` (`groupId`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
-
-/*Data for the table `xiaoitask` */
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `xiaoiurl` */
 
@@ -402,10 +338,6 @@ CREATE TABLE `xiaoiurl` (
   `other` varchar(50) DEFAULT NULL COMMENT '其他',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
-/*Data for the table `xiaoiurl` */
-
-insert  into `xiaoiurl`(`id`,`url`,`urlRemark`,`urlNumber`,`other`) values (1,'192.168.2.112','本地ip',10001,NULL);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

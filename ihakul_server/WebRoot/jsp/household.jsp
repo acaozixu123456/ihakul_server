@@ -9,10 +9,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 	<meta charset="UTF-8">
 	<title>机器人小艾后台管理系统-家电管理</title>
-	<script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
-	<script type="text/javascript" src="../js/vendor/jquery.easyui.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="../css/common.css" />
-	<link type="text/css" rel="stylesheet" href="../css/main.css" />
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/vendor/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/vendor/jquery.easyui.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/main.css" />
 	
 </head>
 <body>
@@ -44,7 +44,7 @@ $(document).ready(function(){
 //查询显示
 function showHouseHold(){
 	$.ajax({
-			url:"findHouseHold.action",
+			url:"${pageContext.request.contextPath }/findHouseHold.action",
 			type:"post",  
 			cache:false, 
 			data:{"eaName":$("input[name='eaName']").val(),brand:$("input[name='brand']").val(),pageNow:1,showPage:5,se:1},  /*data参数,以json格式为准  */
@@ -75,7 +75,7 @@ function showHouseHold(){
 function deleteHh(id){
 		alert("开始删除");
 		$.ajax({
-			url:"deleteHousehold.action",
+			url:"${pageContext.request.contextPath }/deleteHousehold.action",
 			type:"post",
 			cache:false,
 			data:{hid:id,se:1},

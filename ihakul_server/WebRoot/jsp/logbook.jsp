@@ -10,9 +10,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
    <meta charset="UTF-8">
 	<title>机器人小艾后台管理系统-日志管理</title>
-	<script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="../css/common.css" />
-	<link type="text/css" rel="stylesheet" href="../css/main.css" />
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/vendor/jquery-1.9.1.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/main.css" />
 </head>
   </head>
   <div class="main_title"><i></i><a href="">小艾</a>><a href=""><strong>搜索工作日志</strong></a></div>
@@ -20,7 +20,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 <div class="container">
-	<form action="showXiaolog.action?showPage=10&pageNow=1" method="post">
+	<form action="${pageContext.request.contextPath }/showXiaolog.action?showPage=10&pageNow=1" method="post">
 	<ul class="ad_list_search clearfix">
 		<li class="time_from"><label>小艾编号：</label><input type="text" name="xiaoiNumber" value=""></li>
 		<li class="search_btn"><button>搜索</button></li>
@@ -64,10 +64,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<input type="hidden" id="totalPage" value="${totalPage }">
 						
 						<input type="hidden" value="${refresh }" id="refresh">
-							<a href="showXiaolog.action?pageNow=1&showPage=5" id="firstPage" >首页</a>
-							<a href="showXiaolog.action?pageNow=${pageNow-1 }&showPage=5" id="upPage" >上一页</a>
-							<a href="showXiaolog.action?pageNow=${pageNow+1 }&showPage=5" id="nextPage" >下一页</a>
-							<a href="showXiaolog.action?pageNow=${totalPage }&showPage=5" id="lastPage" >尾页</a>
+							<a href="${pageContext.request.contextPath }/showXiaolog.action?pageNow=1&showPage=5" id="firstPage" >首页</a>
+							<a href="${pageContext.request.contextPath }/showXiaolog.action?pageNow=${pageNow-1 }&showPage=5" id="upPage" >上一页</a>
+							<a href="${pageContext.request.contextPath }/showXiaolog.action?pageNow=${pageNow+1 }&showPage=5" id="nextPage" >下一页</a>
+							<a href="${pageContext.request.contextPath }/showXiaolog.action?pageNow=${totalPage }&showPage=5" id="lastPage" >尾页</a>
 						</div>
 						<label id="lb" for="check">${pageNow }/${totalPage }</label>
 						
@@ -76,7 +76,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		
 		
 	</table>
-<a href="exportExcell.action?xiaoNumber=${xiaoi.xiaoNumber}" class="btn_submit mt_20">导出报表</a>
+<a href="${pageContext.request.contextPath }/exportExcell.action?xiaoNumber=${xiaoi.xiaoNumber}" class="btn_submit mt_20">导出报表</a>
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -89,7 +89,7 @@ $(document).ready(function(){
 		if(pageNow+1 >totalPage){
 			alert("已经是最后一页了");
 		}else{
-			window.location.href="showXiaolog.action?pageNow="+(pageNow+1)+"&showPage=5";
+			window.location.href="${pageContext.request.contextPath }/showXiaolog.action?pageNow="+(pageNow+1)+"&showPage=5";
 		}
 			
 		
@@ -103,7 +103,7 @@ $(document).ready(function(){
 		 if(pageNow-1 ==0){
 			alert("已经是第一页了");
 		 }else{
-			window.location.href="showXiaolog.action?pageNow="+(pageNow-1)+"&showPage=5";
+			window.location.href="${pageContext.request.contextPath }/showXiaolog.action?pageNow="+(pageNow-1)+"&showPage=5";
 		 }
 	});
 	
@@ -116,7 +116,7 @@ $(document).ready(function(){
 		 if(pageNow==1){
 		 	alert("已经是第一页了");
 		 }else{
-		 	window.location.href="showXiaolog.action?pageNow=1&showPage=5";
+		 	window.location.href="${pageContext.request.contextPath }/showXiaolog.action?pageNow=1&showPage=5";
 		 }
 	
 	});
@@ -130,7 +130,7 @@ $(document).ready(function(){
 		 if(pageNow==totalPage){
 		 	alert("已经是最后一页了");
 		 }else{
-		 	window.location.href="showXiaolog.action?pageNow="+totalPage+"&showPage=5";
+		 	window.location.href="${pageContext.request.contextPath }/showXiaolog.action?pageNow="+totalPage+"&showPage=5";
 		 }
 	
 	});

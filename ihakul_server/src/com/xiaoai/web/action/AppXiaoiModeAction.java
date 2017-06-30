@@ -59,7 +59,7 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 		JSONObject json1 = new JSONObject();
 		JSONObject jsonObject = MyRequest.getParameterNames();
 		XiaoiResult xr = new XiaoiResult();
-		jsonObject.put("triggerTime", jsonObject.getString("trigger"));
+		jsonObject.put("trigger", jsonObject.getString("trigger"));
 		String classId = jsonObject.getString("classId");
 		String argument = jsonObject.getString("argument");
 		String eaNumber = jsonObject.getString("eaNumber");
@@ -222,7 +222,7 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 					for (XiaoiMode xm : findModeByGroupNum) {
 						json2 = new JSONObject();
 						json2.put("id", xm.getId());
-						json2.put("triggerTime", xm.getTriggerTime());
+						json2.put("trigger", xm.getTrigger());
 						json2.put("classId", xm.getClassId());
 						json2.put("orders", xm.getOrders());
 						json2.put("eaNumber", xm.getEaNumber());

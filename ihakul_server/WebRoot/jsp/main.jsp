@@ -9,15 +9,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 	<meta charset="UTF-8">
 	<title>后台管理系统</title>
-	<script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="../css/common.css" />
-	<link type="text/css" rel="stylesheet" href="../css/main.css" />
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/vendor/jquery-1.9.1.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/main.css" />
 </head> 
 <body>
 
 <div class="nav">
 	<ul class="system fr">
-		<li><a href=""><span class="user_icon fl"><img src="../images/user_icon.jpg" alt=""></span>${admin.realName }</a></li>
+		<li><a href=""><span class="user_icon fl"><img src="${pageContext.request.contextPath }/images/user_icon.jpg" alt=""></span>${admin.realName }</a></li>
 		<!--<li><a href=""><i class="cog"></i>设置</a></li>-->
 		<li><a href="#" onclick="log()"><i class="off"></i>退出登录</a></li>
 	</ul>
@@ -26,15 +26,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <div class="menu">
 	<ul>
-	    <li id="l1" class="curr"><a href="showAllAdminAction.action?pageNow=1&showPage=5" target="content_frame">账号管理</a></li>	
-		<li id="l2"><a href="showAllFanily.action?pageNow=1&showPage=5" target="content_frame">家庭组管理</a></li>
-		<li id="l3"><a href="findAllUsers.action?pageNow=1&showPage=5" target="content_frame">用户管理</a></li>
-		<li id="l4"><a href="findAllhhold.action?pageNow=1&showPage=5" target="content_frame">家电管理</a></li>
-		<li id="l5"><a href="findAllXiaoi.action?pageNow=1&showPage=5" target="content_frame">终端管理</a></li>
-		<li id="l6"><a href="showXiaolog.action?pageNow=1&showPage=5" target="content_frame">终端工作日志</a></li>
-		<li id="l7"><a href="findVersion.action?pageNow=1&showPage=5" target="content_frame">版本管理</a></li>
+	    <li id="l1" class="curr"><a href="${pageContext.request.contextPath }/showAllAdminAction.action?pageNow=1&showPage=5" target="content_frame">账号管理</a></li>	
+		<li id="l2"><a href="${pageContext.request.contextPath }/showAllFanily.action?pageNow=1&showPage=5" target="content_frame">家庭组管理</a></li>
+		<li id="l3"><a href="${pageContext.request.contextPath }/findAllUsers.action?pageNow=1&showPage=5" target="content_frame">用户管理</a></li>
+		<li id="l4"><a href="${pageContext.request.contextPath }/findAllhhold.action?pageNow=1&showPage=5" target="content_frame">家电管理</a></li>
+		<li id="l5"><a href="${pageContext.request.contextPath }/findAllXiaoi.action?pageNow=1&showPage=5" target="content_frame">终端管理</a></li>
+		<li id="l6"><a href="${pageContext.request.contextPath }/showXiaolog.action?pageNow=1&showPage=5" target="content_frame">终端工作日志</a></li>
+		<li id="l7"><a href="${pageContext.request.contextPath }/findVersion.action?pageNow=1&showPage=5" target="content_frame">版本管理</a></li>
 		<li id="l8"><a href="queryHouseUser.action" target="content_frame">数据查看</a></li>
-		<li id="l9"><a href="paginFindDatadic.action?pageNow=1&showPage=5" target="content_frame">数据字典</a></li>  <!--pageNow=1  默认当前页数,showPage=5  显示行数  -->
+		<li id="l9"><a href="${pageContext.request.contextPath }/paginFindDatadic.action?pageNow=1&showPage=5" target="content_frame">数据字典</a></li>  <!--pageNow=1  默认当前页数,showPage=5  显示行数  -->
 	</ul>
 </div>
 	
@@ -154,7 +154,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 function log(){
 	var fals=confirm("你确定要退出吗？");
 	if(fals){
-		window.location.href="login.jsp";
+		window.location.href="${pageContext.request.contextPath }/jsp/login.jsp";
 	}else{
 		return false;
 	}

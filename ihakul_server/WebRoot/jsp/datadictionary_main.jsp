@@ -10,22 +10,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 	<meta charset="UTF-8">
 	<title>机器人小艾后台管理系统-小艾管理</title>
-	<script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="../css/common.css" />
-	<link type="text/css" rel="stylesheet" href="../css/main.css" />
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/vendor/jquery-1.9.1.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/main.css" />
 </head>
 <body>
 <div class="main_title"><i></i><a href="">机器人小艾</a>><a href=""><strong>数据字典管理</strong></a></div>
 
 <div class="container">
-	<form action="paginFindDatadic.action?pageNow=1&showPage=5" method="post">
+	<form action="${pageContext.request.contextPath }/paginFindDatadic.action?pageNow=1&showPage=5" method="post">
 	<ul class="ad_list_search clearfix">
 		
 		<li class="name"><label>数据名字:</label><input type="text" name="ddName" value="" placeholder="数据字典名字"></li>
 		
 		<li class="search_btn"><button type="submit">搜索</button></li>
 		
-		<li class="search_btn"><a href="datadictionary_insert.jsp" ><button type="button">添加</button></a></li>
+		<li class="search_btn"><a href="${pageContext.request.contextPath }/jsp/datadictionary_insert.jsp" ><button type="button">添加</button></a></li>
 	</ul>
 	</form>
 	<table class="table mt_20">
@@ -42,7 +42,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			
 			
 			<td>
-			<a href="deleteDatadictory.action?id=${list.id }" class="operate">删除</a></td>
+			<a href="${pageContext.request.contextPath }/deleteDatadictory.action?id=${list.id }" class="operate">删除</a></td>
 		</tr>
 		</c:forEach>
 
@@ -73,7 +73,7 @@ $(document).ready(function(){
 	var refresh=$("#refresh").val();
 	refresh++;
 	if(refresh==2){//修改后返回
-		 window.location.href="paginFindDatadic.action?pageNow=1&showPage=5";
+		 window.location.href="${pageContext.request.contextPath }/paginFindDatadic.action?pageNow=1&showPage=5";
 	};
 	//下一页
 	$("#nextPage").click(function(){
@@ -84,7 +84,7 @@ $(document).ready(function(){
 		if(pageNow+1 >totalPage){
 			alert("已经是最后一页了");
 		}else{
-			window.location.href="paginFindDatadic.action?pageNow="+(pageNow+1)+"&showPage=5";
+			window.location.href="${pageContext.request.contextPath }/paginFindDatadic.action?pageNow="+(pageNow+1)+"&showPage=5";
 		}
 			
 		
@@ -98,7 +98,7 @@ $(document).ready(function(){
 		 if(pageNow-1 ==0){
 			alert("已经是第一页了");
 		 }else{
-			window.location.href="paginFindDatadic.action?pageNow="+(pageNow-1)+"&showPage=5";
+			window.location.href="${pageContext.request.contextPath }/paginFindDatadic.action?pageNow="+(pageNow-1)+"&showPage=5";
 		 }
 	});
 	
@@ -111,7 +111,7 @@ $(document).ready(function(){
 		 if(pageNow==1){
 		 	alert("已经是第一页了");
 		 }else{
-		 	window.location.href="paginFindDatadic.action?pageNow=1&showPage=5";
+		 	window.location.href="${pageContext.request.contextPath }/paginFindDatadic.action?pageNow=1&showPage=5";
 		 }
 	
 	});
@@ -125,7 +125,7 @@ $(document).ready(function(){
 		 if(pageNow==totalPage){
 		 	alert("已经是最后一页了");
 		 }else{
-		 	window.location.href="paginFindDatadic.action?pageNow="+totalPage+"&showPage=5";
+		 	window.location.href="${pageContext.request.contextPath }/paginFindDatadic.action?pageNow="+totalPage+"&showPage=5";
 		 }
 	
 	});

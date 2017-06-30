@@ -216,9 +216,8 @@ public class FamilygroupService implements IFamilygroupService {
 		JSONArray array=new JSONArray();
 		JSONArray array3=new JSONArray();
 		JSONArray array5=new JSONArray();
-		JSONArray array6=new JSONArray();
-		
 		JSONObject json=new JSONObject();
+		JSONArray jArray = null;
 		if(!XATools.isInteger(groupNumber)){
 			code=FamilyCode.formatisInconsistent;
 			success=false;
@@ -233,7 +232,6 @@ public class FamilygroupService implements IFamilygroupService {
 		List<Users> user=null;
 		if(success){ //如果家庭组编号不为空则查询
 			int gn= Integer.parseInt(groupNumber);
-			//family=familyService.getFamilygroupByNumber(gn);
 			family= getFamilygroupByNumber(gn);
 		if(family !=null){
 			json2.put("groupName", family.getGroupName()); //家庭组名称 
@@ -251,6 +249,7 @@ public class FamilygroupService implements IFamilygroupService {
 			List<Xiaoi> xiaoList=xiaoiDao.selectXiaoiByid(groupId);
 			 if(!XATools.isNull(xiaoList)){
 				for(Xiaoi xiaoi:xiaoList){
+				json5 = new JSONObject();
 				json5.put("xiaoName", xiaoi.getXname());
 				json5.put("onlineState", xiaoi.getOnlineState()); //在线状态(0,不在线;1,在线)
 				json5.put("xiaoNumber", xiaoi.getXiaoNumber());//终端编号
@@ -264,10 +263,8 @@ public class FamilygroupService implements IFamilygroupService {
 			 }
 			//情景模式 
 			List<XiaoiMode> xiaoiModes = xiaoiModeDao.findAllModeByGroupNum(family.getGroupNumber());
-			//json2.put("xiaoiMode", JSONObject.toJSON(xiaoiModes));
-			JSONObject js=new JSONObject();
-			js.put("xiaoiMode", JSONObject.toJSON(xiaoiModes));
-			array6.add(js);
+			jArray = new JSONArray();
+			jArray.add(JSONObject.toJSON(xiaoiModes));
 			//房间
 			List<Room> roomList=roomDao.getRoomByGroupId(groupId);
 		    if(!XATools.isNull(roomList)){
@@ -320,7 +317,7 @@ public class FamilygroupService implements IFamilygroupService {
 		json.put("message", message);
 		json.put("result", array);   //家庭组信息
 		json.put("result1", array5);   //小艾信息
-		json.put("result2", array6);   //情景模式信息
+		json.put("result2", jArray);   //情景模式信息
 		
 		return json;	
 	}
