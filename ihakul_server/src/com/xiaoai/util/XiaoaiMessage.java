@@ -184,7 +184,7 @@ public class XiaoaiMessage {
 		public static final int emptyId=611;
 		/** 小艾名称不能为空*/
 		public static final int emptyName=612;
-		/** 小艾名称不能为空*/
+		/** 小艾Ip不能为空*/
 		public static final int emptyIp=613;
 		
 		/** 该小艾已存在   */
@@ -203,6 +203,8 @@ public class XiaoaiMessage {
 		public static final int updateFalse=672;
 		/**删除小艾失败! */
 		public static final int deleteFalse=673;
+		/**更换终端小艾失败! */
+		public static final int changeFalse=674;
 	}
 	
 	
@@ -308,6 +310,15 @@ public class XiaoaiMessage {
 		
 		
 		
+	}
+	
+	public static class InfoCode{
+		/**公告内容不能为空！ */
+		public static final int emptyContent = 1211;
+		
+		
+		/**新增公告失败！ */
+		public static final int insertFail = 1271;
 	}
 	
 }

@@ -47,7 +47,8 @@ public class BindHandler implements RequestHandler{
 			json.put("xiaoName", body.getData().get("xiaoName"));
 			json.put("versionNumber", body.getData().get("versionNumber"));
 			JSONObject json2=insertUpdateXiaoai(json); //新建连接时修改小艾状态为在线			
-			if(success){
+			//if(success){
+			if(json2.getString("code").equals("0")){
 			//第一次设置心跳时间为登录时间
 			newSession.setBindTime(System.currentTimeMillis());
 			newSession.setHeartbeat(System.currentTimeMillis());
@@ -79,20 +80,20 @@ public class BindHandler implements RequestHandler{
 				{
 					sessionManager.addSession(account, newSession);
 				}
+				reply.setCode(XiaoaiMessage.OK);
+				logger.info("终端绑定成功："+account);
+				logger.debug("bind :account:" +body.get(XiaoaiConstant.SESSION_KEY)+"-----------------------------" +reply.getCode());
 			}else{
 				reply.setCode(json2.getInteger("code"));
 				reply.setKey(account);
+				logger.info("终端绑定失败！："+account+"原因是："+json2.getInteger("code"));
 			}
-//				reply.setCode(XiaoaiConstant.ReturnCode.CODE_200);
-				reply.setCode(XiaoaiMessage.OK);
-			//	reply.setMessage(account+"，账号绑定成功");
+			
 			} catch (Exception e) {
-			//	reply.setCode(XiaoaiConstant.ReturnCode.CODE_500);
 				reply.setCode(XiaoaiMessage.Other);
 				e.printStackTrace();
 			}
 		
-		logger.debug("bind :account:" +body.get(XiaoaiConstant.SESSION_KEY)+"-----------------------------" +reply.getCode());
 		return reply;
 	}
 
@@ -124,8 +125,9 @@ public class BindHandler implements RequestHandler{
 				xiao.setVolume(50); //设置默认音量
 			 if(xiao1==null){ //如果查不到，说明已经被删除了;否则，更新小艾	
 				 success=false;
-				 json1.put("code",XiaoaiMessage.XiaoiCode.noExistBean);
-			//	 xiaoiService.insertXiaoi(xiao);
+				 //json1.put("code",XiaoaiMessage.XiaoiCode.noExistBean);
+				 json1.put("code", XiaoaiMessage.OK);
+				 xiaoiService.insertXiaoi(xiao);
 			//	 xiaoiService.delete(xiao);
 			  }else{
 				  xiao.setXid(xiao1.getXid());

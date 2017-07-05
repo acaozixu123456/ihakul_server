@@ -240,7 +240,6 @@ public class AppFamilygroupAction extends XiaoaiMessage{
 	 * @throws IOException 
 	 */
 	public String getFamilygroupByid() throws IOException{
-		JSONObject json=new JSONObject();
 		HttpServletRequest request=MyRequest.getRequest();
 		PrintWriter out=MyRequest.getResponse();	
 		MyRequest.printParameterNames("查询家庭组的入参");
@@ -248,119 +247,9 @@ public class AppFamilygroupAction extends XiaoaiMessage{
 		//json=getFamilyGroup(groupNumber);
 		com.alibaba.fastjson.JSONObject familyGroup = familyService.getFamilyGroup(groupNumber);
 		out.print(familyGroup);
-		logger.info("查询家庭组的出参:"+json);	
+		logger.info("查询家庭组的出参:"+familyGroup);	
 		return null;
 	}
-	
-	
-	/*public  JSONObject getFamilyGroup(String groupNumber){
-		success =true;
-		message =null;
-		code=OK;
-		JSONObject json2=new JSONObject();
-		JSONObject json5=new JSONObject();
-		JSONArray array=new JSONArray();
-		JSONArray array3=new JSONArray();
-		JSONArray array5=new JSONArray();
-		JSONObject json=new JSONObject();
-		if(!XATools.isInteger(groupNumber)){
-			code=FamilyCode.formatisInconsistent;
-			success=false;
-			message="家庭组编号格式不符 ";
-		}
-		if(XATools.isNull(groupNumber)){
-			code=FamilyCode.emptyId;
-			success=false;
-			message="家庭组编号不能为空!";
-		}
-		Familygroup family=null;
-		List<Users> user=null;
-		if(success){ //如果家庭组编号不为空则查询
-			int gn= Integer.parseInt(groupNumber);
-			family=familyService.getFamilygroupByNumber(gn);
-		if(family !=null){
-			json2.put("groupName", family.getGroupName()); //家庭组名称 
-			json2.put("groupNumber", family.getGroupNumber()); //家庭编号
-			json2.put("groupPassword", family.getGroupPassword()); //验证密码
-			json2.put("managerId", family.getManagerId()); //创建家庭组用户ID	
-			json.put("versionNumber", family.getVersionNumber());   //家庭组版本号
-			user=familyService.selectusersByFamilygroup(family);
-			for(Users us:user){
-				if(family.getManagerId().equals(us.getUserId())){
-					json2.put("userName", us.getUserName()); //创建家庭组用户名称
-				}
-			}
-			List<Xiaoi> xiaoList=xiaoiDao.selectXiaoiByid(family.getGroupId());
-			 if(!XATools.isNull(xiaoList)){
-				for(Xiaoi xiaoi:xiaoList){
-				json5.put("xiaoName", xiaoi.getXname());
-				json5.put("onlineState", xiaoi.getOnlineState()); //在线状态(0,不在线;1,在线)
-				json5.put("xiaoNumber", xiaoi.getXiaoNumber());//终端编号
-				json5.put("xiaoType", xiaoi.getXiaoType());//终端类型(1,普通;2时尚)
-				json5.put("xiaoIp", xiaoi.getXiaoIp());//终端IP
-				json5.put("activationTime", xiaoi.getActivationTime());//激活时间
-				json5.put("mode", xiaoi.getMode());//情景模式
-				json5.put("volume", xiaoi.getVolume());//声音
-				array5.add(json5);
-			   }
-			 }
-			
-			List<Room> roomList=roomDao.getRoomByGroupId(family.getGroupId());
-		    if(!XATools.isNull(roomList)){
-		    	 for(Room room:roomList){
-		    		 JSONArray array4=new JSONArray();
-		    		 JSONObject json3=new JSONObject();
-		    		 json3.put("groupNumber", family.getGroupNumber()); //家庭编号
-		    		 json3.put("roomName", room.getRoomName()); //房间名称
-		    		 json3.put("roomNickName", room.getRoomNickName()); //房间昵称
-		    		 json3.put("floor", room.getFloor()); //房间楼层(默认 0)
-		    		 json3.put("parentId", room.getParentId()); //父节点标识
-		    		 json3.put("roomNumber", room.getRoomNumber()); //房间编号
-		    		 json3.put("robot", room.getRobot()); //终端绑定的编号
-		    		 json3.put("creator", room.getCreator()); //终端创建的编号
-		    		 List<Household> householdList =householdDao.selectHouseholdByroomIDandGroupId(room.getId(),family.getGroupId());
-		    		 if(!XATools.isNull(householdList)){
-		    		 for(Household household:householdList){
-		    			 JSONObject json4=new JSONObject();
-		    			 json5.put("roomNumber", room.getRoomNumber()); //房间编号
-		    			 json4.put("names", household.getEaName());  //家电呢称
-		    			 json4.put("classId", household.getClassId());//家电类别  1 智能家电,2红外线家电
-		    			 json4.put("brand", household.getBrand()); //品牌
-		    			 json4.put("model", household.getHid()); //型号 
-		    			 json4.put("eaNumber", household.getEaNumber()); //家电编号 
-		    			 json4.put("type", household.getType()); //家电类型 
-		    			 json4.put("prop", household.getProp()); //通讯参数 
-		    			 json4.put("stub", household.getStub()); //智能索引
-		    			 json4.put("status", household.getStatus()); //
-		    			 json4.put("port", household.getPort()); //
-		    			 array4.add(json4);
-		    			 json3.put("household", array4);//家电信息
-		    		 }
-		    		 }else{
-		    			 json3.put("household", array4);//家电信息 
-		    		 }
-		    		 array3.add(json3);
-		    		 json2.put("room", array3);//房间信息
-		    	 }
-		    }else{
-		    	json2.put("room", array3);
-		    }
-			array.add(json2);
-		}else{
-			code=FamilyCode.noExistBean;
-			success=false;
-			message="没有该家庭组";
-		}
-		}
-		json.put("code", code);
-		json.put("message", message);
-		json.put("result", array);   //家庭组信息
-		json.put("result1", array5);   //小艾信息
-		return json;	
-	}*/
-	
-	
-	
 	
 	
 	/**
@@ -446,6 +335,36 @@ public class AppFamilygroupAction extends XiaoaiMessage{
 	}
 
 
-	
+	/**
+	 * 得到所有家庭组（终端调用接口）
+	 * @return
+	 * @throws Exception 
+	 */
+	public String getAllToXiaoi() throws Exception{
+		XiaoiResult xr = new XiaoiResult();
+		HttpServletRequest request=MyRequest.getRequest();
+		PrintWriter out=MyRequest.getResponse();	
+		MyRequest.printParameterNames("获得所有家庭组的入参（终端接口）");
+		//获得参数
+		String groupNumber=request.getParameter("groupNumber");
+		com.alibaba.fastjson.JSONObject jsonObject = null;
+		try {
+			//判断
+			if(XATools.isNull(groupNumber)){
+				xr = XiaoiResult.build("家庭组编号不能为空！", FamilyCode.emptyId);
+			}
+			if(xr.isSuccess()){
+				jsonObject = familyService.getFamilyGroupByXiaoi(groupNumber);
+			}
+			
+		} catch (Exception e) {
+			xr = XiaoiResult.build("未知错误！", Other);
+			e.printStackTrace();
+		}
+		
+		logger.info("获得所有家庭组的出参（终端接口）:"+jsonObject);
+		out.print(jsonObject);
+		return null;
+	}
 	
 }

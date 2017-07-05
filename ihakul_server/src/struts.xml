@@ -460,7 +460,12 @@
     		 <!-- 添加defaultStack保证不执行拦截器 -->  
         <interceptor-ref name="defaultStack"></interceptor-ref>  
     	</action>
-    	
+    	<!-- 获取家庭组下所有信息 （终端调用接口）-->
+    	<action name="appgetAllToXiaoi" class="appFamilyAction" method="getAllToXiaoi">
+    		<result type="json"></result>
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>  
+    	</action>
     	
     	<!-- 房间管理 -->
  		<!-- 查询房间 -->
@@ -556,7 +561,16 @@
     		<result name="success" type="json" ></result>	
         <interceptor-ref name="defaultStack"></interceptor-ref>
     	</action>
-		
+    	 <!-- 安卓调用修改小艾名称-->
+    	<action name="appupdateXiaoiName" class="appXiaoiAction" method="update">
+    		<result name="success" type="json" ></result>	
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+    	</action>
+    	 <!-- 安卓调用更换终端小艾-->
+    	<action name="appchangeXiaoi" class="appXiaoiAction" method="changeXiaoi">
+    		<result name="success" type="json" ></result>	
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+    	</action>
          
        <!--定时任务  -->
        <!--新增  -->
@@ -626,5 +640,18 @@
     		<result name="success" type="json" ></result>	
         <interceptor-ref name="defaultStack"></interceptor-ref>
     	</action>
+    	
+    	<!-- 公告管理 -->
+    	<!-- 获取所有公告 -->
+    	<action name="appgetAllInformation" class="appInformationAction" method="getNewInfo">
+    		<result name="success" type="json" ></result>	
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+    	</action>
+    	<!-- 新增公告 -->
+    	<action name="appinsertInformation" class="appInformationAction" method="InsertInfo">
+    		<result name="success" type="json" ></result>	
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+    	</action>
+    	
    </package>  
 </struts>

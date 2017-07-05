@@ -459,6 +459,7 @@ public class AppUsersAction extends XiaoaiMessage {
 			//if(version.getVersionNumber()>Integer.parseInt(versionNumber)){ 
 				json2.put("url", path);
 				json2.put("versionNumber", version.getVersionNumber());
+				json2.put("upgradeClass", version.getUpgradeClass());
 //			}else{
 //				json2.put("url", "");
 //				json2.put("versionNumber", version.getVersionNumber());

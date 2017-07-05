@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -19,13 +18,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.xiaoai.dao.IFamilygroupDao;
 import com.xiaoai.dao.impl.HouseholdDao;
 import com.xiaoai.dao.impl.RoomDao;
+import com.xiaoai.dao.impl.XiaoiDao;
 import com.xiaoai.entity.FamilyUser;
 import com.xiaoai.entity.Familygroup;
 import com.xiaoai.entity.Household;
 import com.xiaoai.entity.Room;
 import com.xiaoai.entity.Users;
 import com.xiaoai.entity.Xiaoi;
-import com.xiaoai.mina.service.push.PushMessage;
+import com.xiaoai.mina.service.push.PushMessage_Room;
 import com.xiaoai.mina.service.push.PushMessage_houseHoldController;
 import com.xiaoai.service.IFamilyUserService;
 import com.xiaoai.service.IFamilygroupService;
@@ -38,7 +38,6 @@ import com.xiaoai.util.Page;
 import com.xiaoai.util.XATools;
 import com.xiaoai.util.XiaoaiMessage;
 import com.xiaoai.util.XiaoiResult;
-import com.xiaoai.util.XiaoaiMessage.XiaoiCode;
 
 /**
  * 家电管理操作实现类
@@ -65,7 +64,9 @@ public class AppHouseholdAction extends XiaoaiMessage {
 	private IFamilygroupService familyService;
 	@Resource(name = "xiaoiService")
 	private IXiaoiService xiaoiService;
-
+	@Resource(name = "xiaoiDao")
+	private XiaoiDao xiaoiDao;
+	
 	@Resource(name = "fauserService")
 	private IFamilyUserService fauserService;
 	private boolean success; // 成功、失败标记
@@ -101,6 +102,7 @@ public class AppHouseholdAction extends XiaoaiMessage {
 	 * @return success=true(修改成功)或者success=false(修改失败)
 	 * @throws IOException
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String insert() throws IOException {
 		success = true;
 		message = null;
@@ -115,13 +117,13 @@ public class AppHouseholdAction extends XiaoaiMessage {
 		String roomNumber = request.getParameter("roomNumber"); // 房间编号
 		String groupNumber = request.getParameter("groupNumber"); // 家庭组编号
 		String userId = request.getParameter("userId"); // 用户Id
-		String eaNumber = request.getParameter("eaNumber"); // 家电编号
+		//String eaNumber = request.getParameter("eaNumber"); // 家电编号
 		String prop = request.getParameter("prop"); // 通讯参数
 		String stub = request.getParameter("stub"); // 智能索引
 		String type = request.getParameter("type"); // 家电类型
 		String versionNumber = request.getParameter("versionNumber"); // 档案版本号
 		String status = request.getParameter("status"); //
-		String port = request.getParameter("port"); //
+		//String port = request.getParameter("port"); //
 
 		Users users = null;
 		Household households = new Household();
@@ -170,7 +172,7 @@ public class AppHouseholdAction extends XiaoaiMessage {
 					success = false;
 					message = "家电呢称不能为空!";
 				}
-				households.setPort(Integer.parseInt(port));
+				//households.setPort(Integer.parseInt(port));
 				households.setStatus(Integer.parseInt(status));
 			}
 		}
@@ -178,11 +180,11 @@ public class AppHouseholdAction extends XiaoaiMessage {
 		if (!XATools.isNull(type)) {
 			households.setType(type);
 		}
-		if (XATools.isNull(eaNumber)) {
+		/*if (XATools.isNull(eaNumber)) {
 			code = HouseholdCode.emptyId;
 			success = false;
 			message = "家电编号不能为空!";
-		}
+		}*/
 		if (XATools.isNull(versionNumber)) {
 			code = FamilyCode.emptyVersion;
 			success = false;
@@ -229,8 +231,21 @@ public class AppHouseholdAction extends XiaoaiMessage {
 					fu1 = fauserService.selectFamilyUserByGNU(users, family);
 					if (fu1 != null) {
 						if (userId.equals(fu1.getDna())) { // 判断该家庭组是不是该用户创建
+							//普通电器
+							StringBuilder eaNumber = null;
+							if(classId.equals("1")){
+								eaNumber = new StringBuilder(roomNumber);
+								eaNumber.append("#");
+								eaNumber.append(type);
+								eaNumber.append(brand);
+								eaNumber.append(stub);
+							}else{
+								eaNumber = new StringBuilder(roomNumber);
+								eaNumber.append("#");
+								eaNumber.append(prop);
+							}
 							List<Household> kk = householdDao
-									.getRoomByRoomNumber1(family, eaNumber);
+									.getRoomByRoomNumber1(family, eaNumber.toString() );
 							if (XATools.isNull(kk)) { // 判断该家庭组是否已经添加了该电器
 								room = roomDao.getRoomByGroupId(family,
 										roomNumber);
@@ -240,18 +255,45 @@ public class AppHouseholdAction extends XiaoaiMessage {
 									households.setClassId(Integer
 											.parseInt(classId));
 									households.setEaName(eaName);
-									households.setEaNumber(eaNumber);
+									households.setEaNumber(eaNumber.toString());
 									households.setCreateTime(XATools
 											.getTNowTime());
-									success = houseHoldService
-											.insertHousehold(households);
-									if (success) {
-										// json2.put("eaNumber", eaNumber);
-										// array.add(json2);
-									} else {
-										code = HouseholdCode.insertFalse;
-										success = false;
-										message = "新增家电失败!";
+									//推送
+									List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
+									com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
+									HashMap hashMap = null;
+									boolean flag = false;
+									boolean pushState = false;
+									for (Xiaoi xiaoi : allOnlineXiaois) {
+										//判断当前小艾是否在线
+										if(xiaoi.getOnlineState()==1){
+											//在线，推送
+											hashMap = new HashMap();
+											hashMap.put("households", households);
+											json2.put("key", "appinserthouseHold");
+											json2.put("code", 0);
+											json2.put("xiaoNumber", xiaoi.getXiaoNumber());
+											pushState = PushMessage_Room.push2Xiao(json2, hashMap);
+											if(pushState){
+												flag = true;
+											}
+										}
+									}
+									if(flag){
+										//当前家庭组有在线小艾推送成功,执行添加电器
+										success = houseHoldService
+												.insertHousehold(households);
+										if (success==false) {
+											code = HouseholdCode.insertFalse;
+											success = false;
+											message = "新增家电失败!";
+										} else {
+											//新增成功，不做处理
+										}
+									}else{
+										//当前家庭组没有任何一台小艾在线，推送失败，拒绝添加房间！
+										code = XiaoiCode.noExistOnlinBean;
+										message = "没有在线小艾!";
 									}
 								} else {
 									code = RoomCode.noExistBean;
@@ -379,6 +421,7 @@ public class AppHouseholdAction extends XiaoaiMessage {
 	 * @return success=true(删除成功)或者success=false(删除失败)
 	 * @throws IOException
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String delete() throws IOException {
 		success = true;
 		message = null;
@@ -443,12 +486,40 @@ public class AppHouseholdAction extends XiaoaiMessage {
 							Household houseHold = householdDao
 									.getRoomByRoomNumber(eaNumber);
 							if (houseHold != null) {
-								success = householdDao
-										.deleteHousehold(houseHold);
-								if (success == false) {
-									code = HouseholdCode.deleteFalse;
-									success = false;
-									message = "删除家电失败!";
+								//推送
+								List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
+								com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
+								boolean pushState = false;
+								boolean flag = false;
+								HashMap hashMap = null;
+								for (Xiaoi xiaoi : allOnlineXiaois) {
+									//判断当前小艾是否在线
+									if(xiaoi.getOnlineState()==1){
+										//在线，推送
+										hashMap = new HashMap();
+										hashMap.put("eaNumber", houseHold.getEaNumber());
+										json2.put("key", "appdeletehouseHold");
+										json2.put("code", 0);
+										json2.put("xiaoNumber", xiaoi.getXiaoNumber());
+										pushState = PushMessage_Room.push2Xiao(json2, hashMap);
+										if(pushState){
+											flag = true;
+										}
+									}
+								}
+								if(flag){
+									//当前家庭组有在线小艾推送成功,执行删除电器
+									success = householdDao
+											.deleteHousehold(houseHold);
+									if (success == false) {
+										code = HouseholdCode.deleteFalse;
+										success = false;
+										message = "删除家电失败!";
+									}
+								}else{
+									//当前家庭组没有任何一台小艾在线，推送失败，拒绝添加房间！
+									code = XiaoiCode.noExistOnlinBean;
+									message = "没有在线小艾!";
 								}
 							} else {
 								code = HouseholdCode.noExistBean;
@@ -654,6 +725,7 @@ public class AppHouseholdAction extends XiaoaiMessage {
 	 * 
 	 * @throws IOException
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	public String controllerHouseHold() throws IOException {
 		PrintWriter out = MyRequest.getResponse();
 		HttpServletRequest req = MyRequest.getRequest();

@@ -13,6 +13,7 @@ import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.executor.ExecutorFilter;
 import org.apache.mina.filter.keepalive.KeepAliveFilter;
 import org.apache.mina.filter.keepalive.KeepAliveMessageFactory;
+import org.apache.mina.filter.keepalive.KeepAliveRequestTimeoutHandler;
 import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 
@@ -32,7 +33,7 @@ public class SerNioSociketAcceptor {
     int port;
 	//记录日志
 	public static Logger logger=Logger.getLogger(SerNioSociketAcceptor.class);
-  //创建bind()方法接收连接
+	//创建bind()方法接收连接
     public void bind() throws IOException
     {	
     	  //创建 协议编码解码过滤器ProtocolCodecFilter
@@ -61,6 +62,7 @@ public class SerNioSociketAcceptor {
         KeepAliveFilter kaf = new KeepAliveFilter(kamf, IdleStatus.BOTH_IDLE);
         kaf.setForwardEvent(true);
         kaf.setRequestInterval(30);  //本服务器为被定型心跳  即需要每30秒接受一个心跳请求  否则该连接进入空闲状态 并且发出idled方法回调
+        //kaf.setRequestTimeout(5); //超时时间   如果当前发出一个心跳请求后需要反馈  若反馈超过此事件 默认则关闭连接
         acceptor.getFilterChain().addLast("heart", kaf); 
         //读写通道60秒内无操作进入空闲状态
        acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 60);

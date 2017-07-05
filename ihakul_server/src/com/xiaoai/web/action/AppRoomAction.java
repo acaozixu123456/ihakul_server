@@ -2,6 +2,7 @@ package com.xiaoai.web.action;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -22,6 +23,7 @@ import com.xiaoai.entity.Household;
 import com.xiaoai.entity.Room;
 import com.xiaoai.entity.Users;
 import com.xiaoai.entity.Xiaoi;
+import com.xiaoai.mina.service.push.PushMessage_Room;
 import com.xiaoai.service.IFamilyUserService;
 import com.xiaoai.service.IFamilygroupService;
 import com.xiaoai.service.IRoomService;
@@ -29,6 +31,8 @@ import com.xiaoai.service.IUsersService;
 import com.xiaoai.util.MyRequest;
 import com.xiaoai.util.XATools;
 import com.xiaoai.util.XiaoaiMessage;
+import com.xiaoai.util.XiaoiResult;
+import com.xiaoai.util.XiaoaiMessage.XiaoiCode;
 
 @Controller("appRoomAction")
 public class AppRoomAction extends XiaoaiMessage {
@@ -75,6 +79,7 @@ public class AppRoomAction extends XiaoaiMessage {
 	 * @return success=true(添加成功)或者success=false(添加失败)
 	 * @throws IOException
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String insert() throws IOException {
 		success = true;
 		message = null;
@@ -90,7 +95,7 @@ public class AppRoomAction extends XiaoaiMessage {
 		String roomNickName = request.getParameter("roomNickName");
 		String floor = request.getParameter("floor");
 		String parentId = request.getParameter("parentId");
-		String roomNumber = request.getParameter("roomNumber");
+		//String roomNumber = request.getParameter("roomNumber");
 		String xiaoNumber = request.getParameter("xiaoNumber");
 		String versionNumber = request.getParameter("versionNumber"); // 档案版本号
 		String robot = request.getParameter("robot"); // 终端绑定
@@ -125,11 +130,11 @@ public class AppRoomAction extends XiaoaiMessage {
 			success = false;
 			message = "房间名称不能为空!";
 		}
-		if (XATools.isNull(roomNumber)) {
+		/*if (XATools.isNull(roomNumber)) {
 			code = RoomCode.emptyId;
 			success = false;
 			message = "房间编号不能为空!";
-		}
+		}*/
 		if (XATools.isNull(xiaoNumber)) {
 			code = XiaoiCode.emptyId;
 			success = false;
@@ -177,18 +182,50 @@ public class AppRoomAction extends XiaoaiMessage {
 							Xiaoi xil = xiaoiDao
 									.selectXiaoiByNumber(xiaoNumber);
 							if (xil != null) {
+								//拼接roomNumber
+								StringBuffer roomNumber = new StringBuffer("0-0-");
+								roomNumber.append(roomName);
+			
 								Room kk = roomDao.getRoomByGroupId(family,
-										roomNumber);
+										roomNumber.toString());
 								if (kk == null) { // 判断该家庭组是否已经添加了该房间
-									room.setRoomNumber(roomNumber);
+									room.setRoomNumber(roomNumber.toString());
 									room.setFamilygroup(family);
 									room.setRoomName(roomName);
 									room.setCreateTime(XATools.getTNowTime());
 									room.setCreator(xiaoNumber);
-									success = roomService.insertRoom(room);
-									if (success == false) {
-										code = RoomCode.insertFalse;
-										message = "创建房间失败!";
+									
+									List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
+									com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
+									HashMap hashMap = null;
+									boolean pushState = false;
+									boolean flag = false;
+									for (Xiaoi xiaoi : allOnlineXiaois) {
+										//判断当前小艾是否在线
+										if(xiaoi.getOnlineState()==1){
+											//在线，推送
+											hashMap = new HashMap();
+											hashMap.put("room", room);
+											json2.put("key", "appaddRoom");
+											json2.put("code", 0);
+											json2.put("xiaoNumber", xiaoi.getXiaoNumber());
+											pushState = PushMessage_Room.push2Xiao(json2, hashMap);
+											if(pushState){
+												flag = true;
+											}
+										}
+									}
+									if(flag){
+										//当前家庭组有在线小艾推送成功,执行添加房间
+										success = roomService.insertRoom(room);
+										if (success == false) {
+											code = RoomCode.insertFalse;
+											message = "创建房间失败!";
+										}
+									}else{
+										//当前家庭组没有任何一台小艾在线，推送失败，拒绝添加房间！
+										code = XiaoiCode.noExistOnlinBean;
+										message = "没有在线小艾!";
 									}
 								} else {
 									code = RoomCode.conflictBean;
@@ -243,6 +280,7 @@ public class AppRoomAction extends XiaoaiMessage {
 	 * @return success=true(修改成功)或者success=false(修改失败)
 	 * @throws IOException
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String update() throws IOException {
 		success = true;
 		message = null;
@@ -280,6 +318,23 @@ public class AppRoomAction extends XiaoaiMessage {
 				if (room != null) {
 					room.setRoomName(roomName);
 					success = roomService.updateRoom(room);
+					//推送
+					List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(room.getFamilygroup());
+					com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
+					HashMap hashMap = null;
+					for (Xiaoi xiaoi : allOnlineXiaois) {
+						//判断当前小艾是否在线
+						if(xiaoi.getOnlineState()==1){
+							//在线，推送
+							hashMap = new HashMap();
+							hashMap.put("room", room);
+							json2.put("key", "appupdateRoom");
+							json2.put("code", 0);
+							json2.put("xiaoNumber", xiaoi.getXiaoNumber());
+							PushMessage_Room.push2Xiao(json2, hashMap);
+						}
+					}
+					
 					if (success == false) {
 						code = RoomCode.updateFalse;
 						success = false;
@@ -313,6 +368,7 @@ public class AppRoomAction extends XiaoaiMessage {
 	 * @return success=true(删除成功)或者success=false(删除失败)
 	 * @throws IOException
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String delete() throws IOException {
 		success = true;
 		message = null;
@@ -376,10 +432,39 @@ public class AppRoomAction extends XiaoaiMessage {
 						if (userId.equals(fu1.getDna())) { // 判断该家庭组是不是该用户创建
 							room = roomDao.getRoomByGroupId(family, roomNumber);
 							if (room != null) { // 判断该家庭组是否已经添加了该房间
-								success = roomService.deleteRoom(room);
-								if (success == false) {
-									code = RoomCode.deleteFalse;
-									message = "删除房间失败!";
+								//推送
+								List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
+								com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
+								
+								boolean pushState = false;
+								boolean flag = false;
+								HashMap hashMap = null;
+								hashMap = new HashMap();
+								hashMap.put("roomNumber", room.getRoomNumber());
+								for (Xiaoi xiaoi : allOnlineXiaois) {
+									//判断当前小艾是否在线
+									if(xiaoi.getOnlineState()==1){
+										//在线，推送
+										json2.put("key", "appdeleteRoom");
+										json2.put("code", 0);
+										json2.put("xiaoNumber", xiaoi.getXiaoNumber());
+										pushState = PushMessage_Room.push2Xiao(json2, hashMap);
+										if(pushState){
+											flag = true;
+										}
+									}
+								}
+								if(flag){
+									//当前家庭组有在线小艾推送成功,执行删除房间
+									success = roomService.deleteRoom(room);
+									if (success == false) {
+										code = RoomCode.deleteFalse;
+										message = "删除房间失败!";
+									}
+								}else{
+									//当前家庭组没有任何一台小艾在线，推送失败，拒绝添加房间！
+									code = XiaoiCode.noExistOnlinBean;
+									message = "没有在线小艾!";
 								}
 							} else {
 								code = RoomCode.noExistBean;

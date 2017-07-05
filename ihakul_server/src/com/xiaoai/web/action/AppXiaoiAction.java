@@ -2,8 +2,8 @@ package com.xiaoai.web.action;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -16,12 +16,13 @@ import org.springframework.stereotype.Controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xiaoai.dao.IFamilygroupDao;
-import com.xiaoai.entity.Channel;
+import com.xiaoai.dao.impl.XiaoiDao;
 import com.xiaoai.entity.FamilyUser;
 import com.xiaoai.entity.Familygroup;
 import com.xiaoai.entity.Users;
 import com.xiaoai.entity.Xiaoi;
 import com.xiaoai.mina.service.push.PushMessage;
+import com.xiaoai.mina.service.push.PushMessage_Xiaoi;
 import com.xiaoai.service.IFamilyUserService;
 import com.xiaoai.service.IFamilygroupService;
 import com.xiaoai.service.IUsersService;
@@ -44,6 +45,9 @@ public class AppXiaoiAction extends XiaoaiMessage {
 	private IUsersService usersService;
 	@Resource(name = "familyDao")
 	private IFamilygroupDao familyDao;
+	@Resource(name = "xiaoiDao")
+	private XiaoiDao xiaoiDao;
+	
 	private boolean success; // 成功、失败标记
 	private String message; // 信息
 	private int code; // 标记
@@ -63,6 +67,7 @@ public class AppXiaoiAction extends XiaoaiMessage {
 	 * @return success=false(添加失败)或者success=true(添加成功)
 	 * @throws IOException
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String insert() throws IOException {
 		HttpServletRequest request = MyRequest.getRequest();
 		PrintWriter out = MyRequest.getResponse();
@@ -74,7 +79,7 @@ public class AppXiaoiAction extends XiaoaiMessage {
 		String xiaoIp = request.getParameter("xiaoIp");
 		String versionNumber = request.getParameter("versionNumber"); // 档案版本号
 		JSONObject json = new JSONObject();
-		Xiaoi xiao1 = new Xiaoi();
+		Xiaoi xiao1 = null;
 		XiaoiResult xr = new XiaoiResult();
 		if (XATools.isNull(xiaoName)) {
 			xr = XiaoiResult.build("小艾名称不能为空!", XiaoiCode.emptyName);
@@ -114,12 +119,41 @@ public class AppXiaoiAction extends XiaoaiMessage {
 				xiao.setXiaoIp(xiaoIp);
 				xiao.setVolume(50); // 设置默认音量
 				if (xiao1 == null) { // 如果查不到，说明该小艾可以添加;否则，更新小艾
-					xr.setSuccess(xiaoiService.insertXiaoi(xiao));
-					family.setVersionNumber(Integer.parseInt(versionNumber));
-					familyDao.updateFamily(family);
-					if (xr.isSuccess() == false) {
-						xr = XiaoiResult.build("添加小艾失败!", XiaoiCode.insertFalse);
+					
+					//不用推
+					//获取当前在线的小艾
+					/*List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
+					com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
+					boolean pushState = false;
+					boolean flag = false;
+					HashMap hashMap = null;
+					for (Xiaoi xiaoi : allOnlineXiaois) {
+						//判断当前小艾是否在线
+						if(xiaoi.getOnlineState()==1){
+							//在线，推送
+							hashMap = new HashMap();
+							hashMap.put("xiaoi", xiao);
+							json2.put("key", "appaddXiaoi");
+							json2.put("code", xiao.getXiaoNumber());
+							json2.put("xiaoNumber", xiaoi.getXiaoNumber());
+							pushState = PushMessage_Xiaoi.push2Xiao(json2, hashMap);
+							if(pushState){
+								flag = true;
+							}
+						}
 					}
+					if(flag){
+						//当前家庭组有在线小艾推送成功,执行添加终端
+						json.put("xiaoNumber", xiao.getXiaoNumber());
+						family.setVersionNumber(Integer.parseInt(versionNumber));
+						familyDao.updateFamily(family);
+						if (xr.isSuccess() == false) {
+							xr = XiaoiResult.build("添加小艾失败!", XiaoiCode.insertFalse);
+						}
+					}else{
+						xr = XiaoiResult.build("没有在线小艾!", XiaoiCode.noExistOnlinBean);
+					}*/
+					xr.setSuccess(xiaoiService.insertXiaoi(xiao));
 				} else {
 					xiao.setXid(xiao1.getXid());
 					xr.setSuccess(xiaoiService.updateXiaoi(xiao));
@@ -133,6 +167,7 @@ public class AppXiaoiAction extends XiaoaiMessage {
 		}
 		json.put("code", xr.getCode());
 		json.put("message", xr.getMessage());
+		//json.put("result", json);
 		logger.info("添加终端出参:" + json);
 		out.print(json);
 		return null;
@@ -154,53 +189,124 @@ public class AppXiaoiAction extends XiaoaiMessage {
 	 * @return fals=false(修改失败)或者fals=true(修改成功)
 	 * @throws IOException
 	 */
+	@SuppressWarnings({ "static-access", "unchecked", "rawtypes" })
 	public String update() throws IOException {
 		HttpServletRequest request = ServletActionContext.getRequest();
 		request.setCharacterEncoding("utf-8");
 		HttpServletResponse response = ServletActionContext.getResponse();
 		response.setCharacterEncoding("utf-8");
+		XiaoiResult xr = new XiaoiResult();
 		PrintWriter out = response.getWriter();
+		String xiaoNumber = request.getParameter("xiaoNumber");
 		String xiaoName = request.getParameter("xiaoName");
-		String xiaoType = request.getParameter("xiaoType");
-		String id = request.getParameter("groupId");
-		String xid = request.getParameter("xid");
-		String userid = request.getParameter("userId");
-		Users users = null;
+		String groupNumber = request.getParameter("groupNumber");
+		String userId = request.getParameter("userId");
+		String versionNumber = request.getParameter("versionNumber");
 		boolean fals = false;
-		if (userid != null && !userid.equals("")) {
-			users = usersService.selectUsersByid(Integer.parseInt(userid));
+		logger.info("修改小艾名称入参:{" +"xiaoNumber:" +xiaoNumber+",xiaoName:"+xiaoName+",groupNumber:"+groupNumber+",userId:"+userId+",versionNumber:"+versionNumber+"s}");
+		//参数判断
+		if(XATools.isNull(xiaoNumber)){
+			xr = XiaoiResult.build("小艾编号不能为空", XiaoiCode.emptyId);
 		}
-		if (users != null) {
-			Xiaoi xiaos = null;
-			if (xid != null && !xid.equals("")) {
-				int xiaoId = Integer.parseInt(xid);
-				xiaos = xiaoiService.getXiaoiByid(xiaoId);
-			}
-			Familygroup family = null;
-			if (id != null && !id.equals("")) {
-				int groupId = Integer.parseInt(id);
-				family = familyService.getFamilygroupByid(groupId);
-				xiaos.setFamilygroup(family);
-			}
-
-			if (xiaoName != null && !xiaoName.equals("")) {
-				xiaos.setXname(xiaoName);
-			}
-			if (xiaoType != null && !xiaoType.equals("")) {
-				int xiaoT = Integer.parseInt(xiaoType);
-				xiaos.setXiaoType(xiaoT);
-			}
-			fals = xiaoiService.updateXiaoi(xiaos);
+		if(XATools.isNull(xiaoName)){
+			xr = XiaoiResult.build("小艾名称不能为空", XiaoiCode.emptyName);
 		}
+		if(XATools.isNull(groupNumber)){
+			xr = XiaoiResult.build("家庭组编号不能为空", FamilyCode.emptyId);
+		}
+		if(XATools.isNull(userId)){
+			xr = XiaoiResult.build("用户id不能为空", UserCode.emptyId);
+		}
+		if (XATools.isNull(versionNumber)) {
+			xr = XiaoiResult.build("档案版本号不能为空!", VersionCode.emptyVersion);
+		}
+		//权限判断,应该优化到过滤器去进行权限判断
+		try {
+			if(xr.isSuccess()){
+				Xiaoi xiaos = xiaoiService.selectXiaoiByNumber(xiaoNumber);
+				if(xiaos==null){
+					//没有此小艾
+					xr = XiaoiResult.build("没有该小艾", XiaoiCode.noExistBean);
+				}else{
+					//设置名称
+					xiaos.setXname(xiaoName);
+					//Familygroup familygroup = xiaos.getFamilygroup();
+					Familygroup familygroup = familyService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
+					if(familygroup!=null){
+						if (Integer.parseInt(versionNumber) > familygroup.getVersionNumber()) { // 如果终端的版本号大于服务端
+							familygroup.setVersionNumber(Integer.parseInt(versionNumber));
+							familyService.updateFamily(familygroup);
+						}
+						Users user = usersService.selectUsersByid(Integer.parseInt(userId));
+						if(user!=null){
+							FamilyUser familyUser = fauserService.selectFamilyUserByGNU(user, familygroup);
+							if(familyUser!=null){
+								//是否是家庭组管理员
+								if(familyUser.getDna().equals(userId)){
+									//推送
+									//获取当前在线的小艾
+									List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(familygroup);
+									com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
+									boolean pushState = false;
+									boolean flag = false;
+									HashMap hashMap = null;
+									for (Xiaoi xiaoi : allOnlineXiaois) {
+										//判断当前小艾是否在线
+										if(xiaoi.getOnlineState()==1){
+											//在线，推送
+											hashMap = new HashMap();
+											hashMap.put("xiaoi", xiaos);
+											json2.put("key", "appupdateXiaoiName");
+											json2.put("code", 0);
+											json2.put("xiaoNumber", xiaoi.getXiaoNumber());
+											pushState = PushMessage_Xiaoi.push2Xiao(json2, hashMap);
+											if(pushState){
+												flag = true;
+											}
+										}
+									}
+									if(flag){
+										//当前家庭组有在线小艾推送成功,执行修改小艾名称
+										xr.setSuccess(xiaoiService.updateXiaoi(xiaos));
+										if (xr.isSuccess() == false) {
+											xr = XiaoiResult.build("修改小艾失败", XiaoiCode.updateFalse);
+										}
+									}else{
+										//当前家庭组没有任何一台小艾在线，推送失败，拒绝添加房间！
+										/*code = XiaoiCode.noExistOnlinBean;
+										message = "没有在线小艾!";*/
+										xr = XiaoiResult.build("没有在线小艾!", XiaoiCode.noExistOnlinBean);
+									}
+								}else{
+									xr = XiaoiResult.build("您不是群主，没有权限操作!", FamilyCode.privilegeMaster);
+								}
+							}else{
+								xr = XiaoiResult.build("该家庭组中不存在该用户", FamilyCode.noExistUser);
+							}
+						}else{
+							xr = XiaoiResult.build("没有该用户", UserCode.noExistBean);
+						}
+					}else{
+						xr = XiaoiResult.build("没有该家庭组", FamilyCode.noExistBean);
+					}
+				}
+			}
+		} catch (Exception e) {
+			xr = XiaoiResult.build("修改小艾失败", XiaoiCode.updateFalse);
+			e.printStackTrace();
+		}
+		
 
 		JSONObject json = new JSONObject();
-		json.put("fals", fals);
+		json.put("code", xr.getCode());
+		json.put("message", xr.getMessage());
 		out.print(json.toString());
+		logger.info("修改小艾名称出参:" + json);
 		return null;
 	}
 
 	/**
-	 * 删除或更换终端信息
+	 * 删除终端信息
 	 * 
 	 * @param xiaoNumber
 	 *            终端编号
@@ -208,6 +314,7 @@ public class AppXiaoiAction extends XiaoaiMessage {
 	 *            用户id
 	 * @throws IOException
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String delete() throws IOException {
 		JSONObject json = new JSONObject();
 		XiaoiResult xr = new XiaoiResult();
@@ -218,7 +325,6 @@ public class AppXiaoiAction extends XiaoaiMessage {
 		String xiaoNumber = request.getParameter("xiaoNumber");
 		String groupNumber = request.getParameter("groupNumber");
 		String versionNumber = request.getParameter("versionNumber");
-		//String newxiaoNumber = request.getParameter("xiaoNumber");
 		Users users = null;
 		Xiaoi xiaoi = null;
 		FamilyUser fu1 = null;
@@ -249,26 +355,44 @@ public class AppXiaoiAction extends XiaoaiMessage {
 						fu1 = fauserService.selectFamilyUserByGNU(users, family);
 						if (fu1 != null) {
 							if (userId.equals(fu1.getDna())) { // 判断该家庭组是不是该用户创建
-								//if(XATools.isNull(newxiaoNumber)){ //如果为空，则为删除终端; 否则更换终端 
-									xr.setSuccess(xiaoiService.delete(xiaoi));
-								/*}else{
-									xr.setSuccess(xiaoiService.change(xiaoNumber, newxiaoNumber));
-								}*/
-								Xiaoi xi=xiaoiService.selectXiaoiByFa(family);
-								if(xi!=null){
-									JSONObject json2=new JSONObject();
-									json2.put("key", "appdeleteXiaoi");
-									json2.put("code", 0);
-									json2.put("xiaoNumber", xiaoNumber);
-									PushMessage.push2Xiao(json2);
-								}
-								if (!xr.isSuccess()) {
-									xr = XiaoiResult.build("删除小艾失败!", XiaoiCode.deleteFalse);
-								}else{
-									//删除成功！
-									//返回家庭组信息
-									//family=familyService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
-								}
+									//推送
+									//获取当前在线的小艾
+									//List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
+									com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
+									boolean pushState = false;
+									boolean flag = false;
+									HashMap hashMap = null;
+									//for (Xiaoi xiaoi_ : allOnlineXiaois) {
+										//判断当前小艾是否在线
+										if(xiaoi.getOnlineState()==1){
+											//在线，推送
+											hashMap = new HashMap();
+											hashMap.put("xiaoNumber", xiaoi.getXiaoNumber());
+											json2.put("key", "appdeleteXiaoi");
+											json2.put("code", 0);
+											json2.put("xiaoNumber", xiaoi.getXiaoNumber());
+											pushState = PushMessage_Xiaoi.push2Xiao(json2, hashMap);
+											if(pushState){
+												flag = true;
+											}
+										}else{
+											//不在线
+											
+										}
+									//}
+									if(flag){
+										//当前家庭组有在线小艾推送成功,执行删除小艾
+										xr.setSuccess(xiaoiService.delete(xiaoi));
+										if (xr.isSuccess() == false) {
+											xr = XiaoiResult.build("修改小艾失败", XiaoiCode.deleteFalse);
+										}
+									}else{
+										//当前家庭组没有任何一台小艾在线，推送失败，拒绝添加房间！
+										/*code = XiaoiCode.noExistOnlinBean;
+										message = "没有在线小艾!";*/
+										xr = XiaoiResult.build("没有在线小艾!", XiaoiCode.noExistOnlinBean);
+									}
+									
 							} else {
 								xr = XiaoiResult.build("您不是群主，没有权限操作!", FamilyCode.privilegeMaster);
 							}
@@ -286,7 +410,6 @@ public class AppXiaoiAction extends XiaoaiMessage {
 			}
 		}
 		
-		//Familygroup familygroup = familyService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
 		JSONObject familyGroup = familyService.getFamilyGroup(groupNumber);
 		if(xr.getCode()==0){
 			out.print(familyGroup);
@@ -302,6 +425,144 @@ public class AppXiaoiAction extends XiaoaiMessage {
 		return null;
 	}
 
+	
+	/**
+	 * 更换终端信息
+	 * 
+	 * @param xiaoNumber
+	 *            终端编号
+	 * @param userId
+	 *            用户id
+	 * @throws IOException
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public String changeXiaoi() throws IOException {
+		JSONObject json = new JSONObject();
+		XiaoiResult xr = new XiaoiResult();
+		HttpServletRequest request = MyRequest.getRequest();
+		PrintWriter out = MyRequest.getResponse();
+		MyRequest.printParameterNames("更换终端的入参");
+		String userId = request.getParameter("userId");
+		String xiaoNumber = request.getParameter("xiaoNumber");
+		String groupNumber = request.getParameter("groupNumber");
+		String versionNumber = request.getParameter("versionNumber");
+		String newxiaoNumber = request.getParameter("newxiaoNumber");
+		Users users = null;
+		Xiaoi xiaoi = null;
+		FamilyUser fu1 = null;
+		Familygroup family = null;
+		if (XATools.isNull(xiaoNumber)) {
+			xr = XiaoiResult.build("旧的小艾编号不能为空!", XiaoiCode.emptyId);
+		}
+		if (XATools.isNull(userId)) {
+			xr = XiaoiResult.build("用户id不能为空", UserCode.emptyId);
+		}
+		if (XATools.isNull(groupNumber)) {
+			xr = XiaoiResult.build("家庭组编号不能为空!", FamilyCode.emptyId);
+		}
+		if (XATools.isNull(versionNumber)) {
+			xr = XiaoiResult.build("档案版本号不能为空!", VersionCode.emptyVersion);
+		}
+		if (XATools.isNull(newxiaoNumber)) {
+			xr = XiaoiResult.build("新的小艾编号不能为空!", XiaoiCode.emptyId);
+		}
+		if (xr.isSuccess()) {
+			//终端相同,不替换
+			if(xiaoNumber.equals(newxiaoNumber)){
+				xr = XiaoiResult.build("更换的小艾相同!", XiaoiCode.conflictBean);
+			}
+			if(xr.isSuccess()){
+				try {
+					users = usersService.selectUsersByid(Integer.parseInt(userId));
+					if (users != null) {
+						xiaoi = xiaoiService.selectXiaoiByNumber(xiaoNumber);
+						Xiaoi xiaoi_new = xiaoiService.selectXiaoiByNumber(newxiaoNumber);
+						if (xiaoi != null) {
+							if(xiaoi_new!=null){
+								family = familyService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
+								if (family != null) {
+									if (Integer.parseInt(versionNumber) > family.getVersionNumber()) { // 如果终端的版本号大于服务端
+										family.setVersionNumber(Integer.parseInt(versionNumber));
+										familyService.updateFamily(family);
+									}
+									fu1 = fauserService.selectFamilyUserByGNU(users, family);
+									if (fu1 != null) {
+										if (userId.equals(fu1.getDna())) { // 判断该家庭组是不是该用户创建
+											//推送
+											//获取当前在线的小艾
+											List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
+											com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
+											boolean pushState = false;
+											boolean flag = false;
+											HashMap hashMap = null;
+											for (Xiaoi xiaoi_ : allOnlineXiaois) {
+												//判断当前小艾是否在线
+												if(xiaoi.getOnlineState()==1){
+													//在线，推送
+													hashMap = new HashMap();
+													hashMap.put("xiaoi", xiaoi);
+													json2.put("key", "appchangeXiaoi");
+													json2.put("code", 0);
+													json2.put("xiaoNumber", xiaoi.getXiaoNumber());
+													pushState = PushMessage_Xiaoi.push2Xiao(json2, hashMap);
+													if(pushState){
+														flag = true;
+													}
+												}
+											}
+											if(flag){
+												xr.setSuccess(xiaoiService.change(xiaoNumber, newxiaoNumber));
+												//当前家庭组有在线小艾推送成功,执行删除小艾
+												if (xr.isSuccess() == false) {
+													xr = XiaoiResult.build("更换终端失败", XiaoiCode.changeFalse);
+												}
+											}else{
+												//当前家庭组没有任何一台小艾在线，推送失败，拒绝添加房间！
+												/*code = XiaoiCode.noExistOnlinBean;
+												message = "没有在线小艾!";*/
+												xr = XiaoiResult.build("没有在线小艾!", XiaoiCode.noExistOnlinBean);
+											}
+										} else {
+											xr = XiaoiResult.build("您不是群主，没有权限操作!", FamilyCode.privilegeMaster);
+										}
+									} else {
+										xr = XiaoiResult.build("该家庭组中不存在该用户", FamilyCode.noExistUser);
+									}
+								} else {
+									xr = XiaoiResult.build("没有该家庭组", FamilyCode.noExistBean);
+								}
+							}else{
+								xr = XiaoiResult.build("不存在新小艾!", XiaoiCode.noExistBean);
+							}
+						} else {
+							xr = XiaoiResult.build("没有该小艾!", XiaoiCode.noExistBean);
+						}
+					} else {
+						xr = XiaoiResult.build("没有该用户!", UserCode.noExistBean);
+					}
+				} catch (Exception e) {
+					xr = XiaoiResult.build("更换终端失败", XiaoiCode.changeFalse);
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		JSONObject familyGroup = familyService.getFamilyGroup(groupNumber);
+		if(xr.getCode()==0){
+			out.print(familyGroup);
+			logger.info("更换终端的出参:" + familyGroup);
+		}else{
+			json.put("code", xr.getCode());
+			json.put("message", xr.getMessage());
+			
+			json.put("result", familyGroup);
+			out.print(json);
+			logger.info("更换终端的出参:" + json);
+		}
+		return null;
+	}
+	
+	
 	/**
 	 * 根据编号得到小艾
 	 * 

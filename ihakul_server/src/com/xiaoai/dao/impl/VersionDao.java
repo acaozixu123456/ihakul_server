@@ -1,6 +1,10 @@
 package com.xiaoai.dao.impl;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeMap;
 
 import javax.annotation.Resource;
 
@@ -108,11 +112,24 @@ public class VersionDao implements IVersionDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Versions selectMaxVersions(String versionPackage) {
-		String hql="from Versions vs where vs.versionNumber=(select max(v.versionNumber) from Versions v where v.versionPackage=?)" +
-				" AND vs.versionPackage=?  ";
-		List<Versions> vs=hibernateTemplate.find(hql,versionPackage,versionPackage);
-		if(vs.size()>0){
-			return vs.get(0);
+		/*String hql="from Versions vs where vs.versionNumber=(select max(v.versionNumber) from Versions v where v.versionPackage=?)" +
+				" AND vs.versionPackage=?  ";*/
+		String hql = "from Versions vs where vs.versionPackage=?";
+		/*List<Versions> vs=hibernateTemplate.find(hql,versionPackage,versionPackage);*/
+		List<Versions> vs = hibernateTemplate.find(hql,versionPackage);
+
+		TreeMap treeMap = new TreeMap();
+		for (Versions versions : vs) {
+			Integer versionNumber = versions.getVersionNumber();
+			treeMap.put(versionNumber, versions);
+		}
+		Entry lastEntry = treeMap.lastEntry();
+		if(lastEntry!=null){
+			Object value = lastEntry.getValue();
+			if(value!=null&&value instanceof Versions){
+				Versions reVersions = (Versions) value;
+				return reVersions;
+			}
 		}
 		return null;
 	}

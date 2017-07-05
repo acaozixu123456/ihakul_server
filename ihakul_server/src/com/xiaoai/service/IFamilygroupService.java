@@ -88,5 +88,11 @@ public interface IFamilygroupService {
 	 * @return
 	 */
 	public Familygroup getFamilygroupByNumberNow(int groupNumber);
+	/**
+	 * 获得家庭组的所有信息_终端调用接口（级联其他）
+	 * @param parseInt
+	 * @return
+	 */
+	public JSONObject getFamilyGroupByXiaoi(String groupNumber);
 }
 

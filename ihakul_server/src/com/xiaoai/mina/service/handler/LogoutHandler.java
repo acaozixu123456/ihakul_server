@@ -24,6 +24,7 @@ public class LogoutHandler implements RequestHandler {
 		String account =session.getAttribute(XiaoaiConstant.SESSION_KEY).toString();
 		session.removeAttribute(XiaoaiConstant.SESSION_KEY);
 		session.close(true);
+		//立马清除map里面的session
 		sessionManager.removeSession(account);
 		return null;
 	}
