@@ -32,7 +32,6 @@ public class XiaoiModeDao implements IXiaoiModeDao {
 	@SuppressWarnings({ "unchecked" })
 	@Override
 	public List<XiaoiMode> findModeById(int id) {
-		//return hibernateTemplate.get(XiaoiMode.class, Long.parseLong(String.valueOf(id)));
 		List<XiaoiMode> list = hibernateTemplate.find("from XiaoiMode where mode = ?",id);
 		return list;
 	}
@@ -43,6 +42,7 @@ public class XiaoiModeDao implements IXiaoiModeDao {
 		List<XiaoiMode> list = hibernateTemplate.find("from XiaoiMode where groupNumber = ?",groupNumber);
 		return list;
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<XiaoiMode> findById(long id) {
 		List<XiaoiMode> list = hibernateTemplate.find("from XiaoiMode where id = ?",id);

@@ -4,11 +4,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IAdministrateDao;
 import com.xiaoai.entity.Administrate;
@@ -19,7 +16,6 @@ import com.xiaoai.entity.Administrate;
  *
  */
 @Repository("adminDao")
-@Transactional
 public class AdministrateDao implements IAdministrateDao {
 	@Resource(name="hibernateTemplate")
 	private HibernateTemplate hibernateTemplate;
@@ -50,11 +46,14 @@ public class AdministrateDao implements IAdministrateDao {
 		String hql="from Administrate";
 		//openSession这种方法浪费系统资源和影响执行效率
 	   //Session session=hibernateTemplate.getSessionFactory().openSession();
-		Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
+		/*Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
 		Query query=session.createQuery(hql);  //创建sql
 		query.setMaxResults(length);
 		query.setFirstResult(offset);
 		List<Administrate> list=query.list();     //执行sql查询
+		*/
+		//TODO 分页没实现还
+		List<Administrate> list=hibernateTemplate.find(hql);
 		return list;
 	}
 	//得到总记录数

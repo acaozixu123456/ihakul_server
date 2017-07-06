@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IHouseholdDao;
 import com.xiaoai.entity.Household;
@@ -54,6 +55,7 @@ public class HouseholdService implements IHouseholdService {
 		return houseHoldDao.getCountHouseHold(hql, houseHold);
 	}
 
+	@Transactional
 	//删除
 	public boolean deleteHousehold(int  hid) {
 		boolean fals=true;
@@ -75,6 +77,7 @@ public class HouseholdService implements IHouseholdService {
 		return houseHold;
 	}
 
+	@Transactional
 	//修改
 	public boolean updateHouseholdByid(Household houseHold) {
 		boolean fals=true;
@@ -87,6 +90,7 @@ public class HouseholdService implements IHouseholdService {
 		return fals;
 	}
 
+	@Transactional
 	//添加
 	public boolean insertHousehold(Household houseHold) {
 		boolean fals=true;

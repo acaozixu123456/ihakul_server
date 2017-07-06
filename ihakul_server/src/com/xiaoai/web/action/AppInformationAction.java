@@ -1,6 +1,5 @@
 package com.xiaoai.web.action;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +7,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.alibaba.fastjson.JSONArray;
@@ -25,6 +25,7 @@ import com.xiaoai.util.XiaoiResult;
  * @Description 公告
  */
 @Controller("appInformationAction")
+@Scope("prototype")
 public class AppInformationAction extends XiaoaiMessage{
 	
 	private static Logger logger = Logger.getLogger(AppInformationAction.class);

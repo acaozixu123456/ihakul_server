@@ -36,7 +36,7 @@ import com.xiaoai.util.XiaoaiMessage.FamilyCode;
  *
  */
 @Service("familyService")
-@Transactional
+
 public class FamilygroupService implements IFamilygroupService {
 	@Resource(name="familyDao")
 	private IFamilygroupDao familyDao;
@@ -92,7 +92,7 @@ public class FamilygroupService implements IFamilygroupService {
 		return familyDao.getAllRowCount(sql.toString(),familygroup);
 	}
 
-	
+	@Transactional
 	public boolean insertFamilygroup(Familygroup family) {
 		boolean fals=true;
 		try{
@@ -108,7 +108,7 @@ public class FamilygroupService implements IFamilygroupService {
 		return fals;
 	}
 
-	
+	@Transactional
 	public boolean deleteFamilygroup(Familygroup family) {
 		boolean fals=true;
 		try{
@@ -172,7 +172,7 @@ public class FamilygroupService implements IFamilygroupService {
 		return familyDao.getFamilygroupByNumber(groupNumber);
 	}
 
-	
+	@Transactional
 	public boolean updateFamily(Familygroup familygroup) {
 		boolean fals=true;
 		try {
@@ -251,7 +251,7 @@ public class FamilygroupService implements IFamilygroupService {
 				for(Xiaoi xiaoi:xiaoList){
 				json5 = new JSONObject();
 				json5.put("xiaoName", xiaoi.getXname());
-				json5.put("onlineState", xiaoi.getOnlineState()); //在线状态(0,不在线;1,在线)
+				json5.put("onlineState", xiaoi.getState()); //在线状态(0,不在线;1,在线)
 				json5.put("xiaoNumber", xiaoi.getXiaoNumber());//终端编号
 				json5.put("xiaoType", xiaoi.getXiaoType());//终端类型(1,普通;2时尚)
 				json5.put("xiaoIp", xiaoi.getXiaoIp());//终端IP
@@ -284,10 +284,10 @@ public class FamilygroupService implements IFamilygroupService {
 		    		 for(Household household:householdList){
 		    			 JSONObject json4=new JSONObject();
 		    			 json5.put("roomNumber", room.getRoomNumber()); //房间编号
-		    			 json4.put("names", household.getEaName());  //家电呢称
+		    			 json4.put("eaName", household.getEaName());  //家电呢称
 		    			 json4.put("classId", household.getClassId());//家电类别  1 智能家电,2红外线家电
 		    			 json4.put("brand", household.getBrand()); //品牌
-		    			 json4.put("model", household.getHid()); //型号 
+		    			 json4.put("model", household.getModel()); //型号 
 		    			 json4.put("eaNumber", household.getEaNumber()); //家电编号 
 		    			 json4.put("type", household.getType()); //家电类型 
 		    			 json4.put("prop", household.getProp()); //通讯参数 
@@ -336,7 +336,7 @@ public class FamilygroupService implements IFamilygroupService {
 		Integer code=0;
 		JSONObject json2=new JSONObject();
 		JSONObject json5=new JSONObject();
-		JSONObject array=new JSONObject();
+//		JSONObject array=new JSONObject();
 		JSONArray array3=new JSONArray();
 		JSONArray array5=new JSONArray();
 		JSONObject json=new JSONObject();
@@ -374,7 +374,7 @@ public class FamilygroupService implements IFamilygroupService {
 				for(Xiaoi xiaoi:xiaoList){
 				json5 = new JSONObject();
 				json5.put("xiaoName", xiaoi.getXname());
-				json5.put("onlineState", xiaoi.getOnlineState()); //在线状态(0,不在线;1,在线)
+				json5.put("onlineState", xiaoi.getState()); //在线状态(0,不在线;1,在线)
 				json5.put("xiaoNumber", xiaoi.getXiaoNumber());//终端编号
 				json5.put("xiaoType", xiaoi.getXiaoType());//终端类型(1,普通;2时尚)
 				json5.put("xiaoIp", xiaoi.getXiaoIp());//终端IP
@@ -387,7 +387,6 @@ public class FamilygroupService implements IFamilygroupService {
 			//情景模式 
 			List<XiaoiMode> xiaoiModes = xiaoiModeDao.findAllModeByGroupNum(family.getGroupNumber());
 				jArray = new JSONArray();
-			//jArray.add(JSONObject.toJSON(xiaoiModes));
 			if(!XATools.isNull(xiaoiModes)){
 				for (XiaoiMode xiaoiMode : xiaoiModes) {
 					jArray.add(JSONObject.toJSON(xiaoiMode));
@@ -412,12 +411,13 @@ public class FamilygroupService implements IFamilygroupService {
 		    		 for(Household household:householdList){
 		    			 JSONObject json4=new JSONObject();
 		    			 json5.put("roomNumber", room.getRoomNumber()); //房间编号
-		    			 json4.put("names", household.getEaName());  //家电呢称
+		    			 json4.put("roomNumber", room.getRoomNumber());
+		    			 json4.put("eaName", household.getEaName());  //家电呢称
 		    			 json4.put("classId", household.getClassId());//家电类别  1 智能家电,2红外线家电
 		    			 json4.put("brand", household.getBrand()); //品牌
 		    			 json4.put("model", household.getHid()); //型号 
 		    			 json4.put("eaNumber", household.getEaNumber()); //家电编号 
-		    			 json4.put("type", household.getType()); //家电类型 
+		    			 //json4.put("type", household.getType()); //家电类型 
 		    			 json4.put("prop", household.getProp()); //通讯参数 
 		    			 json4.put("stub", household.getStub()); //智能索引
 		    			 json4.put("status", household.getStatus()); //
@@ -434,8 +434,7 @@ public class FamilygroupService implements IFamilygroupService {
 		    }else{
 		    	json2.put("room", array3);
 		    }
-			//array.add(json2);
-		    array.put("room", array3);
+		    
 		}else{
 			code=FamilyCode.noExistBean;
 			success=false;
@@ -443,19 +442,11 @@ public class FamilygroupService implements IFamilygroupService {
 		}
 		}
 		
-		//JSONObject xiaoJsonObject = new JSONObject();
-		//xiaoJsonObject.put("xiaoi", array5);
-		array.put("xiaoi", array5);//小艾信息
-		
-		//JSONObject xiaoModeJsonObject = new JSONObject();
-		//xiaoModeJsonObject.put("xiaoiMode", jArray);
-		array.put("xiaoiMode", jArray);//情景模式信息
-		
+		json2.put("xiaoi", array5);//小艾信息
+		json2.put("xiaoiMode", jArray);//情景模式信息
 		json.put("code", code);
 		json.put("message", message);
-		json.put("result", array);   //家庭组信息
-		//json.put("result1", array5);   //小艾信息
-		//json.put("result2", jArray);   //情景模式信息
+		json.put("result", json2);   //家庭组信息
 		
 		return json;
 	}

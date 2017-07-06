@@ -77,20 +77,20 @@ insert  into `datadictionary`(`id`,`ddName`,`createTime`,`checkedType`) values (
 DROP TABLE IF EXISTS `family_user`;
 
 CREATE TABLE `family_user` (
-  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `groupId` int(10) DEFAULT NULL COMMENT '家庭组id',
   `userId` int(10) DEFAULT NULL COMMENT '用户id',
-  `dna` varchar(20) DEFAULT NULL COMMENT '创建标识',
+  `dna` char(20) DEFAULT NULL COMMENT '创建标识',
   PRIMARY KEY (`id`),
   KEY `g_id` (`groupId`),
   KEY `u_id` (`userId`),
   CONSTRAINT `g_id` FOREIGN KEY (`groupId`) REFERENCES `familygroup` (`groupId`),
   CONSTRAINT `u_id` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 /*Data for the table `family_user` */
 
-insert  into `family_user`(`id`,`groupId`,`userId`,`dna`) values (7,7,2,'2'),(14,13,2,'2'),(22,22,6,'6'),(24,23,7,'7'),(25,24,7,'7'),(26,25,1,'1'),(27,26,7,'7');
+insert  into `family_user`(`id`,`groupId`,`userId`,`dna`) values (7,7,2,'2'),(14,13,2,'2'),(22,22,6,'6'),(24,23,7,'7'),(25,24,7,'7'),(27,26,7,'7'),(28,28,1,'1'),(29,21,1,'1'),(30,29,10,'10'),(31,30,7,'7'),(32,31,7,'7');
 
 /*Table structure for table `familygroup` */
 
@@ -100,20 +100,21 @@ CREATE TABLE `familygroup` (
   `groupId` int(10) NOT NULL AUTO_INCREMENT COMMENT '家庭组id(自增)',
   `groupName` varchar(20) NOT NULL COMMENT '家庭组名字',
   `creationTime` datetime DEFAULT NULL COMMENT '创建时间',
-  `groupNumber` int(24) DEFAULT NULL COMMENT '家庭组编号',
+  `groupNumber` int(24) unsigned DEFAULT NULL COMMENT '家庭组编号',
   `state` varchar(20) DEFAULT NULL COMMENT '国家',
   `city` varchar(20) DEFAULT NULL COMMENT '城市',
   `district` varchar(50) DEFAULT NULL COMMENT '街道',
   `groupPassword` varchar(20) DEFAULT NULL COMMENT '绑定家庭组时的验证密码',
-  `managerId` int(10) DEFAULT NULL COMMENT '创建家庭组的用户ID',
-  `versionNumber` int(30) DEFAULT '0' COMMENT '家庭组版本号',
-  `groupIp` varchar(20) DEFAULT NULL COMMENT '家庭组IP',
-  PRIMARY KEY (`groupId`,`groupName`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+  `managerId` int(10) unsigned DEFAULT NULL COMMENT '创建家庭组的用户ID',
+  `versionNumber` int(30) unsigned DEFAULT '0' COMMENT '家庭组版本号',
+  `groupIp` char(20) DEFAULT NULL COMMENT '家庭组IP',
+  PRIMARY KEY (`groupId`,`groupName`),
+  UNIQUE KEY `uk_groupNumber` (`groupNumber`)
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 
 /*Data for the table `familygroup` */
 
-insert  into `familygroup`(`groupId`,`groupName`,`creationTime`,`groupNumber`,`state`,`city`,`district`,`groupPassword`,`managerId`,`versionNumber`,`groupIp`) values (7,'哈酷哈酷','2017-06-09 14:40:03',10007,NULL,NULL,NULL,'0362461236',2,9,NULL),(10,'中科院','2017-06-22 18:39:46',10010,NULL,NULL,NULL,'0018595608',1,2,NULL),(13,'水浒传','2017-06-26 10:47:02',10013,NULL,NULL,NULL,'8966253120',2,3,NULL),(19,'中科院','2017-06-27 15:37:03',10019,NULL,NULL,NULL,'8618639198',1,3,NULL),(21,'中科院','2017-06-28 16:43:46',10021,NULL,NULL,NULL,'7553223115',1,38,NULL),(22,'14','2017-06-29 10:21:01',10022,NULL,NULL,NULL,'7525006981',6,4,NULL),(23,'m','2017-07-01 14:54:48',10023,NULL,NULL,NULL,'2939025605',7,2,NULL),(24,'l','2017-07-01 15:49:51',10024,NULL,NULL,NULL,'1447296591',7,3,NULL),(25,'中科院','2017-07-04 10:43:54',10025,NULL,NULL,NULL,'1285622078',1,1,NULL),(26,'u','2017-07-04 15:07:10',10026,NULL,NULL,NULL,'2628053404',7,3,NULL);
+insert  into `familygroup`(`groupId`,`groupName`,`creationTime`,`groupNumber`,`state`,`city`,`district`,`groupPassword`,`managerId`,`versionNumber`,`groupIp`) values (7,'哈酷哈酷','2017-06-09 14:40:03',10007,NULL,NULL,NULL,'0362461236',2,9,NULL),(10,'中科院','2017-06-22 18:39:46',10010,NULL,NULL,NULL,'0018595608',1,2,NULL),(13,'水浒传','2017-06-26 10:47:02',10013,NULL,NULL,NULL,'8966253120',2,3,NULL),(19,'中科院','2017-06-27 15:37:03',10019,NULL,NULL,NULL,'8618639198',1,3,NULL),(21,'中科院','2017-06-28 16:43:46',10021,NULL,NULL,NULL,'7553223115',1,38,NULL),(22,'14','2017-06-29 10:21:01',10022,NULL,NULL,NULL,'7525006981',6,4,NULL),(23,'m','2017-07-01 14:54:48',10023,NULL,NULL,NULL,'2939025605',7,2,NULL),(24,'l','2017-07-01 15:49:51',10024,NULL,NULL,NULL,'1447296591',7,3,NULL),(25,'中科院','2017-07-04 10:43:54',10025,NULL,NULL,NULL,'1285622078',1,1,NULL),(26,'u','2017-07-04 15:07:10',10026,NULL,NULL,NULL,'2628053404',7,5,NULL),(27,'中科院','2017-07-05 18:15:30',10027,NULL,NULL,NULL,'7031538300',1,1,NULL),(28,'中科院','2017-07-06 09:57:47',10028,NULL,NULL,NULL,'8751441280',1,1,NULL),(29,'宝安区','2017-07-06 15:47:39',10029,NULL,NULL,NULL,'2159905985',10,0,NULL),(30,'kk','2017-07-06 16:02:35',10030,NULL,NULL,NULL,'4335402637',7,0,NULL),(31,'k','2017-07-06 16:04:37',10031,NULL,NULL,NULL,'9927183844',7,0,NULL);
 
 /*Table structure for table `household` */
 
@@ -121,7 +122,7 @@ DROP TABLE IF EXISTS `household`;
 
 CREATE TABLE `household` (
   `hid` int(10) NOT NULL AUTO_INCREMENT COMMENT '家电id',
-  `classId` int(10) DEFAULT NULL COMMENT '家电类别(1,普通;2,智能)',
+  `classId` tinyint(1) unsigned DEFAULT NULL COMMENT '家电类别(1,普通;2,智能)',
   `brand` varchar(50) DEFAULT NULL COMMENT '品牌',
   `model` varchar(50) DEFAULT NULL COMMENT '型号',
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
@@ -135,16 +136,17 @@ CREATE TABLE `household` (
   `port` int(10) DEFAULT NULL,
   `status` int(10) DEFAULT NULL,
   PRIMARY KEY (`hid`),
+  UNIQUE KEY `uk_eaNumber` (`eaNumber`),
   KEY `ah_bgb` (`classId`),
   KEY `nk_rid` (`roomId`),
   KEY `da_ffg` (`groupId`),
   CONSTRAINT `da_ffg` FOREIGN KEY (`groupId`) REFERENCES `familygroup` (`groupId`),
   CONSTRAINT `nk_rid` FOREIGN KEY (`roomId`) REFERENCES `room` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 /*Data for the table `household` */
 
-insert  into `household`(`hid`,`classId`,`brand`,`model`,`createTime`,`eaName`,`groupId`,`roomId`,`eaNumber`,`prop`,`stub`,`type`,`port`,`status`) values (10,2,NULL,'*','2017-06-29 10:21:50','电冰箱',22,5,'0-0-LIVING_ROOM#288793330400101121',288793330400101121,NULL,NULL,32,-1),(15,2,NULL,'*','2017-07-01 10:38:51','床头灯#传真机',22,5,'0-0-LIVING_ROOM#144678142324245762',144678142324245762,NULL,NULL,33,-1);
+insert  into `household`(`hid`,`classId`,`brand`,`model`,`createTime`,`eaName`,`groupId`,`roomId`,`eaNumber`,`prop`,`stub`,`type`,`port`,`status`) values (10,2,NULL,'*','2017-06-29 10:21:50','电冰箱',22,5,'0-0-LIVING_ROOM#288793330400101121',288793330400101121,NULL,NULL,32,-1),(15,2,NULL,'*','2017-07-01 10:38:51','床头灯#传真机',22,5,'0-0-LIVING_ROOM#144678142324245762',144678142324245762,NULL,NULL,33,-1),(16,1,'LG','ac','2017-07-06 16:07:18','空调',29,7,'0-0-LIVING_ROOM#acLG539',0,539,'ac',31,0),(17,2,NULL,NULL,'2017-07-06 16:09:27','电饭煲',29,7,'0-0-LIVING_ROOM#288793330400101377',288793330400101377,NULL,'socket',34,0);
 
 /*Table structure for table `info` */
 
@@ -207,19 +209,20 @@ CREATE TABLE `room` (
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `groupId` int(10) DEFAULT NULL COMMENT '家庭组id',
   `roomNickName` varchar(50) DEFAULT NULL COMMENT '房间昵称',
-  `floor` int(10) DEFAULT '0' COMMENT '房间楼层(默认 0)',
+  `floor` int(10) unsigned DEFAULT '0' COMMENT '房间楼层(默认 0)',
   `parentId` varchar(20) DEFAULT NULL COMMENT '父节点标识',
   `roomNumber` varchar(20) DEFAULT NULL COMMENT '房间编号',
   `robot` varchar(20) DEFAULT NULL COMMENT '终端绑定',
   `creator` varchar(20) DEFAULT NULL COMMENT '终端创建',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `roomNumber` (`roomNumber`,`groupId`),
   KEY `bn_roi` (`groupId`),
   CONSTRAINT `bn_roi` FOREIGN KEY (`groupId`) REFERENCES `familygroup` (`groupId`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 /*Data for the table `room` */
 
-insert  into `room`(`id`,`roomName`,`createTime`,`groupId`,`roomNickName`,`floor`,`parentId`,`roomNumber`,`robot`,`creator`) values (5,'LIVING_ROOM','2017-06-29 10:21:26',22,NULL,0,NULL,'0-0-LIVING_ROOM','0030000200009902','0030000200009902');
+insert  into `room`(`id`,`roomName`,`createTime`,`groupId`,`roomNickName`,`floor`,`parentId`,`roomNumber`,`robot`,`creator`) values (5,'LIVING_ROOM','2017-06-29 10:21:26',22,NULL,0,NULL,'0-0-LIVING_ROOM','0030000200009902','0030000200009902'),(7,'LIVING_ROOM','2017-07-06 16:06:46',29,'客厅',0,NULL,'0-0-LIVING_ROOM','0030000200000202','0030000200000202');
 
 /*Table structure for table `users` */
 
@@ -241,7 +244,7 @@ CREATE TABLE `users` (
 
 /*Data for the table `users` */
 
-insert  into `users`(`userId`,`userName`,`userPassword`,`accessper`,`userPhoneNumber`,`userSex`,`createTime`,`loginLastTimes`,`loginLastIp`) values (1,'jock','e10adc3949ba59abbe56e057f20f883e',1,'15570895417','男士','2017-06-05 16:27:42','2017-07-04 17:52:31','2'),(2,'丘丘','6c2d1c105a9f5d871a6ea5f9496158c6',1,'18923881858','女士','2017-06-06 16:12:30','2017-06-15 14:40:53','2'),(4,'goog','93be52ba8f828a41647f919a5b646221',1,'18086107575','男士','2017-06-07 10:20:11','2017-06-07 10:34:37','2'),(5,'测试','123',1,'18086107515','男','2017-06-09 11:17:17','2017-06-09 15:21:32','2'),(6,'suchun1237','e10adc3949ba59abbe56e057f20f883e',1,'18688707348','男士','2017-06-22 16:29:02','2017-07-04 14:49:19',NULL),(7,'杰','4a7d1ed414474e4033ac29ccb8653d9b',1,'15130933031','男士','2017-06-27 11:56:40','2017-07-04 14:58:40',NULL),(10,'你好啊','e10adc3949ba59abbe56e057f20f883e',1,'15570895418','男','2017-06-30 10:40:04','2017-07-03 19:03:08',NULL);
+insert  into `users`(`userId`,`userName`,`userPassword`,`accessper`,`userPhoneNumber`,`userSex`,`createTime`,`loginLastTimes`,`loginLastIp`) values (1,'jock','e10adc3949ba59abbe56e057f20f883e',1,'15570895417','男士','2017-06-05 16:27:42','2017-07-06 14:38:13','2'),(2,'丘丘','6c2d1c105a9f5d871a6ea5f9496158c6',1,'18923881858','女士','2017-06-06 16:12:30','2017-06-15 14:40:53','2'),(4,'goog','93be52ba8f828a41647f919a5b646221',1,'18086107575','男士','2017-06-07 10:20:11','2017-06-07 10:34:37','2'),(5,'测试','123',1,'18086107515','男','2017-06-09 11:17:17','2017-06-09 15:21:32','2'),(6,'suchun1237','e10adc3949ba59abbe56e057f20f883e',1,'18688707348','男士','2017-06-22 16:29:02','2017-07-05 16:28:50',NULL),(7,'杰','4a7d1ed414474e4033ac29ccb8653d9b',1,'15130933031','男士','2017-06-27 11:56:40','2017-07-06 15:59:53',NULL),(10,'你好啊','e10adc3949ba59abbe56e057f20f883e',1,'15570895418','男','2017-06-30 10:40:04','2017-07-06 18:29:26',NULL);
 
 /*Table structure for table `versions` */
 
@@ -297,22 +300,24 @@ DROP TABLE IF EXISTS `xiaoi`;
 CREATE TABLE `xiaoi` (
   `xid` int(10) NOT NULL AUTO_INCREMENT COMMENT '终端id',
   `xname` varchar(20) DEFAULT NULL COMMENT '终端名称',
-  `onlineState` int(11) DEFAULT NULL COMMENT '在线状态(0,不在线;1,在线)',
-  `xiaoNumber` varchar(20) DEFAULT NULL COMMENT '终端编号',
+  `state` tinyint(1) unsigned DEFAULT NULL COMMENT '在线状态(0,不在线;1,在线;2删除)',
+  `xiaoNumber` char(18) DEFAULT NULL COMMENT '终端编号',
   `groupId` int(10) DEFAULT NULL COMMENT '家庭组的id',
-  `xiaoType` int(10) DEFAULT NULL COMMENT '终端类型(1,普通;2时尚))',
+  `xiaoType` int(10) unsigned DEFAULT NULL COMMENT '终端类型(1,普通;2时尚))',
   `activationTime` datetime DEFAULT NULL COMMENT '激活时间',
   `xiaoIp` varchar(50) DEFAULT NULL COMMENT '小艾ip',
-  `mode` int(10) DEFAULT NULL COMMENT '终端情景模式(10-标准模式；20-睡眠模式；30-离家模式)',
-  `volume` int(10) DEFAULT NULL COMMENT '扬声器输出音量(取值范围 1-100，当设置为-1 时，终端静音)',
+  `mode` int(10) unsigned DEFAULT NULL COMMENT '终端情景模式(10-标准模式；20-睡眠模式；30-离家模式)',
+  `volume` int(10) unsigned DEFAULT NULL COMMENT '扬声器输出音量(取值范围 1-100，当设置为-1 时，终端静音)',
   PRIMARY KEY (`xid`),
+  UNIQUE KEY `uk_xiaoNumber` (`xiaoNumber`),
   KEY `xv_hj` (`groupId`),
+  KEY `idx_mode` (`mode`),
   CONSTRAINT `xv_hj` FOREIGN KEY (`groupId`) REFERENCES `familygroup` (`groupId`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 /*Data for the table `xiaoi` */
 
-insert  into `xiaoi`(`xid`,`xname`,`onlineState`,`xiaoNumber`,`groupId`,`xiaoType`,`activationTime`,`xiaoIp`,`mode`,`volume`) values (2,'哈酷小ⅰ',0,'0030000200000202',13,2,'2017-06-28 18:02:03','192.168.2.127',NULL,50),(7,'小艾',0,'0030000200009902',22,2,'2017-07-04 14:26:06','192.168.2.137',NULL,50),(8,'哈酷小ⅰ',1,'0030000200000302',26,2,'2017-07-05 09:38:21','192.168.31.158',NULL,50),(9,'哈酷小ⅰ',0,'0030000100009702',21,2,'2017-07-05 09:39:23','192.168.2.118',NULL,50),(10,'哈酷小ⅰ',0,'0030000200000102',21,2,'2017-07-05 09:52:32','192.168.2.113',NULL,50);
+insert  into `xiaoi`(`xid`,`xname`,`state`,`xiaoNumber`,`groupId`,`xiaoType`,`activationTime`,`xiaoIp`,`mode`,`volume`) values (7,'小艾',0,'0030000200009902',22,2,'2017-07-04 14:26:06','192.168.2.137',NULL,50),(8,'哈酷小ⅰ',1,'0030000200000302',26,2,'2017-07-06 17:42:14','192.168.2.116',NULL,50),(11,'哈酷小ⅰ',0,'0030000100009702',21,2,'2017-07-05 11:07:29','192.168.2.118',NULL,50),(13,'哈酷小ⅰ',1,'0030000200000102',28,2,'2017-07-06 17:06:43','192.168.2.113',NULL,50),(14,'哈酷小ⅰ',1,'0030000200000202',29,2,'2017-07-06 18:29:02','192.168.2.127',NULL,50);
 
 /*Table structure for table `xiaoilog` */
 

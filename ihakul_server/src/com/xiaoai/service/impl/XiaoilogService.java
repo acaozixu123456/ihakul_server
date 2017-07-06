@@ -18,6 +18,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IXiaoilogDao;
 import com.xiaoai.entity.Xiaoilog;
@@ -32,6 +33,7 @@ public class XiaoilogService implements IXiaoilogService {
 	@Resource(name="xiaoilogDao")
 	private IXiaoilogDao xiaoilogDao;
 	//删除
+	@Transactional
 	public boolean deleteXiaoilogByid(Xiaoilog xiaoilog) {
 		boolean fals=true;
 		try {
@@ -175,6 +177,7 @@ public class XiaoilogService implements IXiaoilogService {
 
 
 	//添加
+	@Transactional
 	public boolean insertXiaoilog(Xiaoilog xiaoilog) {
 		boolean fals=true;
 		try {
@@ -188,6 +191,7 @@ public class XiaoilogService implements IXiaoilogService {
 
 
 	//修改
+	@Transactional
 	public boolean updateXiaoilog(Xiaoilog xiaoilog) {
 		boolean fals=true;
 		try {

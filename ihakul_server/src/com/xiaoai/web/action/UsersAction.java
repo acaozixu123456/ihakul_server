@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.xiaoai.entity.Familygroup;
@@ -24,6 +25,7 @@ import com.xiaoai.service.IUsersService;
 import com.xiaoai.util.Page;
 
 @Controller("usersAction")
+@Scope("prototype")
 public class UsersAction {
 	@Resource(name="usersService")
 	private IUsersService usersService;

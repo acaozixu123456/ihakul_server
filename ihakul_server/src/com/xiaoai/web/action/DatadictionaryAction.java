@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -21,6 +22,7 @@ import com.xiaoai.service.IDatadictionaryService;
 import com.xiaoai.util.Page;
 @SuppressWarnings("serial")
 @Controller("datadicAction")
+@Scope("prototype")
 public class DatadictionaryAction extends ActionSupport{
 	@Resource(name="datadicService")
 	private IDatadictionaryService datadicService;

@@ -4,9 +4,7 @@ package com.xiaoai.dao.impl;
 
 
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -15,12 +13,9 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IFamilygroupDao;
-import com.xiaoai.entity.FamilyUser;
 import com.xiaoai.entity.Familygroup;
-import com.xiaoai.entity.Room;
 import com.xiaoai.entity.Users;
 import com.xiaoai.util.XATools;
 /**
@@ -83,6 +78,8 @@ public class FamilygroupDao implements IFamilygroupDao {
 	 * 删除
 	 */
 	public void deleteFamilygroup(Familygroup family) {
+		//解决一个session中有两个familygroup
+		hibernateTemplate.merge(Familygroup.class);
 		hibernateTemplate.delete(family);
 		//hibernateTemplate.deleteAll(entities)
 	}
@@ -130,22 +127,15 @@ public class FamilygroupDao implements IFamilygroupDao {
 	public List<Familygroup> selectFamilygroupBytimes(String beginTime,
 			String lastTime) {
 		String sql="select * from familygroup where creationTime >=? and creationTime<=?";
-		Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
-		Query query=session.createQuery(sql);
-		query.setString(1, beginTime);
-		query.setString(2, lastTime);
-		List<Familygroup> list=query.list(); //执行sql查询 并返回查询结果为list类型的
+		List<Familygroup> list = hibernateTemplate.find(sql,beginTime,lastTime);
 		return list;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Familygroup> selectFamilygroupByusers(Users users) {
-		String sql="select family from Familygroup as family join family.users as user where user=:users";
-		Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
-		Query query=session.createQuery(sql);
-		query.setParameter("users", users);
-		List<Familygroup> list=query.list();
+		String sql="select family from Familygroup as family join family.users as user where user=?";
+		List<Familygroup> list=hibernateTemplate.find(sql,users);
 		return list;
 	}
 	
@@ -153,15 +143,13 @@ public class FamilygroupDao implements IFamilygroupDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Users> selectusersByFamilygroup(Familygroup fa) {
-		String sql="select user from Users as user join user.familygroup as fa where fa=:family";
-		Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
-		Query query=session.createQuery(sql);
-		query.setParameter("family", fa);
-		List<Users> list=query.list();
+		String sql="select user from Users as user join user.familygroup as fa where fa=?";
+		List<Users> list = hibernateTemplate.find(sql,fa);
 		return list;
 	}
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Familygroup getFamilygroupByNumberNow(int groupNumber) {
 		String hql="from Familygroup where groupNumber=?";

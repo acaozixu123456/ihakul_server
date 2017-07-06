@@ -133,6 +133,8 @@ public class XiaoaiMessage {
 		public static final int updateFalse=472;
 		/**删除房间失败! */
 		public static final int deleteFalse=473;
+		/**切换默认房间失败! */
+		public static final int changeFalse=474;
 	}
 
 	/**
@@ -150,6 +152,12 @@ public class XiaoaiMessage {
 		public static final int emptyRequestUri=514;
 		/**Keys不能为空！*/
 		public static final int emptyKeys=515;
+		/**通讯参数不能为空!*/
+		public static final int emptyProp=516;
+		/**功能键值不能为空!*/
+		public static final int emptyCommand=517;
+		/**执行参数不能为空!*/
+		public static final int emptyValue=518;
 		
 		/**该电器已存在 */
 		public static final int conflictBean=531;
@@ -321,4 +329,12 @@ public class XiaoaiMessage {
 		public static final int insertFail = 1271;
 	}
 	
+	public static class ChannelCode{
+		/**频道集合不能为空！ */
+		public static final int emptyContent = 1311;
+		
+		
+		/**新增频道失败！ */
+		public static final int insertFail = 1371;
+	}
 }

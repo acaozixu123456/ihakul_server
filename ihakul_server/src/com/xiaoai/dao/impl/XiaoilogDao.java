@@ -9,7 +9,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IXiaoilogDao;
 import com.xiaoai.entity.Xiaoilog;
@@ -19,7 +18,6 @@ import com.xiaoai.entity.Xiaoilog;
  *
  */
 @Repository("xiaoilogDao")
-@Transactional
 public class XiaoilogDao implements IXiaoilogDao {
 	
 	@Resource(name="hibernateTemplate")
@@ -62,13 +60,9 @@ public class XiaoilogDao implements IXiaoilogDao {
 
 
 	//查询导出报表
-	@SuppressWarnings({ "unchecked", "unused" })
+	@SuppressWarnings({ "unchecked" })
 	public List<Xiaoilog> exportExecl(Xiaoilog xiaoilog, String hql) {
-		Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
-		Transaction s=session.beginTransaction();
-		Query query=session.createQuery(hql);
-		query.setProperties(xiaoilog);
-		List<Xiaoilog> list=query.list();
+		List<Xiaoilog> list=hibernateTemplate.find(hql,xiaoilog);
 		return list;
 	}
 

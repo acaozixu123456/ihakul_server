@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IVersionDao;
 import com.xiaoai.entity.Versions;
@@ -80,6 +81,7 @@ public class VersionService implements IVersionService {
 	}
 	
 	//添加
+	@Transactional
 	public boolean insertVersion(Versions version) {
 		boolean fals=true;
 		version.setUpgradeTime(XATools.getTNowTime());
@@ -100,6 +102,7 @@ public class VersionService implements IVersionService {
 	}
 
 	//修改
+	@Transactional
 	public boolean updateVersion(Versions version) {
 		boolean fals=true;
 		try {
@@ -114,6 +117,7 @@ public class VersionService implements IVersionService {
 	}
 
 	//删除
+	@Transactional
 	public boolean deleteVrtsion(Versions version) {
 		boolean fals=true;
 		try {

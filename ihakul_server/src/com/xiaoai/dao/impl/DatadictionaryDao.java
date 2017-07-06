@@ -8,12 +8,10 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IDatadictionaryDao;
 import com.xiaoai.entity.Datadictionary;
 @Repository("datadicDao")
-@Transactional
 public class DatadictionaryDao implements IDatadictionaryDao{
 
 	@Resource(name="hibernateTemplate")

@@ -17,12 +17,13 @@ import com.xiaoai.service.IXiaoiModeService;
  * @Description 
  */
 @Service("xiaoiModeService")
-@Transactional
+
 public class XiaoiModeService implements IXiaoiModeService {
 
 	@Resource
 	private IXiaoiModeDao xiaoiModeDao;
 	@Override
+	@Transactional
 	public boolean insertMode(XiaoiMode xiaoiMode) {
 		/*boolean flag = true;
 		try {*/
@@ -36,6 +37,7 @@ public class XiaoiModeService implements IXiaoiModeService {
 	}
 	
 	@Override
+	@Transactional
 	public boolean deleteMode(XiaoiMode xiaoiMode) {
 		boolean flag = true;
 		try {
@@ -59,7 +61,6 @@ public class XiaoiModeService implements IXiaoiModeService {
 
 	@Override
 	public List<XiaoiMode> findById(long id) {
-		// TODO Auto-generated method stub
 		return xiaoiModeDao.findById(id);
 	}
 

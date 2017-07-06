@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IHouseholdDao;
 import com.xiaoai.dao.IRoomDao;
@@ -52,6 +53,8 @@ public class RoomService implements IRoomService {
 		int count=roomDao.getCountRoom(hql, room);
 		return count;
 	}
+	
+	@Transactional
 	//添加
 	public boolean insertRoom(Room room) {
 		boolean fals=true;
@@ -72,6 +75,7 @@ public class RoomService implements IRoomService {
 	}
 
 	//删除
+	@Transactional
 	public boolean deleteRoom(Room room) {
 		boolean fals=true;
 		int id=room.getId();
@@ -101,6 +105,7 @@ public class RoomService implements IRoomService {
 	}
 
 	//修改
+	@Transactional
 	public boolean updateRoom(Room room) {
 		boolean fals=true;
 		try {

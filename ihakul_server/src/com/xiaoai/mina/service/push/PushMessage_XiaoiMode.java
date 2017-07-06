@@ -21,7 +21,7 @@ public class PushMessage_XiaoiMode {
 	private static final Logger logger=Logger.getLogger(PushMessage_XiaoiMode.class);
 	
 	//消息转发
-	public static boolean push2Xiao(JSONObject json,HashMap map){
+	public static boolean push2Xiao(JSONObject json,@SuppressWarnings("rawtypes") HashMap map){
 		SentBody sent=new SentBody();
 		DefaultSessionManager sessionManager=(DefaultSessionManager) ContextHolder.getBean("XiaoaiSessionManage");
 		XiaoaiSession xaSession=sessionManager.getSession(json.getString(XiaoaiConstant.SESSION_KEY));//通过绑定账号找到session集合

@@ -3,7 +3,6 @@ package com.xiaoai.mina.service.handler;
 
 import org.apache.log4j.Logger;
 
-import com.xiaoai.mina.model.ReplyBody;
 import com.xiaoai.mina.model.SentBody;
 import com.xiaoai.mina.service.RequestHandler;
 import com.xiaoai.mina.service.constant.XiaoaiConstant;

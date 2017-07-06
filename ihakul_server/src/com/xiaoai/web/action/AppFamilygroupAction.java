@@ -4,7 +4,6 @@ package com.xiaoai.web.action;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -13,17 +12,12 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.xiaoai.dao.IHouseholdDao;
-import com.xiaoai.dao.IRoomDao;
-import com.xiaoai.dao.impl.XiaoiDao;
 import com.xiaoai.entity.FamilyUser;
 import com.xiaoai.entity.Familygroup;
-import com.xiaoai.entity.Household;
-import com.xiaoai.entity.Room;
 import com.xiaoai.entity.Users;
-import com.xiaoai.entity.Xiaoi;
 import com.xiaoai.service.IFamilyUserService;
 import com.xiaoai.service.IFamilygroupService;
 import com.xiaoai.service.IUsersService;
@@ -38,6 +32,7 @@ import com.xiaoai.util.XiaoiResult;
  *
  */
 @Controller("appFamilyAction")
+@Scope("prototype")
 public class AppFamilygroupAction extends XiaoaiMessage{
 	@Resource(name="familyService")
 	private IFamilygroupService familyService;
@@ -45,17 +40,7 @@ public class AppFamilygroupAction extends XiaoaiMessage{
 	private IUsersService usersService;
 	@Resource(name="fauserService")
 	private IFamilyUserService fauserService;
-	
-	@Resource(name="roomDao")
-	private IRoomDao roomDao;
-	
-	@Resource(name="houseHoldDao")
-	private IHouseholdDao householdDao;
-	
-	
-	@Resource(name="xiaoiDao")
-	private XiaoiDao xiaoiDao;
-	
+
 	private boolean success ;         //成功、失败标记
 	private  String message ;        //信息
 	private int code ;				 //标记
@@ -91,41 +76,45 @@ public class AppFamilygroupAction extends XiaoaiMessage{
 		}
 
 	  if(xiaoiResult.isSuccess()){	
-		Familygroup family=new Familygroup();
-		family.setGroupName(groupName);
-		family.setCreationTime(XATools.getTNowTime());
-		family.setManagerId(Integer.parseInt(userId));
-		family.setVersionNumber(0);
-		
-		xiaoiResult.setSuccess(familyService.insertFamilygroup(family));
-		//所产生的家庭组编号
-		int number=10000+family.getGroupId();
-		String groupPassword=XATools.random(10); //生成10位随机数的验证码
-		family.setGroupPassword(groupPassword);
-		family.setGroupNumber(number);
-		xiaoiResult.setSuccess(familyService.updateFamily(family));
-		if(xiaoiResult.isSuccess()){
-			Users users=null;
-			users=usersService.selectUsersByid(Integer.parseInt(userId));
-			if(users!=null){
-			FamilyUser fu=new FamilyUser();
-			fu.getUsers();
-			fu.setFamilygroup(family);
-			fu.setUsers(users);
-			fu.setDna(userId);
-			xiaoiResult.setSuccess(fauserService.insertFamilyUser(fu));		
-			if(xiaoiResult.isSuccess()){ //用户绑定保存成功就正确返回
-				json2.put("groupNumber", number);
-				json2.put("groupPassword", groupPassword);
-				array.add(json2);
+		try {
+			Familygroup family=new Familygroup();
+			family.setGroupName(groupName);
+			family.setCreationTime(XATools.getTNowTime());
+			family.setManagerId(Integer.parseInt(userId));
+			family.setVersionNumber(0);
+			
+			xiaoiResult.setSuccess(familyService.insertFamilygroup(family));
+			//所产生的家庭组编号
+			int number=10000+family.getGroupId();
+			String groupPassword=XATools.random(10); //生成10位随机数的验证码
+			family.setGroupPassword(groupPassword);
+			family.setGroupNumber(number);
+			xiaoiResult.setSuccess(familyService.updateFamily(family));
+			if(xiaoiResult.isSuccess()){
+				Users users=null;
+				users=usersService.selectUsersByid(Integer.parseInt(userId));
+				if(users!=null){
+				FamilyUser fu=new FamilyUser();
+				fu.getUsers();
+				fu.setFamilygroup(family);
+				fu.setUsers(users);
+				fu.setDna(userId);
+				xiaoiResult.setSuccess(fauserService.insertFamilyUser(fu));		
+				if(xiaoiResult.isSuccess()){ //用户绑定保存成功就正确返回
+					json2.put("groupNumber", number);
+					json2.put("groupPassword", groupPassword);
+					array.add(json2);
+				}else{
+					xiaoiResult = XiaoiResult.build("用户绑定家庭组失败!", FamilyCode.conflictAbortBind);
+				}
+			 }else{
+					xiaoiResult = XiaoiResult.build("没有该用户!",UserCode.noExistBean);
+				}
 			}else{
-				xiaoiResult = XiaoiResult.build("用户绑定家庭组失败!", FamilyCode.conflictAbortBind);
+				xiaoiResult = XiaoiResult.build("家庭组添加失败!",FamilyCode.insertFalse);
 			}
-		 }else{
-				xiaoiResult = XiaoiResult.build("没有该用户!",UserCode.noExistBean);
-			}
-		}else{
-			xiaoiResult = XiaoiResult.build("家庭组添加失败!",FamilyCode.insertFalse);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	  }
 	  	json.put("code", xiaoiResult.getCode());
@@ -190,39 +179,43 @@ public class AppFamilygroupAction extends XiaoaiMessage{
 			message="家庭组编号格式不符 ";
 		}
 		if(success){
-		users=usersService.selectUsersByid(Integer.parseInt(userId));
-		if(users !=null){
-				family=familyService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
-				if(family !=null){
-					fu1=fauserService.selectFamilyUserByGNU(users, family);
-					if(fu1!=null){
-				  if(userId.equals(fu1.getDna())){ //判断该家庭组是不是该用户创建					  
-					family.setGroupName(groupName);
-					success=familyService.updateFamily(family);
-					if(success==false){
-						code=FamilyCode.updateFalse;
+		try {
+			users=usersService.selectUsersByid(Integer.parseInt(userId));
+			if(users !=null){
+					family=familyService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
+					if(family !=null){
+						fu1=fauserService.selectFamilyUserByGNU(users, family);
+						if(fu1!=null){
+					  if(userId.equals(fu1.getDna())){ //判断该家庭组是不是该用户创建					  
+						family.setGroupName(groupName);
+						success=familyService.updateFamily(family);
+						if(success==false){
+							code=FamilyCode.updateFalse;
+							success=false;
+							message="家庭组修改失败!";	
+						}
+					}else{
+						code=FamilyCode.privilegeMaster;
 						success=false;
-						message="家庭组修改失败!";	
+						message="您不是群主，没有权限修改!";
 					}
-				}else{
-					code=FamilyCode.privilegeMaster;
+			      }else{
+			    	  code=FamilyCode.noExistUser;
+						success=false;
+						message="该家庭组中不存在该用户";
+					}			
+				} else{
+					code=FamilyCode.noExistBean;
 					success=false;
-					message="您不是群主，没有权限修改!";
-				}
-		      }else{
-		    	  code=FamilyCode.noExistUser;
-					success=false;
-					message="该家庭组中不存在该用户";
-				}			
-			} else{
-				code=FamilyCode.noExistBean;
+					message="没有该家庭组";
+				}		
+			}else{
+				code=UserCode.noExistBean;
 				success=false;
-				message="没有该家庭组";
-			}		
-		}else{
-			code=UserCode.noExistBean;
-			success=false;
-			message="没有该用户!";
+				message="没有该用户!";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		}
 		json.put("code", code);
@@ -292,39 +285,46 @@ public class AppFamilygroupAction extends XiaoaiMessage{
 			message="家庭组编号格式不符 ";
 		}
 		if(success){
-		users=usersService.selectUsersByid(Integer.parseInt(userId));
-		if(users !=null){
-				Familygroup family=null;
-				family=familyService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
-				if(family !=null){
-					fu1=fauserService.selectFamilyUserByGNU(users, family);
-					if(fu1!=null){
-					 if(userId.equals(fu1.getDna())){ //判断该家庭组是不是该用户创建					  
-					success=familyService.deleteFamilygroup(family);
-					if(success==false){
-						code=FamilyCode.deleteFalse;
+		try {
+			users=usersService.selectUsersByid(Integer.parseInt(userId));
+			if(users !=null){
+					Familygroup family=null;
+					family=familyService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
+					if(family !=null){
+						fu1=fauserService.selectFamilyUserByGNU(users, family);
+						if(fu1!=null){
+						 if(userId.equals(fu1.getDna())){ //判断该家庭组是不是该用户创建					  
+						success=familyService.deleteFamilygroup(family);
+						if(success==false){
+							code=FamilyCode.deleteFalse;
+							success=false;
+							message="家庭组删除失败!";	
+						}
+					}else{
+						code=FamilyCode.privilegeMaster;
 						success=false;
-						message="家庭组删除失败!";	
+						message="您不是群主，没有权限修改!";
+					}
+				 }else{
+					code=FamilyCode.noExistUser;
+					success=false;
+					message="该家庭组中不存在该用户";
 					}
 				}else{
-					code=FamilyCode.privilegeMaster;
+					code=FamilyCode.noExistBean;
 					success=false;
-					message="您不是群主，没有权限修改!";
-				}
-			 }else{
-				code=FamilyCode.noExistUser;
-				success=false;
-				message="该家庭组中不存在该用户";
+					message="没有该家庭组";	
 				}
 			}else{
-				code=FamilyCode.noExistBean;
+				code=UserCode.noExistBean;
 				success=false;
-				message="没有该家庭组";	
+				message="没有该用户!";
 			}
-		}else{
-			code=UserCode.noExistBean;
+		} catch (Exception e) {
+			code=FamilyCode.deleteFalse;
 			success=false;
-			message="没有该用户!";
+			message="家庭组删除失败!";
+			e.printStackTrace();
 		}
 		}
 		json.put("code", code);

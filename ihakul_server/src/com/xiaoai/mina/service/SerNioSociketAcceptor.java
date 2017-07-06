@@ -47,7 +47,7 @@ public class SerNioSociketAcceptor {
        //getFilterChain() 获取 I/O 过滤器链，可以对 I/O 过滤器进行管理，包括添加和删除 I/O 过滤器。    	
     	acceptor = new NioSocketAcceptor();  
     	//设置缓存大小
-        acceptor.getSessionConfig().setReadBufferSize(1024);  
+        acceptor.getSessionConfig().setReadBufferSize(10240);  
          // 设置过滤器
         //设置多线程
         acceptor.getFilterChain().addLast("executor",new ExecutorFilter()); 

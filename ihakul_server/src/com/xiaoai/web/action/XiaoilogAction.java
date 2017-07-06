@@ -15,6 +15,7 @@ import net.sf.json.JSONObject;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.struts2.ServletActionContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -25,6 +26,7 @@ import com.xiaoai.service.IXiaoilogService;
 import com.xiaoai.util.Page;
 @SuppressWarnings("serial")
 @Controller("xiaoilogAction")
+@Scope("prototype")
 public class XiaoilogAction extends ActionSupport{
 	
 	@Resource(name="xiaoilogService")

@@ -8,7 +8,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IChannelDao;
 import com.xiaoai.entity.Channel;
@@ -19,7 +18,6 @@ import com.xiaoai.entity.Channel;
  *
  */
 @Repository("channelDao")
-@Transactional
 public class ChannelDao implements IChannelDao {
 	
 	@Resource(name="hibernateTemplate")

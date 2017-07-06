@@ -17,7 +17,6 @@ import com.xiaoai.service.IInfoService;
  * @Description 
  */
 @Service
-@Transactional
 public class InfoService implements IInfoService {
 
 	@Resource
@@ -29,6 +28,7 @@ public class InfoService implements IInfoService {
 		return allInfo;
 	}
 
+	@Transactional
 	@Override
 	public void insertInfo(Info info) {
 		infoDao.insertInfo(info);

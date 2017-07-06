@@ -13,6 +13,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.struts2.ServletActionContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -22,6 +23,11 @@ import com.xiaoai.service.IChannelService;
 import com.xiaoai.service.IFamilygroupService;
 import com.xiaoai.util.Page;
 import com.xiaoai.util.XATools;
+import com.xiaoai.util.XiaoaiMessage.ChannelCode;
+import com.xiaoai.util.XiaoaiMessage.FamilyCode;
+import com.xiaoai.util.XiaoaiMessage.UserCode;
+import com.xiaoai.util.XiaoaiMessage.XiaoiCode;
+import com.xiaoai.util.XiaoiResult;
 /**
  * 频道管理操作实现类
  * @author Administrator
@@ -29,6 +35,7 @@ import com.xiaoai.util.XATools;
  */
 @SuppressWarnings("serial")
 @Controller("channelAction")
+@Scope("prototype")
 public class AppChannelAction extends ActionSupport{
 	
 	@Resource(name="channelService")
@@ -46,7 +53,7 @@ public class AppChannelAction extends ActionSupport{
 	 * @return fals=true(频道添加成功)或者fals=false(频道添加失败)
 	 * @throws IOException 
 	 */
-	public String insert() throws IOException{
+	public String insertOne() throws IOException{
 		fals=true;
 		message=null;
 		JSONObject json=new JSONObject();
@@ -93,6 +100,82 @@ public class AppChannelAction extends ActionSupport{
 		out.flush();
 		return null;
 	}
+	
+	/**
+	 * 添加所有频道信息（集合）
+	 * @param groupId 家庭组id
+	 * @param chanName 频道名
+	 * @param chanNumber 频道号
+	 * @return fals=true(频道添加成功)或者fals=false(频道添加失败)
+	 * @throws IOException 
+	 */
+	public String insertAll() throws IOException{
+		JSONObject json=new JSONObject();
+		HttpServletRequest request=ServletActionContext.getRequest();
+		HttpServletResponse response=ServletActionContext.getResponse();
+		request.setCharacterEncoding("utf-8");
+		response.setCharacterEncoding("utf-8");
+		PrintWriter out=response.getWriter();
+		String channels=request.getParameter("channels");
+		String groupNumber=request.getParameter("groupNumber");
+		String userId=request.getParameter("userId");
+		String xiaoNumber=request.getParameter("xiaoNumber");
+		Familygroup family=null;
+		XiaoiResult xr = new XiaoiResult();
+		
+		//参数验证
+		if(XATools.isNull(groupNumber)){
+			xr = XiaoiResult.build("家庭组编号不能为空", FamilyCode.emptyId);
+		}else{
+			if(!XATools.isInteger(groupNumber)){
+				xr = XiaoiResult.build("家庭组编号格式不符", FamilyCode.formatisInconsistent);
+			}
+		}
+		if(XATools.isNull(channels)){
+			xr = XiaoiResult.build("频道集合不能为空",ChannelCode.emptyContent);
+		}
+		if(XATools.isNull(userId)){
+			xr = XiaoiResult.build("用户id不能为空",UserCode.emptyId);
+		}
+		if(XATools.isNull(xiaoNumber)){
+			xr = XiaoiResult.build("终端编号不能为空",XiaoiCode.emptyId);
+		}
+		if(xr.isSuccess()){
+			family=familyService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
+			Channel channel=new Channel();
+			if(family !=null){ //判断是否有该家庭组
+				//解析json
+				try {
+					com.alibaba.fastjson.JSONObject jsonObject = new com.alibaba.fastjson.JSONObject();
+					com.alibaba.fastjson.JSONObject channel_ = jsonObject.getJSONObject(channels);
+					
+					String chanName =channel_.getString("chanName");
+					String chanNumber =channel_.getString("chanNumber");
+					
+					channel.setChanName(chanName);
+					channel.setChanNumber(chanNumber);
+					channel.setFamilygroup(family);
+					
+					xr.setSuccess(channelService.insertChannel(channel));
+				} catch (Exception e) {
+					xr = XiaoiResult.build("新增频道失败", ChannelCode.insertFail);
+					e.printStackTrace();
+				}
+				
+				if(xr.isSuccess()){
+					xr = XiaoiResult.build("没有该家庭组", FamilyCode.noExistBean);
+				}
+			}else{
+				xr = XiaoiResult.build("没有该家庭组", FamilyCode.noExistBean);
+			}		
+		}
+		json.put("code", xr.getCode());
+		json.put("message", xr.getMessage());
+		out.print(json.toString());
+		out.flush();
+		return null;
+	}
+	
 	/**
 	 * 删除频道信息
 	 * @param id 频道id

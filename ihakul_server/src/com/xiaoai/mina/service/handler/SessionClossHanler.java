@@ -2,13 +2,11 @@ package com.xiaoai.mina.service.handler;
 
 import javax.annotation.Resource;
 
-import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 
 
 import com.xiaoai.entity.Xiaoi;
-import com.xiaoai.mina.model.ReplyBody;
 import com.xiaoai.mina.model.SentBody;
 import com.xiaoai.mina.service.RequestHandler;
 import com.xiaoai.mina.service.constant.XiaoaiConstant;
@@ -50,7 +48,7 @@ public class SessionClossHanler implements RequestHandler{
 	public void updateXiaoai(String xiaoNumber){
 		Xiaoi xiao=xiaoiService.selectXiaoiByNumber(xiaoNumber);
 		if(xiao!=null){
-			xiao.setOnlineState(0);
+			xiao.setState(0);
 			xiaoiService.updateXiaoi(xiao);
 		}
 		

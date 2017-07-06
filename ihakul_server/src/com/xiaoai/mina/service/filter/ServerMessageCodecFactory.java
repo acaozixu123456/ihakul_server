@@ -42,6 +42,7 @@ import com.xiaoai.mina.model.SentBody;
 	
 
 public class ServerMessageCodecFactory implements ProtocolCodecFactory {
+	@SuppressWarnings("unused")
 	private final Logger LOG=Logger.getLogger(ServerMessageCodecFactory.class);
 		private MessageEncoder encoder;
 		private MessageDecoder decoder;
@@ -84,6 +85,7 @@ public class ServerMessageCodecFactory implements ProtocolCodecFactory {
 			// 消息的结束符
 			public static final int MARK_END = '\n';
 
+			@SuppressWarnings("deprecation")
 			@Override
 			public void encode(IoSession session, Object message,
 					ProtocolEncoderOutput out) throws Exception {
@@ -106,6 +108,7 @@ public class ServerMessageCodecFactory implements ProtocolCodecFactory {
 		 * @date 2016年3月5日
 		 */
 		class MessageDecoder extends CumulativeProtocolDecoder  {
+			@SuppressWarnings("deprecation")
 			@Override
 			protected boolean doDecode(IoSession session, IoBuffer in,
 					ProtocolDecoderOutput out) throws Exception {

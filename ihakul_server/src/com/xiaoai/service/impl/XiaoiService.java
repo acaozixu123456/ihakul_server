@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IXiaoiDao;
 import com.xiaoai.dao.IXiaoilogDao;
@@ -44,6 +45,7 @@ public class XiaoiService implements IXiaoiService {
 	/**
 	 * 删除终端
 	 */
+	@Transactional
 	public boolean delete(Xiaoi xiaoi) {
 		boolean fals=true;
 		int xid=xiaoi.getXid();
@@ -62,7 +64,7 @@ public class XiaoiService implements IXiaoiService {
 				  }
 			  }
 			
-			xiaoiDao.delete(xiaoi);  //删除小艾
+			//xiaoiDao.delete(xiaoi);  //假删除小艾
 		}catch(Exception e){
 			fals=false;
 			e.printStackTrace();
@@ -73,6 +75,7 @@ public class XiaoiService implements IXiaoiService {
 	/** 
 	 * 更换终端
 	 */
+	@Transactional
 	@Override
 	public boolean change(String xiaoNumber, String newxiaoNumber) {
 		boolean fals=true;
@@ -107,6 +110,7 @@ public class XiaoiService implements IXiaoiService {
 	/**
 	 * 修改
 	 */
+	@Transactional
 	public boolean updateXiaoi(Xiaoi xiaoi) {
 		boolean fals=true;
 		try {
@@ -169,6 +173,7 @@ public class XiaoiService implements IXiaoiService {
 	/**
 	 * 添加
 	 */
+	@Transactional
 	public boolean insertXiaoi(Xiaoi xiaoi) {
 		boolean fals=true;
 		try {
@@ -200,6 +205,11 @@ public class XiaoiService implements IXiaoiService {
 			return list.get(0);
 		}
 		return null;
+	}
+
+	@Override
+	public Xiaoi selectXiaoiByNumberAll(String xiaoNumber) {
+		return xiaoiDao.selectXiaoiByNumberAll(xiaoNumber);
 	}
 
 	

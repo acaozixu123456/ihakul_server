@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 
@@ -31,6 +32,7 @@ import com.xiaoai.util.Page;
 import com.xiaoai.util.XATools;
 @SuppressWarnings("serial")
 @Controller("xiaoiAction")//控制层 都要写 固定写法
+@Scope("prototype")
 public class XiaoiAction extends ActionSupport{
 	
 	private String familynumber;//家庭组编号
@@ -68,7 +70,7 @@ public class XiaoiAction extends ActionSupport{
 		int num=100;
 		boolean fals=true;
 		if(xi !=null){//数据库中存在此编号
-			if(xi.getOnlineState()==0){//如果未使用
+			if(xi.getState()==0){//如果未使用
 				for(int i=0;i<num;i++){
 					familynumber=JavaDemo10.getRandomNumber();//得到家庭组编号
 					try {
@@ -204,7 +206,7 @@ public class XiaoiAction extends ActionSupport{
 		xiao.setXname(xiaoName);
 		xiao.setXiaoType(Integer.parseInt(xiaoType));
 		xiao.setFamilygroup(family);
-		xiao.setOnlineState(useType);
+		xiao.setState(useType);
 		boolean fals=xiaoiService.updateXiaoi(xiao);
 		if(fals){
 			int refreshNumber=1;
@@ -246,7 +248,7 @@ public class XiaoiAction extends ActionSupport{
 		if(!XATools.isNull(xiaoType)){
 		xiao.setXiaoType(Integer.parseInt(xiaoType));
 		}
-		xiao.setOnlineState(0);
+		xiao.setState(0);
 		fals=xiaoiService.insertXiaoi(xiao);
 		if(fals){
 			int refreshNumber=1;

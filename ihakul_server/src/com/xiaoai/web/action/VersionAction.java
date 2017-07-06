@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
 
 import org.apache.struts2.ServletActionContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -24,6 +25,7 @@ import com.xiaoai.util.Page;
 import com.xiaoai.util.XATools;
 @SuppressWarnings("serial")
 @Controller("versionAction")
+@Scope("prototype")
 public class VersionAction extends ActionSupport {
 	
 	@Resource(name="versionService")

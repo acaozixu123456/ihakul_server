@@ -1,21 +1,17 @@
 package com.xiaoai.mina.service.handler;
 
 import java.net.InetSocketAddress;
-import java.util.Date;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
-import org.apache.mina.core.service.IoHandler;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.springframework.stereotype.Component;
 
-import com.xiaoai.mina.model.ReplyBody;
 import com.xiaoai.mina.model.SentBody;
 import com.xiaoai.mina.service.RequestHandler;
 import com.xiaoai.mina.service.constant.XiaoaiConstant;
-import com.xiaoai.mina.service.push.SessionMap;
 import com.xiaoai.mina.service.session.XiaoaiSession;
 import com.xiaoai.util.XiaoaiMessage;
 

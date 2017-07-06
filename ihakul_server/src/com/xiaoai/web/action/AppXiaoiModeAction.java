@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAnySetter;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.alibaba.fastjson.JSON;
@@ -37,6 +38,7 @@ import com.xiaoai.util.XiaoaiMessage.XiaoiCode;
  * @Description
  */
 @Controller("appXiaoiModeAction")
+@Scope("prototype")
 public class AppXiaoiModeAction extends XiaoaiMessage {
 
 	@Resource
@@ -100,60 +102,59 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 		}
 
 		if (xr.isSuccess()) {
-			// 首先检查家庭组id是否存在
-			Familygroup family = familygroupService
-					.getFamilygroupByNumber(Integer.parseInt(groupNumber));
-			if (family != null) {
-				XiaoiMode xiaoiMode = new XiaoiMode();
-				xiaoiMode=JSON.toJavaObject(jsonObject, XiaoiMode.class);
-				try {
-					//获取当前在线的小艾
-					List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
-					com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
-					HashMap hashMap = null;
-					boolean pushState = false;
-					boolean flag = false;
-					for (Xiaoi xiaoi : allOnlineXiaois) {
-						//判断当前小艾是否在线
-						if(xiaoi.getOnlineState()==1){
-							//在线，推送
-							hashMap = new HashMap();
-							hashMap.put("xiaoiMode", xiaoiMode);
-							json2.put("key", "appaddXiaoiModeAction");
-							json2.put("code", xiaoiMode.getId());
-							json2.put("xiaoNumber", xiaoi.getXiaoNumber());
-							pushState = PushMessage_XiaoiMode.push2Xiao(json2, hashMap);
-							if(pushState){
-								flag = true;
+			try {
+				// 首先检查家庭组id是否存在
+				Familygroup family = familygroupService
+						.getFamilygroupByNumber(Integer.parseInt(groupNumber));
+				if (family != null) {
+					XiaoiMode xiaoiMode = new XiaoiMode();
+					xiaoiMode=JSON.toJavaObject(jsonObject, XiaoiMode.class);
+					try {
+						//获取当前在线的小艾
+						List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
+						com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
+						HashMap hashMap = null;
+						boolean pushState = false;
+						boolean flag = false;
+						for (Xiaoi xiaoi : allOnlineXiaois) {
+							//判断当前小艾是否在线
+							if(xiaoi.getState()==1){
+								//在线，推送
+								hashMap = new HashMap();
+								hashMap.put("xiaoiMode", xiaoiMode);
+								json2.put("key", "appaddXiaoiModeAction");
+								json2.put("code", xiaoiMode.getId());
+								json2.put("xiaoNumber", xiaoi.getXiaoNumber());
+								pushState = PushMessage_XiaoiMode.push2Xiao(json2, hashMap);
+								if(pushState){
+									flag = true;
+								}
 							}
 						}
-					}
-					if(flag){
-						//当前家庭组有在线小艾推送成功,执行添加情景模式
-						success = xiaoiModeService.insertMode(xiaoiMode);
-						json1.put("modeId", xiaoiMode.getMode());
-						if (success == false) {
-							code = XiaoiModeCode.insertFail;
-							message = "添加情景模式失败!";
+						if(flag){
+							//当前家庭组有在线小艾推送成功,执行添加情景模式
+							success = xiaoiModeService.insertMode(xiaoiMode);
+							json1.put("modeId", xiaoiMode.getMode());
+							if (success == false) {
+								code = XiaoiModeCode.insertFail;
+								message = "添加情景模式失败!";
+							}
+						}else{
+							//当前家庭组没有任何一台小艾在线，推送失败，拒绝添加房间！
+							code = XiaoiCode.noExistOnlinBean;
+							message = "没有在线小艾!";
 						}
-					}else{
-						//当前家庭组没有任何一台小艾在线，推送失败，拒绝添加房间！
-						code = XiaoiCode.noExistOnlinBean;
-						message = "没有在线小艾!";
+						
+					} catch (Exception e) {
+						xr=XiaoiResult.build("新增情景模式失败！", XiaoiModeCode.insertFail);
+						e.printStackTrace();
 					}
-					
-				} catch (Exception e) {
-					xr=XiaoiResult.build("新增情景模式失败！", XiaoiModeCode.insertFail);
-					e.printStackTrace();
+				} else {
+					xr=XiaoiResult.build("没有该家庭组！", FamilyCode.noExistBean);
 				}
-				/*if (!insertMode) {
-					xr=XiaoiResult.build("新增情景模式失败！", XiaoiModeCode.insertFail);
-				}else{
-					json1.put("modeId", xiaoiMode.getMode());
-				}*/
-				
-			} else {
-				xr=XiaoiResult.build("没有该家庭组！", FamilyCode.noExistBean);
+			} catch (Exception e) {
+				xr=XiaoiResult.build("新增情景模式失败！",XiaoiModeCode.insertFail);
+				e.printStackTrace();
 			}
 
 		}
@@ -182,48 +183,50 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 			xr=XiaoiResult.build("情景模式id不能为空", XiaoiModeCode.emptyId);
 		}
 		if(xr.isSuccess()){
-			//查询当前id是否存在情景模式
-			List<XiaoiMode> list = xiaoiModeService.findById(Long.parseLong(id));
-			if(!XATools.isNull(list)){	
-				//?是否需要判断有没有删除权限
-					XiaoiMode xiaoiMode = list.get(0);
-					//获得家庭组
-					Familygroup family=familygroupService.getFamilygroupByNumber(xiaoiMode.getGroupNumber());
-					//获取当前在线的小艾
-					List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
-					com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
-					boolean pushState = false;
-					boolean flag = false;
-					for (Xiaoi xiaoi : allOnlineXiaois) {
-						//判断当前小艾是否在线
-						if(xiaoi.getOnlineState()==1){
-							//在线，推送
-							json2.put("key", "appdeleteXiaoiModeAction");
-							json2.put("code", xiaoiMode.getId());
-							json2.put("xiaoNumber", xiaoi.getXiaoNumber());
-							pushState = PushMessage_XiaoiMode.push2Xiao(json2, null);
-							if(pushState){
-								flag = true;
+			try {
+				//查询当前id是否存在情景模式
+				List<XiaoiMode> list = xiaoiModeService.findById(Long.parseLong(id));
+				if(!XATools.isNull(list)){	
+					//?是否需要判断有没有删除权限
+						XiaoiMode xiaoiMode = list.get(0);
+						//获得家庭组
+						Familygroup family=familygroupService.getFamilygroupByNumber(xiaoiMode.getGroupNumber());
+						//获取当前在线的小艾
+						List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
+						com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
+						boolean pushState = false;
+						boolean flag = false;
+						for (Xiaoi xiaoi : allOnlineXiaois) {
+							//判断当前小艾是否在线
+							if(xiaoi.getState()==1){
+								//在线，推送
+								json2.put("key", "appdeleteXiaoiModeAction");
+								json2.put("code", xiaoiMode.getId());
+								json2.put("xiaoNumber", xiaoi.getXiaoNumber());
+								pushState = PushMessage_XiaoiMode.push2Xiao(json2, null);
+								if(pushState){
+									flag = true;
+								}
 							}
 						}
-					}
-					if(flag){
-						//当前家庭组有在线小艾推送成功,执行添加情景模式
-						success = xiaoiModeService.deleteMode(xiaoiMode);
-						//json1.put("modeId", xiaoiMode.getMode());
-						if (success == false) {
-							code = XiaoiModeCode.deleteFail;
-							message = "删除情景模式失败!";
+						if(flag){
+							//当前家庭组有在线小艾推送成功,执行添加情景模式
+							xr.setSuccess(xiaoiModeService.deleteMode(xiaoiMode));
+							if (success == false) {
+								xr=XiaoiResult.build("删除情景模式失败!", XiaoiModeCode.deleteFail);
+							}
+						}else{
+							//当前家庭组没有任何一台小艾在线，推送失败，拒绝添加房间！
+							xr=XiaoiResult.build("没有在线小艾!", XiaoiCode.noExistOnlinBean);
 						}
-					}else{
-						//当前家庭组没有任何一台小艾在线，推送失败，拒绝添加房间！
-						code = XiaoiCode.noExistOnlinBean;
-						message = "没有在线小艾!";
-					}
-				
-			}else{
-				//当前id不存在
-				xr=XiaoiResult.build("未找到该任务！", Plan.noExistBean);
+					
+				}else{
+					//当前id不存在
+					xr=XiaoiResult.build("未找到该任务！", Plan.noExistBean);
+				}
+			} catch (Exception e) {
+				xr=XiaoiResult.build("删除情景模式失败!", XiaoiModeCode.deleteFail);
+				e.printStackTrace();
 			}
 		}
 		json.put("code", xr.getCode());
@@ -244,19 +247,24 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 		JSONObject jsonObject = MyRequest.getParameterNames();
 		XiaoiResult xr = new XiaoiResult();
 		logger.info("查询情景模式入参：" + jsonObject);
-		if(XATools.isNull(jsonObject.getString("modeId"))){
-			xr=XiaoiResult.build("情景模式id不能为空！", XiaoiModeCode.emptyId);
-		}
-		List<XiaoiMode> list =  null;
-		if(xr.isSuccess()){
-			list = xiaoiModeService.findModeById(jsonObject.getInteger("modeId"));
-		}
-		
-		JSONObject json3=null;
-		JSONArray array = new JSONArray();
-		for (XiaoiMode xm : list) {
-			json3 = (JSONObject) JSONObject.toJSON(xm);
-			array.add(json3);
+		JSONArray array = null;
+		try {
+			if(XATools.isNull(jsonObject.getString("modeId"))){
+				xr=XiaoiResult.build("情景模式id不能为空！", XiaoiModeCode.emptyId);
+			}
+			List<XiaoiMode> list =  null;
+			if(xr.isSuccess()){
+				list = xiaoiModeService.findModeById(jsonObject.getInteger("modeId"));
+			}
+			
+			JSONObject json3=null;
+			array = new JSONArray();
+			for (XiaoiMode xm : list) {
+				json3 = (JSONObject) JSONObject.toJSON(xm);
+				array.add(json3);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		json.put("code", xr.getCode());
@@ -290,28 +298,32 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 			xiaoiResult = XiaoiResult.build("家庭组编号不能为空", FamilyCode.emptyId);
 		}
 		if(xiaoiResult.isSuccess()){
-			Familygroup  family=familygroupService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
-			if(family!=null){
-				findModeByGroupNum = xiaoiModeService.findModeByGroupNum(family.getGroupNumber());
-				if(!XATools.isNull(findModeByGroupNum)){
-					JSONObject json2 = null;
-					for (XiaoiMode xm : findModeByGroupNum) {
-						json2 = new JSONObject();
-						json2.put("id", xm.getId());
-						json2.put("trigger", xm.getTrigger());
-						json2.put("classId", xm.getClassId());
-						json2.put("orders", xm.getOrders());
-						json2.put("eaNumber", xm.getEaNumber());
-						json2.put("argument", xm.getArgument());
-						json2.put("mode", xm.getMode());
-						json2.put("groupNumber", xm.getGroupNumber());
-						array.add(json2);
+			try {
+				Familygroup  family=familygroupService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
+				if(family!=null){
+					findModeByGroupNum = xiaoiModeService.findModeByGroupNum(family.getGroupNumber());
+					if(!XATools.isNull(findModeByGroupNum)){
+						JSONObject json2 = null;
+						for (XiaoiMode xm : findModeByGroupNum) {
+							json2 = new JSONObject();
+							json2.put("id", xm.getId());
+							json2.put("trigger", xm.getTrigger());
+							json2.put("classId", xm.getClassId());
+							json2.put("orders", xm.getOrders());
+							json2.put("eaNumber", xm.getEaNumber());
+							json2.put("argument", xm.getArgument());
+							json2.put("mode", xm.getMode());
+							json2.put("groupNumber", xm.getGroupNumber());
+							array.add(json2);
+						}
+					}else{
+						xiaoiResult = XiaoiResult.build("该家庭组下没有任何情景模式", XiaoiModeCode.noExistBean);
 					}
 				}else{
-					xiaoiResult = XiaoiResult.build("该家庭组下没有任何情景模式", XiaoiModeCode.noExistBean);
+					xiaoiResult = XiaoiResult.build("没有该家庭组", FamilyCode.noExistBean);
 				}
-			}else{
-				xiaoiResult = XiaoiResult.build("没有该家庭组", FamilyCode.noExistBean);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		json.put("code", xiaoiResult.getCode());

@@ -6,7 +6,6 @@ import javax.annotation.Resource;
 
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IFamilyUserDao;
 import com.xiaoai.entity.FamilyUser;
@@ -18,7 +17,6 @@ import com.xiaoai.entity.Users;
  *
  */
 @Repository("fauserDao")
-@Transactional
 public class FamilyUserDao implements IFamilyUserDao{
 	
 	@Resource(name="hibernateTemplate")

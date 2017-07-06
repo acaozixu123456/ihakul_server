@@ -13,7 +13,6 @@ import org.hibernate.Transaction;
 
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IUsersDao;
 
@@ -28,7 +27,6 @@ import com.xiaoai.util.XATools;
  *
  */
 @Repository("usersDao")
-@Transactional
 public class UsersDao implements IUsersDao {
 
 	@Resource(name="hibernateTemplate")

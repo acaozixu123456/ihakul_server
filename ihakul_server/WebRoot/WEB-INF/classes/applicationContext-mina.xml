@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns= "http://www.springframework.org/schema/beans"
+       xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance" xmlns:aop= "http://www.springframework.org/schema/aop"
+       xmlns:context= "http://www.springframework.org/schema/context" xmlns:tx= "http://www.springframework.org/schema/tx"
+       xmlns:jpa= "http://www.springframework.org/schema/data/jpa"
+       xmlns:security= "http://www.springframework.org/schema/security"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation= "
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+            http://www.springframework.org/schema/security
+            http://www.springframework.org/schema/security/spring-security-3.2.xsd
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+            http://www.springframework.org/schema/data/jpa
+            http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-4.0.xsd
+            http://www.springframework.org/schema/task
+            http://www.springframework.org/schema/task/spring-task-3.2.xsd">  
+
+	<!-- spring集成 -->
+		<!-- 设置 I/O 接受器，并指定接收到请求后交给 myHandler 进行处理 --> 
+		<bean id="customEditorConfigurer" class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+		   <property name="customEditors" >
+		     <map>
+		       <entry key="java.net.SocketAddress"  value="org.apache.mina.integration.beans.InetSocketAddressEditor"/>
+		     </map>
+		   </property>
+		 </bean>
+		 
+		 <!-- handlers事件 -->
+		<bean id="xiaoIoHandler" class="com.xiaoai.mina.service.handler.ServiceMainHandler">
+			<property name="handlers">
+				<map>
+					<entry key="client_bind">  <!-- 创建连接 -->
+						<bean class="com.xiaoai.mina.service.handler.BindHandler"></bean>
+					</entry>
+						<entry key="client_logout"> <!-- 断开连接 -->
+						<bean class="com.xiaoai.mina.service.handler.LogoutHandler"></bean>
+					</entry>
+						<entry key="client_closs">  <!--断开清除会话  -->
+						<bean class="com.xiaoai.mina.service.handler.SessionClossHanler"></bean>
+					</entry>
+						
+					<entry key="client_push">  <!--在线推送消息  -->
+						<bean class="com.xiaoai.mina.service.handler.PushOnlinMessageHandler"></bean>
+					</entry>
+				</map>
+			</property>
+		</bean>
+		 <!-- IoAccepter，绑定到1255端口 -->
+		  <!-- 通过 init-method指明了当 I/O 接受器创建成功之后，调用其 bind方法来接受连接；通过 destroy-method声明了当其被销毁的时候，调用其 unbind来停止监听 -->
+	    <bean id="SerNioSociketAcceptor"  class="com.xiaoai.mina.service.SerNioSociketAcceptor" 
+	    init-method="bind" destroy-method="unbind">  
+	         <property name="port" value="42687" /> 
+			 <property name="ioHandler" ref="xiaoIoHandler" /> 
+	    </bean>
+	     
+	     <!--spring动态获取bean实现  -->
+	    <bean id="ContextHolder" class="com.xiaoai.util.ContextHolder"></bean>
+	    
+	   	<bean id="XiaoaiSessionManage" class="com.xiaoai.mina.service.session.DefaultSessionManager"/> 
+	   
+	   	<bean id="sessionManager" class="com.xiaoai.mina.service.push.DefaultMessagePusher">
+	   		<property name="sessionManager" ref="XiaoaiSessionManage"/>
+	   	</bean>
+	   	
+	   	
+	   <bean id="filterChainBuilder"
+        class="org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder">
+        <property name="filters">
+            <map>
+                <!--mina自带的线程池filter-->
+                <entry key="executor" value-ref="executorFilter" />
+                <entry key="mdcInjectionFilter" value-ref="mdcInjectionFilter" />
+                <!--自己实现的编解码器filter-->
+              <!--   <entry key="codecFilter" value-ref="codecFilter" /> -->
+                <!--日志的filter-->
+                <entry key="loggingFilter" value-ref="loggingFilter" />
+                <!--心跳filter-->
+                <entry key="keepAliveFilter" value-ref="keepAliveFilter" />
+            </map>
+        </property>
+    </bean>
+	
+	<!-- executorFilter多线程处理 -->  
+	<bean id="executorFilter" class="org.apache.mina.filter.executor.ExecutorFilter" />
+	<bean id="mdcInjectionFilter" class="org.apache.mina.filter.logging.MdcInjectionFilter">
+		<constructor-arg value="remoteAddress" />
+	</bean>
+	
+	 <!--日志的filter-->
+	<bean id="loggingFilter" class="org.apache.mina.filter.logging.LoggingFilter" />
+	
+	<!--自己实现的编解码器filter  -->
+	<bean id="codecFilter" class="org.apache.mina.filter.codec.ProtocolCodecFilter">
+	<constructor-arg>
+	<bean class="com.xiaoai.mina.service.filter.ServerMessageCodecFactory"></bean>
+		</constructor-arg>
+	</bean>
+	   	
+	   	
+	   <!--心跳检测filter-->
+    <bean id="keepAliveFilter" class="org.apache.mina.filter.keepalive.KeepAliveFilter">
+        <!--构造函数的第一个参数传入自己实现的工厂-->
+        <constructor-arg>
+            <bean class="com.xiaoai.mina.service.filter.KeepAliveMessageFactoryImpl"></bean>
+        </constructor-arg>
+        <!--第二个参数需要的是IdleStatus对象，value值设置为读写空闲-->
+        <constructor-arg type = "org.apache.mina.core.session.IdleStatus" value="BOTH_IDLE" >
+       </constructor-arg>
+        <!--心跳频率，不设置则默认60s  -->
+        <property name="requestInterval" value="60" />
+        <!--心跳超时时间，不设置则默认30s    -->
+        <property name="requestTimeout" value="30" />
+        <!--不设置默认false-->
+        <property name="forwardEvent" value="true" />
+    </bean> 	
+	   	
+
+	   	
+</beans>

@@ -2,6 +2,7 @@ package com.xiaoai.dao.impl;
 
 import java.util.List;
 
+
 import javax.annotation.Resource;
 
 import org.hibernate.Query;
@@ -15,7 +16,6 @@ import com.xiaoai.entity.Room;
 import com.xiaoai.entity.Xiaoi;
 import com.xiaoai.util.XATools;
 @Repository("roomDao")
-
 public class RoomDao implements IRoomDao {
 	@Resource(name="hibernateTemplate")
 	private HibernateTemplate hibernateTemplate;
@@ -73,9 +73,9 @@ public class RoomDao implements IRoomDao {
 	
 	//根据房间编号来查询
 	@SuppressWarnings("unchecked")
-	public Room getRoomByRoomNumber(String roomNumber) {
-		String hql="from Room where roomNumber=?";
-		List<Room> list=hibernateTemplate.find(hql,roomNumber);
+	public Room getRoomByRoomNumber(String roomNumber,Familygroup familygroup) {
+		String hql="from Room where roomNumber=? and groupId=?";
+		List<Room> list=hibernateTemplate.find(hql,roomNumber,familygroup.getGroupId());
 		if(!XATools.isNull(list)){
 			return list.get(0);
 		}
@@ -116,11 +116,8 @@ public class RoomDao implements IRoomDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Room> selectRoomByxiaoi(Xiaoi xiaoi) {
-		String sql="select rooms from Room as rooms join rooms.xiaois as xiao where xiao=:xiaoi";
-		Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
-		Query query=session.createQuery(sql);
-		query.setProperties(xiaoi);
-		List<Room> list=query.list();
+		String sql="select rooms from Room as rooms join rooms.xiaois as xiao where xiao=?";
+		List<Room> list = hibernateTemplate.find(sql,xiaoi);
 		return list;
 	}
 	

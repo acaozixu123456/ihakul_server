@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IFamilyUserDao;
 import com.xiaoai.dao.IUsersDao;
@@ -39,6 +40,7 @@ public class UsersService implements  IUsersService{
 	}
 
 	//用户删除	
+	@Transactional
 	public boolean deleteUsersByid(Users users) {
 		boolean fals=true;
 		try{
@@ -58,6 +60,7 @@ public class UsersService implements  IUsersService{
 	}
 
 	//修改
+	@Transactional
 	public boolean updateUsersByid(Users users) {
 		boolean fals=true;
 		try {
@@ -121,6 +124,7 @@ public class UsersService implements  IUsersService{
 	
 
 	//添加用户
+	@Transactional
 	public boolean saveUsers(Users users) {
 		
 		boolean fals=true;

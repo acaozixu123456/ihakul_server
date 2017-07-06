@@ -13,6 +13,7 @@ import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.xiaoai.dao.IUsersDao;
@@ -28,6 +29,7 @@ import com.xiaoai.util.XATools;
 import com.xiaoai.util.XiaoaiMessage;
 
 @Controller("appUserAction")
+@Scope("prototype")
 public class AppUsersAction extends XiaoaiMessage {
 	@Resource(name="usersService")
 	private IUsersService usersService;

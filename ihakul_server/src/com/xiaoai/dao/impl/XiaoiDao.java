@@ -28,7 +28,7 @@ public class XiaoiDao implements IXiaoiDao {
 	//根据家庭组id查询
 	@SuppressWarnings("unchecked")
 	public List<Xiaoi> selectXiaoiByid(int fid) {
-		String hql="from Xiaoi where groupId=?";
+		String hql="from Xiaoi where groupId=? and state<>2";
 		return hibernateTemplate.find(hql,fid);
 	}
 
@@ -47,7 +47,7 @@ public class XiaoiDao implements IXiaoiDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Xiaoi selectXiaoiByNumber(String xiaoNumber) {
-		String hql="from Xiaoi where xiaoNumber=?";
+		String hql="from Xiaoi where xiaoNumber=? and state<>2";
 		List<Xiaoi> list=hibernateTemplate.find(hql,xiaoNumber);
 		if(!XATools.isNull(list)){ 
 			return list.get(0);
@@ -83,7 +83,6 @@ public class XiaoiDao implements IXiaoiDao {
 	 * 得到总记录数
 	 */
 	public int getXiaoiCount(Xiaoi xiao,String hql) {
-//		Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
 		Session session=hibernateTemplate.getSessionFactory().openSession();
 		Query query=session.createQuery(hql);
 		query.setProperties(xiao);
@@ -110,7 +109,7 @@ public class XiaoiDao implements IXiaoiDao {
 	//根据房间id查询
 	@SuppressWarnings("unchecked")
 	public List<Xiaoi> selectXiaoiByroomId(int roomId) {
-		String hql="from Xiaoi where roomId=?";
+		String hql="from Xiaoi where roomId=? and state<>2";
 		List<Xiaoi> list=hibernateTemplate.find(hql,roomId);
 		return list;
 	}
@@ -121,7 +120,7 @@ public class XiaoiDao implements IXiaoiDao {
 	//根据ip查询
 	@SuppressWarnings("unchecked")
 	public List<Xiaoi> selectXiaoiByIp(String ip) {
-		String hql="from Xiaoi where xiaoiIp";
+		String hql="from Xiaoi where xiaoiIp=? and state<>2";
 		List<Xiaoi> list=hibernateTemplate.find(hql,ip);
 		return list;
 	}
@@ -129,18 +128,27 @@ public class XiaoiDao implements IXiaoiDao {
 	
 	@SuppressWarnings("unchecked")
 	public List<Xiaoi> selectXiaoiByroom(Room room) {
-		String sql="select xiaoai from Xiaoi as xiaoai join xiaoai.room as rooms where rooms=:room";
-		Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
-		Query query=session.createQuery(sql);
-		query.setProperties(room);
-		List<Xiaoi> list=query.list();
+		String hql="select xiaoai from Xiaoi as xiaoai join xiaoai.room as rooms where rooms=? and state<>2";
+		List<Xiaoi> list=hibernateTemplate.find(hql,room);
 		return list;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Xiaoi> selectXiaoiByFa(Familygroup fa) {
-		String hql="from Xiaoi where onlineState=1 and familygroup=?";
+		String hql="from Xiaoi where state=1 and familygroup=?";
 		return hibernateTemplate.find(hql,fa);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Xiaoi selectXiaoiByNumberAll(String xiaoNumber) {
+		String hql="from Xiaoi where xiaoNumber=?";
+		List<Xiaoi> list=hibernateTemplate.find(hql,xiaoNumber);
+		if(!XATools.isNull(list)){ 
+			return list.get(0);
+		}		
+		return null;
 	}	
 
 }

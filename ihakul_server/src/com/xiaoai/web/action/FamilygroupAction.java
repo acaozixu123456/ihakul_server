@@ -23,6 +23,7 @@ import net.sf.json.JSONObject;
 import org.apache.struts2.ServletActionContext;
 
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -34,6 +35,7 @@ import com.xiaoai.util.MyRequest;
 import com.xiaoai.util.Page;
 @SuppressWarnings("serial")
 @Controller("familygroupAction")
+@Scope("prototype")
 public class FamilygroupAction extends ActionSupport{
 	@Resource(name="familyService")
 	private IFamilygroupService familyService;
@@ -157,7 +159,7 @@ public class FamilygroupAction extends ActionSupport{
 			int refreshNumber=1;
 			xi.setFamilygroup(fg);
 			request.setAttribute("refresh", refreshNumber);
-			xi.setOnlineState(1);
+			xi.setState(1);
 			xiaoiService.updateXiaoi(xi);
 		
 			out.print("<script>alert('添加成功')</script>");

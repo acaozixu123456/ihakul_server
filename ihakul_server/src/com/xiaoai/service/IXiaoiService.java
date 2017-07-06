@@ -96,5 +96,12 @@ public interface IXiaoiService {
 	 * @return Xiaoi
 	 */
 	public Xiaoi selectXiaoiByFa(Familygroup fa);
+
+	/**
+	 * 根据终端编号查询小艾（包括state=2）
+	 * @param xiaoNumber
+	 * @return
+	 */
+	public Xiaoi selectXiaoiByNumberAll(String xiaoNumber);
 	
 }

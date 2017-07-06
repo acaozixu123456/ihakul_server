@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -28,6 +29,7 @@ import com.xiaoai.util.XATools;
  */
 @SuppressWarnings("serial")
 @Controller("houseHoldAction")
+@Scope("prototype")
 public class HouseHoldAction extends ActionSupport{
 	@Resource(name="houseHoldService")
 	private IHouseholdService houseHoldService;

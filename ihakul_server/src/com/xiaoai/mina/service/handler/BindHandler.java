@@ -29,6 +29,7 @@ public class BindHandler implements RequestHandler{
 	@Resource(name="xiaoiService")
 	private IXiaoiService xiaoiService;
 	
+	@SuppressWarnings("unused")
 	private boolean success ;         //成功、失败标记
 	@Override 
 	public SentBody process(XiaoaiSession newSession, SentBody body) {
@@ -104,34 +105,47 @@ public class BindHandler implements RequestHandler{
 		String xiaoName=json.getString("xiaoName");
 		String groupNumber=json.getString("groupNumber");
 		String xiaoIp=json.getString("xiaoIp");
-		int versionNumber=json.getInteger("versionNumber");
+		//int versionNumber=json.getInteger("versionNumber");
 	//	xiao1=JSON.toJavaObject(json, Xiaoi.class);
 		String xiaoType=xiaoNumber.substring(xiaoNumber.length()-1, xiaoNumber.length());
 		Familygroup	family=familyService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
 		   if(family!=null){
-			   if(versionNumber>family.getVersionNumber()){ //如果终端的版本号大于服务端
+			   /*if(versionNumber>family.getVersionNumber()){ //如果终端的版本号大于服务端
 				   family.setVersionNumber(versionNumber);  
 				   familyService.updateFamily(family);
-			   }
-				xiao1=xiaoiService.selectXiaoiByNumber(xiaoNumber);
-				Xiaoi xiao=new Xiaoi();
-				xiao.setXname(xiaoName);
-				xiao.setXiaoNumber(xiaoNumber);
-				xiao.setXiaoType(Integer.parseInt(xiaoType));
-				xiao.setOnlineState(1);
-				xiao.setFamilygroup(family);
-				xiao.setXiaoIp(xiaoIp);
-				xiao.setActivationTime(XATools.getNowTime());
-				xiao.setVolume(50); //设置默认音量
-			 if(xiao1==null){ //如果查不到，说明已经被删除了;否则，更新小艾	
+			   }*/
+				//xiao1=xiaoiService.selectXiaoiByNumber(xiaoNumber);
+			   //根据终端编号获得小艾（包括state=2）
+				xiao1=xiaoiService.selectXiaoiByNumberAll(xiaoNumber);
+			 if(xiao1==null){ //如果查不到，说明已经被删除了;否则，更新小艾
+				 	Xiaoi xiao=new Xiaoi();
+					xiao.setXname(xiaoName);
+					xiao.setXiaoNumber(xiaoNumber);
+					xiao.setXiaoType(Integer.parseInt(xiaoType));
+					xiao.setState(1);
+					xiao.setFamilygroup(family);
+					xiao.setXiaoIp(xiaoIp);
+					xiao.setActivationTime(XATools.getNowTime());
+					xiao.setVolume(50); //设置默认音量
 				 success=false;
-				 //json1.put("code",XiaoaiMessage.XiaoiCode.noExistBean);
 				 json1.put("code", XiaoaiMessage.OK);
 				 xiaoiService.insertXiaoi(xiao);
-			//	 xiaoiService.delete(xiao);
 			  }else{
-				  xiao.setXid(xiao1.getXid());
-				  xiaoiService.updateXiaoi(xiao);
+				  if(xiao1.getState()==2){
+					  //state=2情况
+					  //xiao.setState(1);
+					  //TODO
+					  
+				  }
+				  	xiao1.setXname(xiaoName);
+					xiao1.setXiaoNumber(xiaoNumber);
+					xiao1.setXiaoType(Integer.parseInt(xiaoType));
+					xiao1.setState(1);
+					xiao1.setFamilygroup(family);
+					xiao1.setXiaoIp(xiaoIp);
+					xiao1.setActivationTime(XATools.getNowTime());
+					xiao1.setVolume(50); //设置默认音量
+				  xiaoiService.updateXiaoi(xiao1);
 				  success=true;
 				  json1.put("code", XiaoaiMessage.OK);
 			  }

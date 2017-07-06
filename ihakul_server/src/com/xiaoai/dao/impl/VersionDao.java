@@ -1,9 +1,7 @@
 package com.xiaoai.dao.impl;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.TreeMap;
 
 import javax.annotation.Resource;
@@ -12,7 +10,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IVersionDao;
 import com.xiaoai.entity.Versions;
@@ -22,7 +19,6 @@ import com.xiaoai.entity.Versions;
  *
  */
 @Repository("versionDao")
-@Transactional
 public class VersionDao implements IVersionDao {
 	
 	
@@ -82,21 +78,15 @@ public class VersionDao implements IVersionDao {
 	
 	@SuppressWarnings("unchecked")
 	public List<Versions> selectVersionByverNumber(Versions versions) {
-		String sql="from Versions as v  where  v.versionNumber=:versionNumber";
-		Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
-		Query query=session.createQuery(sql);
-		query.setProperties(versions);
-		List<Versions> list=query.list();	
+		String hql="from Versions as v  where  v.versionNumber=?";
+		List<Versions> list=hibernateTemplate.find(hql,versions);
 		return list;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Versions> selectVersionByvr(Versions versions) {
-		String sql="from Versions as v  where  v.versionNumber=:versionNumber and v.versionPackage=:versionPackage";
-		Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
-		Query query=session.createQuery(sql);
-		query.setProperties(versions);
-		List<Versions> list=query.list();	
+		String hql="from Versions as v  where  v.versionNumber=? and v.versionPackage=?";
+		List<Versions> list=hibernateTemplate.find(hql,versions.getVersionNumber(),versions.getVersionPackage());
 		return list;
 	}
 	
@@ -109,13 +99,10 @@ public class VersionDao implements IVersionDao {
 	}
  
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Versions selectMaxVersions(String versionPackage) {
-		/*String hql="from Versions vs where vs.versionNumber=(select max(v.versionNumber) from Versions v where v.versionPackage=?)" +
-				" AND vs.versionPackage=?  ";*/
 		String hql = "from Versions vs where vs.versionPackage=?";
-		/*List<Versions> vs=hibernateTemplate.find(hql,versionPackage,versionPackage);*/
 		List<Versions> vs = hibernateTemplate.find(hql,versionPackage);
 
 		TreeMap treeMap = new TreeMap();

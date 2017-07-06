@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IFamilyUserDao;
 import com.xiaoai.entity.FamilyUser;
@@ -40,6 +41,7 @@ public class FamilyUserService implements IFamilyUserService {
 		return fauserDao.selectFamilyUser(fu, hql);
 	}
 
+	@Transactional
 	@Override
 	public boolean updateFamilyUser(FamilyUser fu) {
 		boolean fals=false;
@@ -55,6 +57,7 @@ public class FamilyUserService implements IFamilyUserService {
 
 	}
 
+	@Transactional
 	@Override
 	public boolean insertFamilyUser(FamilyUser fu) {
 		boolean fals=false;
@@ -70,6 +73,7 @@ public class FamilyUserService implements IFamilyUserService {
 
 	}
 
+	@Transactional
 	@Override
 	public boolean deleteFamilyUser(FamilyUser fu) {
 		boolean fals=false;

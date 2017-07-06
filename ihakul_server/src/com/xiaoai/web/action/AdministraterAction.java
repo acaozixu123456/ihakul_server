@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import net.sf.json.JSONObject;
 
 import org.apache.struts2.ServletActionContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.xiaoai.entity.Administrate;
@@ -38,6 +39,7 @@ import com.xiaoai.util.XATools;
 
 
 @Controller("adminAction")//控制层 都要写 固定写法
+@Scope("prototype")
 public class AdministraterAction {
 	
 	private String aname;

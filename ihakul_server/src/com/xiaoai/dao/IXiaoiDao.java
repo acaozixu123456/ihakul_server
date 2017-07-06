@@ -88,4 +88,11 @@ public interface IXiaoiDao {
 	 * 查询家庭组下的在线的终端
 	 */
 	public List<Xiaoi> selectXiaoiByFa(Familygroup fa);
+
+	/**
+	 * 根据终端编号查询小艾（包括state=2）
+	 * @param xiaoNumber
+	 * @return
+	 */
+	public Xiaoi selectXiaoiByNumberAll(String xiaoNumber);
 }

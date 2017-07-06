@@ -17,6 +17,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.struts2.ServletActionContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 	
 
@@ -31,6 +32,7 @@ import com.xiaoai.service.IUsersService;
 import com.xiaoai.util.Page;
 
 @Controller("roomAction")
+@Scope("prototype")
 public class RoomAction {
 	@Resource(name="roomService")
 	private IRoomService roomService;

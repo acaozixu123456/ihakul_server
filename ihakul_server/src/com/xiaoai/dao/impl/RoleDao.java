@@ -6,7 +6,6 @@ import javax.annotation.Resource;
 
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IRoleDao;
 import com.xiaoai.entity.Role;
@@ -16,7 +15,6 @@ import com.xiaoai.entity.Role;
  *
  */
 @Repository("roleDao")
-@Transactional
 public class RoleDao implements IRoleDao {
 
 	@Resource(name="hibernateTemplate")

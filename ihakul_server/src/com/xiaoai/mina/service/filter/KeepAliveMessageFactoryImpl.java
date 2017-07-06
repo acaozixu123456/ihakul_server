@@ -11,6 +11,7 @@ import com.xiaoai.mina.service.constant.XiaoaiConstant;
  *
  */
 public class KeepAliveMessageFactoryImpl implements KeepAliveMessageFactory{
+	@SuppressWarnings("unused")
 	private final Logger LOG=Logger.getLogger(KeepAliveMessageFactoryImpl.class);
 	/**
 	 * 客户端心跳响应命令

@@ -34,7 +34,7 @@ public class Xiaoi implements java.io.Serializable {
 	private Integer xid;
 	private Familygroup familygroup;
 	private String xname;
-	private Integer onlineState;
+	private Integer state;
 	private String xiaoNumber;
 	private Integer xiaoType;
 	private String activationTime; //激活时间
@@ -64,11 +64,11 @@ public class Xiaoi implements java.io.Serializable {
 	 * @param mode  终端情景模式(10-标准模式；20-睡眠模式；30-离家模式)
 	 */
 	public Xiaoi(Familygroup familygroup, String xname,
-			Integer onlineState, String xiaoNumber, Integer xiaoType,
+			Integer state, String xiaoNumber, Integer xiaoType,
 			String activationTime, String xiaoIp, Set<Xiaoilog> xiaoilogs,Integer mode) {
 		this.familygroup = familygroup;
 		this.xname = xname;
-		this.onlineState = onlineState;
+		this.state = state;
 		this.xiaoNumber = xiaoNumber;
 		this.xiaoType = xiaoType;
 		this.activationTime = activationTime;
@@ -121,16 +121,16 @@ public class Xiaoi implements java.io.Serializable {
 		this.xname = xname;
 	}
 
-	@Column(name = "onlineState")
-	public Integer getOnlineState() {
-		return onlineState;
+	@Column(name = "state")
+	public Integer getState() {
+		return state;
 	}
 
-	public void setOnlineState(Integer onlineState) {
-		this.onlineState = onlineState;
+	public void setState(Integer state) {
+		this.state = state;
 	}
 
-	@Column(name = "xiaoNumber", length = 20)
+	@Column(name = "xiaoNumber", length = 18)
 	public String getXiaoNumber() {
 		return this.xiaoNumber;
 	}
