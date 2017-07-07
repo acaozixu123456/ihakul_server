@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IXiaoitaskDao;
 import com.xiaoai.entity.Xiaoitask;
@@ -22,6 +23,7 @@ public class XiaoitaskService implements IXiaoitaskService {
 	
 	
 	@Override
+	@Transactional
 	public boolean insertXiaoitask(Xiaoitask xiaoitask) {
 		 boolean fals=true;
 		 try{
@@ -34,6 +36,7 @@ public class XiaoitaskService implements IXiaoitaskService {
 	}
 
 	@Override
+	@Transactional
 	public boolean updateXiaoitask(Xiaoitask xiaoitask) {
 		 boolean fals=true;
 		 try{
@@ -46,6 +49,7 @@ public class XiaoitaskService implements IXiaoitaskService {
 	}
 
 	@Override
+	@Transactional
 	public boolean deleteXiaoitask(Xiaoitask xiaoitask) {
 		 boolean fals=true;
 		 try{

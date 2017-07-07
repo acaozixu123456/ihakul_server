@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
+import oracle.net.aso.r;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
@@ -32,6 +35,9 @@ import com.xiaoai.service.IUsersService;
 import com.xiaoai.util.MyRequest;
 import com.xiaoai.util.XATools;
 import com.xiaoai.util.XiaoaiMessage;
+import com.xiaoleilu.hutool.json.JSON;
+import com.xiaoleilu.hutool.json.JSONUtil;
+import com.xiaoleilu.hutool.util.BeanUtil;
 
 @Controller("appRoomAction")
 @Scope("prototype")
@@ -79,7 +85,7 @@ public class AppRoomAction extends XiaoaiMessage {
 	 * @return success=true(添加成功)或者success=false(添加失败)
 	 * @throws IOException
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked", "rawtypes", "static-access", "unused" })
 	public String insert() throws IOException {
 		success = true;
 		message = null;
@@ -195,11 +201,17 @@ public class AppRoomAction extends XiaoaiMessage {
 											if(xiaoi.getState()==1){
 												//在线，推送
 												hashMap = new HashMap();
-												hashMap.put("room", room);
+												com.alibaba.fastjson.JSONObject j_ = new com.alibaba.fastjson.JSONObject();
+												Object json3 = j_.toJSON(room);
+												
+												Map<String, Object> beanToMap = BeanUtil.beanToMap(room);
+												HashMap sMap = (HashMap) beanToMap;
+												
+												//hashMap.put("room", json3);
 												json2.put("key", "appaddRoom");
 												json2.put("code", 0);
 												json2.put("xiaoNumber", xil.getXiaoNumber());
-												pushState = PushMessage_Room.push2Xiao(json2, hashMap);
+												pushState = PushMessage_Room.push2Xiao(json2, sMap);
 												if(pushState){
 													flag = true;
 												}
@@ -287,7 +299,7 @@ public class AppRoomAction extends XiaoaiMessage {
 	 * @return success=true(修改成功)或者success=false(修改失败)
 	 * @throws IOException
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked", "rawtypes", "static-access", "unused" })
 	public String update() throws IOException {
 		success = true;
 		message = null;
@@ -335,7 +347,13 @@ public class AppRoomAction extends XiaoaiMessage {
 							if(xiaoi.getState()==1){
 								//在线，推送
 								hashMap = new HashMap();
-								hashMap.put("room", room);
+								com.alibaba.fastjson.JSONObject j_ = new com.alibaba.fastjson.JSONObject();
+								Object json3 = j_.toJSON(room);
+								
+								//hashMap.put("room", json3);
+								Map<String, Object> beanToMap = BeanUtil.beanToMap(room);
+								HashMap sMap = (HashMap) beanToMap;
+								
 								json2.put("key", "appupdateRoom");
 								json2.put("code", 0);
 								json2.put("xiaoNumber", xiaoi.getXiaoNumber());
@@ -527,6 +545,9 @@ public class AppRoomAction extends XiaoaiMessage {
 		MyRequest.printParameterNames("查询房间的入参");
 		String roomNumber = request.getParameter("roomNumber");
 		String groupNumber = request.getParameter("groupNumber");
+		
+		//Room requestParamToBean = BeanUtil.requestParamToBean(request, Room.class, true);
+		
 		Room room = null;
 		Familygroup family = null;
 		JSONObject json = new JSONObject();
@@ -556,6 +577,8 @@ public class AppRoomAction extends XiaoaiMessage {
 				json.put("versionNumber", family.getVersionNumber()); // 版本号
 				if (family != null) {
 					room = roomDao.getRoomByGroupId(family, roomNumber);
+					//Object json3 = com.alibaba.fastjson.JSONObject.toJSON(room);
+					//com.alibaba.fastjson.JSONObject.
 					if (room != null) { // 判断该家庭组是否已经添加了该房间
 						JSONArray array4 = new JSONArray();
 						json2.put("roomName", room.getRoomName()); // 房间名称

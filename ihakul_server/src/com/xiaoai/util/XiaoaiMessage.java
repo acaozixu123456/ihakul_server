@@ -17,8 +17,12 @@ public class XiaoaiMessage {
 	public static final int OK = 0; 
 	/** 操作失败，表示其它未知、始料未及的错误 */
 	public static final int Other = 500; 
+	/** 小艾已经被删除 */
+	public static final int deletedXiaoi = 600; 
+	/** 小艾已经被替换 */
+	public static final int changedXiaoi = 700; 
 	
-
+	
 	/**
 	 * 用户报错信息集合311-400
 	 */

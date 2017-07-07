@@ -25,7 +25,14 @@ public class Info implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
+	public static final String ID="content";
+	public static final String CONTENT="content";
+	public static final String CREAT_TIME="creatTime";
+	public static final String CREATOR="creator";
+	public static final String PUSH_TIME="pushTime";
+	public static final String PUSH_STATE="pushState";
+	public static final String OTHER_CONTENT="otherContent";
 	
 	private Integer id;
 	/**

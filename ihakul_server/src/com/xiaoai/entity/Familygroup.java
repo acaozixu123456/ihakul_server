@@ -27,7 +27,17 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name = "familygroup", catalog = "xiaoi")
 public class Familygroup implements java.io.Serializable {
-
+	
+	public static final String GROUP_ID = "groupId";
+	public static final String GROUP_NAME = "groupName";
+	public static final String CREATION_TIME = "creationTime";
+	public static final String GROUP_NUMBER = "groupNumber";
+	public static final String STATE = "state";
+	public static final String CITY = "city";
+	public static final String DISTRICT = "district";
+	public static final String GROUP_PASSWORD = "groupPassword";
+	public static final String MANAGER_ID = "managerId";
+	public static final String VERSION_NUMBER = "versionNumber";
 	// Fields
 
 	/**

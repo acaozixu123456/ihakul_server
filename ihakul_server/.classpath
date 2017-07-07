@@ -100,5 +100,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mina-filter-ssl-1.1.7.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-httpclient-3.0.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/druid-1.1.0 (1).jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/hutool-all-3.0.8.jar" sourcepath="C:/Users/Administrator/Desktop/hutool/hutool-all-3.0.8-sources.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

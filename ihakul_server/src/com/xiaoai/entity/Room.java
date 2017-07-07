@@ -16,6 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.junit.Ignore;
+
+import com.alibaba.fastjson.annotation.JSONField;
 
 /**
  * 房间实体类
@@ -27,7 +30,20 @@ import org.hibernate.annotations.GenericGenerator;
 public class Room implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	public static final String ID = "id";
+	public static final String FAMILY_GROUP = "familygroup";
+	public static final String ROOM_NAME = "roomName";
+	public static final String CREAT_TIME = "createTime";
+	public static final String ROOM_NICK_NAME = "roomNickName";
+	public static final String FLOOR = "floor";
+	public static final String PARENT_ID = "parentId";
+	public static final String ROOM_NUMBER = "roomNumber";
+	public static final String ROBOT = "robot";
+	public static final String CREATOR = "creator";
+	
 	private Integer id;               //房间id
+	@JSONField(serialize=false)
 	private Familygroup familygroup;  //家庭组对象
 	private String roomName;		  //房间名字
 	private Timestamp createTime;     //创建时间
@@ -38,6 +54,7 @@ public class Room implements java.io.Serializable {
 	private String robot;      //终端绑定
 	private String creator;      //终端创建
 	
+	@JSONField(serialize=false)
 	private Set<Household> households = new HashSet<Household>(0);
 	public Room() {
 	 }

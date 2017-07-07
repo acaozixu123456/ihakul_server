@@ -103,5 +103,11 @@ public interface IXiaoiService {
 	 * @return
 	 */
 	public Xiaoi selectXiaoiByNumberAll(String xiaoNumber);
+
+	/**
+	 * 更换终端后清空小艾信息
+	 * @param xiaoi
+	 */
+	public void cleanInfo(Xiaoi xiaoi);
 	
 }

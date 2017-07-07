@@ -212,6 +212,19 @@ public class XiaoiService implements IXiaoiService {
 		return xiaoiDao.selectXiaoiByNumberAll(xiaoNumber);
 	}
 
+	@Transactional
+	@Override
+	public void cleanInfo(Xiaoi xiaoi) {
+		xiaoi.setFamilygroup(null);
+		xiaoi.setXname(null);
+		xiaoi.setMode(0);
+		xiaoi.setState(3);
+		xiaoi.setXiaoIp(null);
+		xiaoi.setXiaoType(0);
+		//更新
+		updateXiaoi(xiaoi);
+	}
+
 	
 
 }

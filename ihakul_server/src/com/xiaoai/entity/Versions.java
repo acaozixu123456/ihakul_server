@@ -21,6 +21,15 @@ public class Versions implements java.io.Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	public static final String ID = "id";
+	public static final String VERSION_NUMBER = "versionNumber";
+	public static final String UPGRADE_CLASS = "upgradeClass";
+	public static final String UPGRADE_TIME = "upgradeTime";
+	public static final String VERSION_TYPE = "versionType";
+	public static final String VERSION_URL = "versionUrl";
+	public static final String VERSION_NAME = "versionName";
+	public static final String VERSION_PACKAGE = "versionPackage";
 	// Fields
 	private Integer id;
 	private Integer versionNumber;	//版本号

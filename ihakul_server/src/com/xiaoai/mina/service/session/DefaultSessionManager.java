@@ -2,7 +2,10 @@ package com.xiaoai.mina.service.session;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.springframework.beans.factory.annotation.Value;
 
 import com.xiaoai.mina.service.constant.XiaoaiConstant;
 
@@ -21,9 +24,9 @@ import com.xiaoai.mina.service.constant.XiaoaiConstant;
  */
 public class DefaultSessionManager implements SessionManager{
 
-	 private static HashMap<String,XiaoaiSession> sessions =new  HashMap<String,XiaoaiSession>();
-	    
 	
+	 private static ConcurrentHashMap<String,XiaoaiSession> sessions =new  ConcurrentHashMap<String,XiaoaiSession>(16);
+	    
 	 private static final AtomicInteger connectionsCounter = new AtomicInteger(0);
 
 	 

@@ -3,6 +3,7 @@ package com.xiaoai.service.impl;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IRoleDao;
 import com.xiaoai.entity.Role;
@@ -23,6 +24,7 @@ public class RoleService implements IRoleService {
 		
 		return roleDao.selectRoleByname(name).get(0);
 	}
+	@Transactional
 	@Override
 	public Role InitRole() {
 		roleDao.InitRole();

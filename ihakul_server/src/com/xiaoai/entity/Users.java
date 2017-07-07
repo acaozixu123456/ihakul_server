@@ -28,6 +28,14 @@ public class Users implements java.io.Serializable {
 
 	// Fields
 
+	public static final String USER_ID = "userId";
+	public static final String USER_NAME = "userName";
+	public static final String USER_PASSWORD = "userPassword";
+	public static final String ACCESSPER = "accessper";
+	public static final String USER_PHONE_NUMBER = "userPhoneNumber";
+	public static final String USER_SEX = "userSex";
+	public static final String CREATE_TIME = "createTime";
+	public static final String LOGIN_LAST_TIMES = "loginLastTimes";
 	/**
 	 * 
 	 */

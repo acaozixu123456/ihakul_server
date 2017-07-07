@@ -466,6 +466,8 @@ public class AppXiaoiAction extends XiaoaiMessage {
 												}
 												if(flag){
 													xr.setSuccess(xiaoiService.change(xiaoNumber, newxiaoNumber));
+													//被替换的小艾家庭组设置为空(状态state设置为3)
+													xiaoiService.cleanInfo(xiaoi);
 													//当前家庭组有在线小艾推送成功,执行删除小艾
 													if (xr.isSuccess() == false) {
 														xr = XiaoiResult.build("更换终端失败", XiaoiCode.changeFalse);
@@ -503,17 +505,18 @@ public class AppXiaoiAction extends XiaoaiMessage {
 			}
 		}
 		
-		JSONObject familyGroup = familyService.getFamilyGroup(groupNumber);
 		if(xr.getCode()==0){
+			JSONObject familyGroup = familyService.getFamilyGroup(groupNumber);
 			out.print(familyGroup);
-			logger.info("更换终端的出参:" + familyGroup);
+			
+			logger.info("更换终端成功的出参:" + familyGroup);
 		}else{
 			json.put("code", xr.getCode());
 			json.put("message", xr.getMessage());
-			
-			json.put("result", familyGroup);
+			//失败不返回信息
+			//json.put("result", familyGroup);
 			out.print(json);
-			logger.info("更换终端的出参:" + json);
+			logger.info("更换终端失败的出参:" + json);
 		}
 		return null;
 	}

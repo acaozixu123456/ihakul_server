@@ -23,7 +23,16 @@ public class XiaoiMode implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
+	public static final String ID = "id";
+	public static final String TRIGGER = "trigger";
+	public static final String CLASSID = "classId";
+	public static final String ORDERS = "orders";
+	public static final String EA_NUMBER = "eaNumber";
+	public static final String ARGUMENT = "argument";
+	public static final String MODE = "mode";
+	public static final String GROUP_NUMBER = "groupNumber";
+	
 	private long id ;
 	private long trigger;
 	private int classId;

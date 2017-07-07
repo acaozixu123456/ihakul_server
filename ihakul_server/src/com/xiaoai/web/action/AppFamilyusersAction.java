@@ -73,12 +73,12 @@ public class AppFamilyusersAction extends XiaoaiMessage {
 			HttpServletRequest request = MyRequest.getRequest();
 			PrintWriter out = MyRequest.getResponse();
 			MyRequest.printParameterNames("用户账号绑定家庭组的入参");
-			String groupNumber = request.getParameter("groupNumber");
-			String userId = request.getParameter("userId");
-			String groupPassword = request.getParameter("groupPassword");
-			json1.put("groupNumber", groupNumber);
-			json1.put("userId", userId);
-			json1.put("groupPassword", groupPassword);
+			String groupNumber = request.getParameter(Familygroup.GROUP_NUMBER);
+			String userId = request.getParameter(Users.USER_ID);
+			String groupPassword = request.getParameter(Familygroup.GROUP_PASSWORD);
+			json1.put(Familygroup.GROUP_NUMBER, groupNumber);
+			json1.put(Users.USER_ID, userId);
+			json1.put(Familygroup.GROUP_PASSWORD, groupPassword);
 
 			json=insertFaUser(json1);
 			if(success){
@@ -94,9 +94,9 @@ public class AppFamilyusersAction extends XiaoaiMessage {
 	
 	public JSONObject insertFaUser(JSONObject json1){
 		JSONObject json=new JSONObject();
-		String groupNumber = json1.getString("groupNumber");
-		String userId = json1.getString("userId");
-		String groupPassword = json1.getString("groupPassword");
+		String groupNumber = json1.getString(Familygroup.GROUP_NUMBER);
+		String userId = json1.getString(Users.USER_ID);
+		String groupPassword = json1.getString(Familygroup.GROUP_PASSWORD);
 		Familygroup family = null;
 		Users users = null;
 		FamilyUser fu = new FamilyUser();
@@ -196,28 +196,28 @@ public class AppFamilyusersAction extends XiaoaiMessage {
 				int gn= Integer.parseInt(groupNumber);
 				family=familyService.getFamilygroupByNumber(gn);
 			if(family !=null){
-				json2.put("groupName", family.getGroupName()); //家庭组名称 
-				json2.put("groupNumber", family.getGroupNumber()); //家庭编号
-				json2.put("groupPassword", family.getGroupPassword()); //验证密码
-				json2.put("managerId", family.getManagerId()); //创建家庭组用户ID	
-				json.put("versionNumber", family.getVersionNumber());   //家庭组版本号
+				json2.put(Familygroup.GROUP_NAME, family.getGroupName()); //家庭组名称 
+				json2.put(Familygroup.GROUP_NUMBER, family.getGroupNumber()); //家庭编号
+				json2.put(Familygroup.GROUP_PASSWORD, family.getGroupPassword()); //验证密码
+				json2.put(Familygroup.MANAGER_ID, family.getManagerId()); //创建家庭组用户ID	
+				json.put(Familygroup.VERSION_NUMBER, family.getVersionNumber());   //家庭组版本号
 				user=familyService.selectusersByFamilygroup(family);
 				for(Users us:user){
 					if(family.getManagerId().equals(us.getUserId())){
-						json2.put("userName", us.getUserName()); //创建家庭组用户名称
+						json2.put(Users.USER_NAME, us.getUserName()); //创建家庭组用户名称
 					}
 				}
 				List<Xiaoi> xiaoList=xiaoiDao.selectXiaoiByid(family.getGroupId());
 				 if(!XATools.isNull(xiaoList)){
 				 for(Xiaoi xiaoi:xiaoList){
-					json5.put("xiaoName", xiaoi.getXname());
-					json5.put("onlineState", xiaoi.getState()); //在线状态(0,不在线;1,在线)
-					json5.put("xiaoNumber", xiaoi.getXiaoNumber());//终端编号
-					json5.put("xiaoType", xiaoi.getXiaoType());//终端类型(1,普通;2时尚)
-					json5.put("xiaoIp", xiaoi.getXiaoIp());//终端IP
-					json5.put("activationTime", xiaoi.getActivationTime());//激活时间
-					json5.put("mode", xiaoi.getMode());//情景模式
-					json5.put("volume", xiaoi.getVolume());//声音
+					json5.put(Xiaoi.X_NAME, xiaoi.getXname());
+					json5.put(Xiaoi.STATE, xiaoi.getState()); //在线状态(0,不在线;1,在线)
+					json5.put(Xiaoi.XIAO_NUMBER, xiaoi.getXiaoNumber());//终端编号
+					json5.put(Xiaoi.XIAO_TYPE, xiaoi.getXiaoType());//终端类型(1,普通;2时尚)
+					json5.put(Xiaoi.XIAO_IP, xiaoi.getXiaoIp());//终端IP
+					json5.put(Xiaoi.ACTIVATION_TIME, xiaoi.getActivationTime());//激活时间
+					json5.put(Xiaoi.MODE, xiaoi.getMode());//情景模式
+					json5.put(Xiaoi.VOLUME, xiaoi.getVolume());//声音
 					array5.add(json5);
 				 }
 				 }
@@ -227,27 +227,27 @@ public class AppFamilyusersAction extends XiaoaiMessage {
 			    	 for(Room room:roomList){
 			    		 JSONArray array4=new JSONArray();
 			    		 JSONObject json3=new JSONObject();
-			    		 json3.put("groupNumber", family.getGroupNumber()); //家庭编号
-			    		 json3.put("roomName", room.getRoomName()); //房间名称
-			    		 json3.put("roomNickName", room.getRoomNickName()); //房间昵称
-			    		 json3.put("floor", room.getFloor()); //房间楼层(默认 0)
-			    		 json3.put("parentId", room.getParentId()); //父节点标识
-			    		 json3.put("roomNumber", room.getRoomNumber()); //房间编号
+			    		 json3.put(Familygroup.GROUP_NUMBER, family.getGroupNumber()); //家庭编号
+			    		 json3.put(Room.ROOM_NAME, room.getRoomName()); //房间名称
+			    		 json3.put(Room.ROOM_NICK_NAME, room.getRoomNickName()); //房间昵称
+			    		 json3.put(Room.FLOOR, room.getFloor()); //房间楼层(默认 0)
+			    		 json3.put(Room.PARENT_ID, room.getParentId()); //父节点标识
+			    		 json3.put(Room.ROOM_NUMBER, room.getRoomNumber()); //房间编号
 			    		 List<Household> householdList =householdDao.selectHouseholdByroomIDandGroupId(room.getId(),family.getGroupId());
 			    		 if(!XATools.isNull(householdList)){
 			    		 for(Household household:householdList){
 			    			 JSONObject json4=new JSONObject();
-			    			 json5.put("roomNumber", room.getRoomNumber()); //房间编号
+			    			 json5.put(Room.ROOM_NUMBER, room.getRoomNumber()); //房间编号
 			    			 json4.put("names", household.getEaName());  //家电呢称
-			    			 json4.put("classId", household.getClassId());//家电类别  1 智能家电,2红外线家电
-			    			 json4.put("brand", household.getBrand()); //品牌
-			    			 json4.put("model", household.getHid()); //型号 
-			    			 json4.put("eaNumber", household.getEaNumber()); //家电编号 
-			    			 json4.put("type", household.getType()); //家电类型 
-			    			 json4.put("prop", household.getProp()); //通讯参数 
-			    			 json4.put("stub", household.getStub()); //智能索引
-			    			 json4.put("status", household.getStatus()); //
-			    			 json4.put("port", household.getPort()); //
+			    			 json4.put(Household.CLASS_ID, household.getClassId());//家电类别  1 智能家电,2红外线家电
+			    			 json4.put(Household.BRAND, household.getBrand()); //品牌
+			    			 json4.put(Household.MODEL, household.getModel()); //型号 
+			    			 json4.put(Household.EA_NUMBER, household.getEaNumber()); //家电编号 
+			    			 json4.put(Household.TYPE, household.getType()); //家电类型 
+			    			 json4.put(Household.PROP, household.getProp()); //通讯参数 
+			    			 json4.put(Household.STUB, household.getStub()); //智能索引
+			    			 json4.put(Household.STATUS, household.getStatus()); //
+			    			 json4.put(Household.PORT, household.getPort()); //
 			    			 array4.add(json4);
 			    			 json3.put("household", array4);//家电信息
 			    		 }

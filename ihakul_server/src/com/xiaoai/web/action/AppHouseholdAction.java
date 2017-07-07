@@ -273,7 +273,10 @@ public class AppHouseholdAction extends XiaoaiMessage {
 										}
 										if(flag){
 											//当前家庭组有在线小艾推送成功,执行添加电器
-											buildPort(households, family);
+											//只有智能电器才要生成逻辑地址
+											if(households.getClassId()==2){
+												buildPort(households, family);
+											}
 											
 											success = houseHoldService
 													.insertHousehold(households);

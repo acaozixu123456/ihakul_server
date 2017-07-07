@@ -105,16 +105,9 @@ public class BindHandler implements RequestHandler{
 		String xiaoName=json.getString("xiaoName");
 		String groupNumber=json.getString("groupNumber");
 		String xiaoIp=json.getString("xiaoIp");
-		//int versionNumber=json.getInteger("versionNumber");
-	//	xiao1=JSON.toJavaObject(json, Xiaoi.class);
 		String xiaoType=xiaoNumber.substring(xiaoNumber.length()-1, xiaoNumber.length());
 		Familygroup	family=familyService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
 		   if(family!=null){
-			   /*if(versionNumber>family.getVersionNumber()){ //如果终端的版本号大于服务端
-				   family.setVersionNumber(versionNumber);  
-				   familyService.updateFamily(family);
-			   }*/
-				//xiao1=xiaoiService.selectXiaoiByNumber(xiaoNumber);
 			   //根据终端编号获得小艾（包括state=2）
 				xiao1=xiaoiService.selectXiaoiByNumberAll(xiaoNumber);
 			 if(xiao1==null){ //如果查不到，说明已经被删除了;否则，更新小艾
@@ -132,27 +125,55 @@ public class BindHandler implements RequestHandler{
 				 xiaoiService.insertXiaoi(xiao);
 			  }else{
 				  if(xiao1.getState()==2){
-					  //state=2情况
-					  //xiao.setState(1);
-					  //TODO
+					  /*首选方案（已删除小艾不允许绑定）*/
+					  //小艾已经被删除
+					  //success=false;
+					  //json1.put("code", XiaoaiMessage.deletedXiaoi);
 					  
+					  reloadXiaoi(xiao1, json1, xiaoNumber, xiaoName, xiaoIp,
+							xiaoType, family);
+				  }else if(xiao1.getState()==3){
+					  /*首选方案（已替换小艾不允许绑定）*/
+					  //小艾已经被替换
+					  //success=false;
+					 // json1.put("code", XiaoaiMessage.changedXiaoi);
+					  
+					  reloadXiaoi(xiao1, json1, xiaoNumber, xiaoName, xiaoIp,
+							xiaoType, family);
+				  }else{
+					  reloadXiaoi(xiao1, json1, xiaoNumber, xiaoName, xiaoIp,
+							xiaoType, family);
 				  }
-				  	xiao1.setXname(xiaoName);
-					xiao1.setXiaoNumber(xiaoNumber);
-					xiao1.setXiaoType(Integer.parseInt(xiaoType));
-					xiao1.setState(1);
-					xiao1.setFamilygroup(family);
-					xiao1.setXiaoIp(xiaoIp);
-					xiao1.setActivationTime(XATools.getNowTime());
-					xiao1.setVolume(50); //设置默认音量
-				  xiaoiService.updateXiaoi(xiao1);
-				  success=true;
-				  json1.put("code", XiaoaiMessage.OK);
+				  
 			  }
 		 }else{
 			 json1.put("code", XiaoaiMessage.FamilyCode.noExistBean);
 		 }
 		return json1;	
+	}
+
+	/**重新设置小艾
+	 * @param xiao1
+	 * @param json1
+	 * @param xiaoNumber
+	 * @param xiaoName
+	 * @param xiaoIp
+	 * @param xiaoType
+	 * @param family
+	 */
+	private void reloadXiaoi(Xiaoi xiao1, JSONObject json1, String xiaoNumber,
+			String xiaoName, String xiaoIp, String xiaoType, Familygroup family) {
+		xiao1.setXname(xiaoName);
+		  xiao1.setXiaoNumber(xiaoNumber);
+		  xiao1.setXiaoType(Integer.parseInt(xiaoType));
+		  xiao1.setState(1);
+		  xiao1.setFamilygroup(family);
+		  xiao1.setXiaoIp(xiaoIp);
+		  xiao1.setActivationTime(XATools.getNowTime());
+		  xiao1.setVolume(50); //设置默认音量
+		  xiaoiService.updateXiaoi(xiao1);
+		  success=true;
+		  json1.put("code", XiaoaiMessage.OK);
 	}
 
 }

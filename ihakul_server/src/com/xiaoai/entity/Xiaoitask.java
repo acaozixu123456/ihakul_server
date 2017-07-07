@@ -15,6 +15,16 @@ import org.hibernate.annotations.GenericGenerator;
 public class Xiaoitask implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	public static final String ID = "id";
+	public static final String CREATION_TIME = "creationTime";
+	public static final String TRIGGER_TIME = "triggerTime";
+	public static final String THINGS = "things";
+	public static final String RULES = "rules";
+	public static final String OBJECT = "object";
+	public static final String ORDERS = "orders";
+	public static final String GROUP_ID = "groupId";
+	
 	private long id;
 	private long creationTime;
 	private long triggerTime;

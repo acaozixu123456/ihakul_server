@@ -62,10 +62,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<td>${xiao.familygroup.groupName }</td>
 			
 			<td>
-			<c:if test="${xiao.onlineState==1 }">
+			<c:if test="${xiao.State==1 }">
 				在线
 			</c:if>
-			<c:if test="${xiao.onlineState==0 }">
+			<c:if test="${xiao.State==0 }">
 				不在线
 			</c:if>
 			</td>

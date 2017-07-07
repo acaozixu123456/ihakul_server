@@ -160,6 +160,8 @@ public class AppXiaoitask extends XiaoaiMessage{
 							message="新增计划任务失败,没有在线小艾 ! ";
 						}
 					}
+				}else{
+					success=xiaoitaskService.insertXiaoitask(xiaoitask);
 				}
 				json1.put("taskId", xiaoitask.getId());
 			}else{

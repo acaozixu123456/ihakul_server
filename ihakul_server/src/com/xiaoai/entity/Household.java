@@ -31,7 +31,21 @@ public class Household implements java.io.Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	// Fields
-
+	public static final String HID = "hid";
+	public static final String ROOM = "room";
+	public static final String FAMILY_GROUP = "familygroup";
+	public static final String CLASS_ID = "classId";
+	public static final String BRAND = "brand";
+	public static final String MODEL = "model";
+	public static final String CREAT_TIME = "createTime";
+	public static final String EA_NAME = "eaName";
+	public static final String EA_NUMBER = "eaNumber";
+	public static final String TYPE = "type";
+	public static final String PROP = "prop";
+	public static final String STUB = "stub";
+	public static final String PORT = "port";
+	public static final String STATUS = "status";
+	
 	private Integer hid;             //家电id
 	private Room room;               //家电房间 
 	private Familygroup familygroup; //家电所属家庭组 

@@ -62,8 +62,8 @@ public class AppFamilygroupAction extends XiaoaiMessage{
 		JSONObject json=new JSONObject();
 		JSONObject json2=new JSONObject();
 		JSONArray array=new JSONArray();
-		groupName=request.getParameter("groupName");
-		userId=request.getParameter("userId");
+		groupName=request.getParameter(Familygroup.GROUP_NAME);
+		userId=request.getParameter(Users.USER_ID);
 		if(XATools.isNull(groupName)){
 			xiaoiResult=XiaoiResult.build("家庭组名称不能为空", false, FamilyCode.emptyName);
 		}
@@ -101,8 +101,8 @@ public class AppFamilygroupAction extends XiaoaiMessage{
 				fu.setDna(userId);
 				xiaoiResult.setSuccess(fauserService.insertFamilyUser(fu));		
 				if(xiaoiResult.isSuccess()){ //用户绑定保存成功就正确返回
-					json2.put("groupNumber", number);
-					json2.put("groupPassword", groupPassword);
+					json2.put(Familygroup.GROUP_NUMBER, number);
+					json2.put(Familygroup.GROUP_PASSWORD, groupPassword);
 					array.add(json2);
 				}else{
 					xiaoiResult = XiaoiResult.build("用户绑定家庭组失败!", FamilyCode.conflictAbortBind);
@@ -144,9 +144,9 @@ public class AppFamilygroupAction extends XiaoaiMessage{
 		HttpServletRequest request=MyRequest.getRequest();
 		PrintWriter out=MyRequest.getResponse();	
 		MyRequest.printParameterNames("修改家庭组的入参");
-		String groupNumber=request.getParameter("groupNumber");
-		String groupName=request.getParameter("groupName");
-		String userId=request.getParameter("userId");  
+		String groupNumber=request.getParameter(Familygroup.GROUP_NUMBER);
+		String groupName=request.getParameter(Familygroup.GROUP_NAME);
+		String userId=request.getParameter(Users.USER_ID);  
 		Users users=null;
 		Familygroup family=null;
 		FamilyUser fu1 =null;
@@ -236,7 +236,7 @@ public class AppFamilygroupAction extends XiaoaiMessage{
 		HttpServletRequest request=MyRequest.getRequest();
 		PrintWriter out=MyRequest.getResponse();	
 		MyRequest.printParameterNames("查询家庭组的入参");
-		String groupNumber=request.getParameter("groupNumber");
+		String groupNumber=request.getParameter(Familygroup.GROUP_NUMBER);
 		//json=getFamilyGroup(groupNumber);
 		com.alibaba.fastjson.JSONObject familyGroup = familyService.getFamilyGroup(groupNumber);
 		out.print(familyGroup);
@@ -259,8 +259,8 @@ public class AppFamilygroupAction extends XiaoaiMessage{
 		HttpServletRequest request=MyRequest.getRequest();
 		PrintWriter out=MyRequest.getResponse();	
 		MyRequest.printParameterNames("删除家庭组的入参");
-		String groupNumber=request.getParameter("groupNumber");
-		String userId=request.getParameter("userId");	
+		String groupNumber=request.getParameter(Familygroup.GROUP_NUMBER);
+		String userId=request.getParameter(Users.USER_ID);	
 		Users users=null;
 		FamilyUser fu1 =null;
 		JSONObject json=new JSONObject();
@@ -346,7 +346,7 @@ public class AppFamilygroupAction extends XiaoaiMessage{
 		PrintWriter out=MyRequest.getResponse();	
 		MyRequest.printParameterNames("获得所有家庭组的入参（终端接口）");
 		//获得参数
-		String groupNumber=request.getParameter("groupNumber");
+		String groupNumber=request.getParameter(Familygroup.GROUP_NUMBER);
 		com.alibaba.fastjson.JSONObject jsonObject = null;
 		try {
 			//判断

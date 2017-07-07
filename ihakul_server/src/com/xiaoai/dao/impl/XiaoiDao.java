@@ -28,7 +28,7 @@ public class XiaoiDao implements IXiaoiDao {
 	//根据家庭组id查询
 	@SuppressWarnings("unchecked")
 	public List<Xiaoi> selectXiaoiByid(int fid) {
-		String hql="from Xiaoi where groupId=? and state<>2";
+		String hql="from Xiaoi where groupId=? and state in (0,1)";
 		return hibernateTemplate.find(hql,fid);
 	}
 
@@ -47,7 +47,7 @@ public class XiaoiDao implements IXiaoiDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Xiaoi selectXiaoiByNumber(String xiaoNumber) {
-		String hql="from Xiaoi where xiaoNumber=? and state<>2";
+		String hql="from Xiaoi where xiaoNumber=? and state in (0,1)";
 		List<Xiaoi> list=hibernateTemplate.find(hql,xiaoNumber);
 		if(!XATools.isNull(list)){ 
 			return list.get(0);
@@ -109,7 +109,7 @@ public class XiaoiDao implements IXiaoiDao {
 	//根据房间id查询
 	@SuppressWarnings("unchecked")
 	public List<Xiaoi> selectXiaoiByroomId(int roomId) {
-		String hql="from Xiaoi where roomId=? and state<>2";
+		String hql="from Xiaoi where roomId=? and state in (0,1)";
 		List<Xiaoi> list=hibernateTemplate.find(hql,roomId);
 		return list;
 	}
@@ -120,7 +120,7 @@ public class XiaoiDao implements IXiaoiDao {
 	//根据ip查询
 	@SuppressWarnings("unchecked")
 	public List<Xiaoi> selectXiaoiByIp(String ip) {
-		String hql="from Xiaoi where xiaoiIp=? and state<>2";
+		String hql="from Xiaoi where xiaoiIp=? and state in (0,1)";
 		List<Xiaoi> list=hibernateTemplate.find(hql,ip);
 		return list;
 	}
@@ -128,7 +128,7 @@ public class XiaoiDao implements IXiaoiDao {
 	
 	@SuppressWarnings("unchecked")
 	public List<Xiaoi> selectXiaoiByroom(Room room) {
-		String hql="select xiaoai from Xiaoi as xiaoai join xiaoai.room as rooms where rooms=? and state<>2";
+		String hql="select xiaoai from Xiaoi as xiaoai join xiaoai.room as rooms where rooms=? and state in (0,1)";
 		List<Xiaoi> list=hibernateTemplate.find(hql,room);
 		return list;
 	}

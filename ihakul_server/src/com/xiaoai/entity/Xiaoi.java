@@ -28,7 +28,16 @@ import org.hibernate.annotations.GenericGenerator;
 public class Xiaoi implements java.io.Serializable {
 
 	// Fields
-
+	public static final String X_ID = "xid";
+	public static final String FAMILY_GROUP = "familygroup";
+	public static final String X_NAME = "xname";
+	public static final String STATE = "state";
+	public static final String XIAO_NUMBER = "xiaoNumber";
+	public static final String XIAO_TYPE = "xiaoType";
+	public static final String ACTIVATION_TIME = "activationTime";
+	public static final String XIAO_IP = "xiaoIp";
+	public static final String MODE = "mode";
+	public static final String VOLUME = "volume";
 	
 	private static final long serialVersionUID = 1L;
 	private Integer xid;
