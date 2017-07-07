@@ -1,0 +1,103 @@
+
+一、阿里云
+1,万网ip地址: https://cp.aliyun.com/login
+     阿里云登录账号: hi10220324@aliyun.com
+     阿里云登录密码: haku12345678 
+
+     控制台用户名：qyu2567410001
+     控制台登录密码：12345678
+     临时域名：www.i-hakul.com 
+     主机ip: 118.190.107.52
+     FTP用户名: qyu2567410001
+     FTP密码：xiaoai123456
+     MYSQL用户名：qdm202004375
+     MYSQL密码 : xiaoai123456
+
+二、哈酷网站后台更新维护
+    后台地址:http://www.i-hakul.com/admini
+    用户名: admin
+    密码: admin
+  
+
+三、哈酷测试服务器
+    1,Ubuntu系统
+      用户名:root
+      密码:070707
+      ip:192.168.2.55
+
+      mysql 
+      用户名:root
+      密码:123
+
+四、短信平台
+  1,北京国都互联科技有限公司
+     用户名:ceshfj1
+     密码:n9JUBHgw
+
+  2,MOB  
+     用户名：isun.cn@163.com  
+     密码：iSun070707
+
+
+五、微软云
+   用户名:  haku@nanjingetda.partner.onmschina.cn
+   密码:  1QAZ2wsx
+   
+   网址:https://www.azure.cn/
+   A系列虚拟机
+   DNS名称:Haku
+   主机ip:42.159.201.109
+   虚拟机账号:azureuser
+   密码:Haku123456
+
+   网址:https://portal.azure.cn
+   D系列虚拟机Ubuntu
+   主机ip:42.159.195.5:22
+   用户名:haku
+   密码:Haku12345678
+   root密码:123456
+   
+   D系列虚拟机Centos
+   主机ip:42.159.192.86:5555
+   用户名:haku
+   密码:Haku12345678
+
+   哈酷后台管理http://42.159.192.86:18181/ihakul_server/jsp/login.jsp
+
+   
+
+
+
+数据库地址：
+http://haku.idc.weijicn.cn:999
+
+账号：haku2
+密码：weiji2016@
+
+后台地址：
+http://haku.idc.weijicn.cn/admini/login.php
+
+账号：admin	
+密码：admin
+
+
+ftp地址：haku.idc.weijicn.cn
+
+账户：haku
+密码：weiji2016@
+
+
+更新文件：http://haku.idc.weijicn.cn/admini/edition.txt
+
+\\192.168.2.170\Sharing\VersionUpdate.apk
+
+192.168.2.170
+
+
+
+
+
+
+
+
+

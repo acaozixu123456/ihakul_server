@@ -1,0 +1,696 @@
+{
+	"variables": [],
+	"info": {
+		"name": "小艾接口",
+		"_postman_id": "0b2a75db-7938-ccb6-f5b7-a9235dc01312",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "公告管理",
+			"description": "",
+			"item": [
+				{
+					"name": "获取所有公告",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appgetAllInformation.action",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "新增公告",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appinsertInformation.action?content=测试公告——7.3&creator=admin&pushTime=1498645500000",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "家庭组管理",
+			"description": "",
+			"item": [
+				{
+					"name": "修改家庭组",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appupdateFamilygroup.action?groupNumber=10003&userId=1&groupName=水浒传修改",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查询家庭组",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appgetFamilygroup.action?groupNumber=10021",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "新增家庭组",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appaddFamilygroup.action?groupName=水浒传&userId=1",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "删除家庭组",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appdeleteFamilygroup.action?groupNumber=10010&userId=6",
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "用户绑定家庭组",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appaddfusers.action?groupNumber=10002&userId=1&groupPassword=1940293438",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查询家庭组（终端接口）",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appgetAllToXiaoi.action?groupNumber=10021",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "家电管理",
+			"description": "",
+			"item": [
+				{
+					"name": "新增家电",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appinserthouseHold.action?groupNumber=10027&userId=1&eaName=11&roomNumber=0-0-LIVING_ROOM&classId=1&type=tv",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "eaNumber",
+									"value": "0-0-LIVING_ROOM#tvSANYO5578",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "groupNumber",
+									"value": "10006",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "roomNumber",
+									"value": "0-0-LIVING_ROOM",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "model",
+									"value": "*",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "brand",
+									"value": "SANYO",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "stub",
+									"value": "5578",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "userId",
+									"value": "1",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "classId",
+									"value": "1",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查询家电",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appgethouseHold.action",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "groupNumber",
+									"value": "10022",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "eaNumber",
+									"value": "0-0-LIVING_ROOM#288793330400101121",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "删除家电",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appdeletehouseHold.action",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "groupNumber",
+									"value": "10022",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "eaNumber",
+									"value": "0-0-LIVING_ROOM#288793330400101121",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "userId",
+									"value": "6",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "控制红外电器（户外）",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appcontrollerhouseHold.action?groupId=10029&eaNumber=ZF&type=tv&stub=365&keys=POWER,VOLUME_INCR&requestUri=EA/IRCtrl&classId=2",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "控制智能家电（户外）",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appcontrollerhouseHold.action?groupId=10029&eaNumber=ZF&classId=2&name=1&value=1&command=1",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "情景模式管理",
+			"description": "",
+			"item": [
+				{
+					"name": "新增情景模式",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appaddXiaoiModeAction.action?groupNumber=10015&trigger=1&classId=10&orders=ALARM_SET&eaNumber=zh&argument=22&mode=20",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "删除情景模式",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appdeleteXiaoiModeAction.action?modeId=2",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "获取情景模式（id）",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appgetXiaoiModeAction.action?modeId=10",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "获取情景模式通过GroupNumber",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appgetXiaoiModeByGroupNumAction.action?groupNumber=10015",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "房间管理",
+			"description": "",
+			"item": [
+				{
+					"name": "添加房间",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appaddRoom.action?groupNumber=10027&userId=1&roomName=阳台&roomNickName=小&floor=0&parentId=1&xiaoNumber=0030000200000202",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查询房间",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appgetRoom.action?roomNumber=0-0-KITCHEN&groupNumber=10027",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "删除房间",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appdeleteRoom.action?userId=1&roomNumber=0-0-阳台&groupNumber=10027",
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "切换默认房间",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appchangeRoom.action?roomNumber=0-0-REST_ROOM&xiaoNumber=0030000100009702",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "版本管理",
+			"description": "",
+			"item": [
+				{
+					"name": "检查版本",
+					"request": {
+						"url": "http://42.159.192.86:18181/ihakul_server/ancheckversion.action?versionPackage=com.ihakul.i.translater",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "用户管理",
+			"description": "",
+			"item": [
+				{
+					"name": "用户注册",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/aninsertUsers.action?userPhoneNumber=15571893422&userPassword=123456&userName=你好啊&userSex=男",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": "用户注册接口    "
+					},
+					"response": []
+				},
+				{
+					"name": "用户查询",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/angetUsersByid.action?userId=1",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "用户登录",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/userLogin.action?userLogin=15570895417&userPassword=123456",
+						"method": "GET",
+						"header": [
+							{
+								"key": "contentType",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "微软云服务器用户登录",
+					"request": {
+						"url": "http://42.159.201.109:8080/ihakul_server/userLogin.action?userLogin=15570895417&userPassword=123456",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "测试服务器用户登录",
+					"request": {
+						"url": "http://192.168.2.55:8585/ihakul_server/userLogin.action?userLogin=15570895417&userPassword=123456",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "微软云测试服务器Centos用户登录",
+					"request": {
+						"url": "http://42.159.192.86:18181/ihakul_server/userLogin.action?userLogin=15570895417&userPassword=123456",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "短信平台",
+			"description": "",
+			"item": [
+				{
+					"name": "单条短信发送",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/httpgetSMS.action?userPhoneNumber=12345678910",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "终端管理",
+			"description": "",
+			"item": [
+				{
+					"name": "添加小艾",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appaddXiaoi.action?xiaoName=小艾&xiaoNumber=100000001&groupNumber=10022&xiaoIp=192.168.2.112&versionNumber=0",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查询小艾",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appgetXiaoiByid.action?xiaoNumber=0030000200000102",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "删除终端",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appdeleteXiaoi.action?userId=6&xiaoNumber=100000001&groupNumber=10022&versionNumber=0",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "修改小艾名称",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appupdateXiaoiName.action?xiaoName=小艾&xiaoNumber=0030000200009902&groupNumber=10022&versionNumber=0&userId=6",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "更换终端",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appchangeXiaoi.action?xiaoNumber=0030000200000202&groupNumber=10022&userId=1&versionNumber=0&newxiaoNumber=0030000200000201",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "计划任务",
+			"description": "",
+			"item": [
+				{
+					"name": "新增计划任务",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appaddXiaoitask.do?groupNumber=10006&create=1497866820000&trigger=1497866820000&things=你好&rules=OFF&object=测试&classId=1&mode=10&orders=qwe&xiaoNumber=0030000200000202",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "删除计划任务",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appdelXiaoitask.do?taskId=1&groupNumber=10021",
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查询单条计划任务",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appgetXiaoitask.do?taskId=2",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查询计划任务",
+					"request": {
+						"url": "http://localhost:8080/ihakul_server/appselectXiaoitask.do?groupNumber=10006",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
