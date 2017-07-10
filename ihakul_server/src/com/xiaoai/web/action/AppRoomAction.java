@@ -201,11 +201,15 @@ public class AppRoomAction extends XiaoaiMessage {
 											if(xiaoi.getState()==1){
 												//在线，推送
 												hashMap = new HashMap();
-												com.alibaba.fastjson.JSONObject j_ = new com.alibaba.fastjson.JSONObject();
-												Object json3 = j_.toJSON(room);
+												//com.alibaba.fastjson.JSONObject j_ = new com.alibaba.fastjson.JSONObject();
+												//Object json3 = j_.toJSON(room);
 												
 												Map<String, Object> beanToMap = BeanUtil.beanToMap(room);
 												HashMap sMap = (HashMap) beanToMap;
+												//剔除
+												sMap.remove("households");
+												sMap.remove("familygroup");
+												
 												
 												//hashMap.put("room", json3);
 												json2.put("key", "appaddRoom");
@@ -353,6 +357,9 @@ public class AppRoomAction extends XiaoaiMessage {
 								//hashMap.put("room", json3);
 								Map<String, Object> beanToMap = BeanUtil.beanToMap(room);
 								HashMap sMap = (HashMap) beanToMap;
+								//剔除
+								sMap.remove("households");
+								sMap.remove("familygroup");
 								
 								json2.put("key", "appupdateRoom");
 								json2.put("code", 0);

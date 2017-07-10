@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +32,7 @@ import com.xiaoai.util.XiaoaiMessage;
 import com.xiaoai.util.XiaoiResult;
 import com.xiaoai.util.XiaoaiMessage.RoomCode;
 import com.xiaoai.util.XiaoaiMessage.XiaoiCode;
+import com.xiaoleilu.hutool.util.BeanUtil;
 
 /**
  * @author ZERO
@@ -67,7 +69,6 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 		code = OK;
 
 		PrintWriter out = MyRequest.getResponse();
-		//HttpServletRequest request = MyRequest.getRequest();
 		JSONObject json = new JSONObject();
 		JSONObject json1 = new JSONObject();
 		JSONObject jsonObject = MyRequest.getParameterNames();
@@ -79,7 +80,6 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 		String orders = jsonObject.getString("orders");
 		String mode = jsonObject.getString("mode");
 		String groupNumber = jsonObject.getString("groupNumber");
-		//String trigger = jsonObject.getString("trigger");
 		
 		logger.info("添加情景模式入参：" + jsonObject);
 		if (XATools.isNull(classId)) {
@@ -120,12 +120,15 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 							//判断当前小艾是否在线
 							if(xiaoi.getState()==1){
 								//在线，推送
-								hashMap = new HashMap();
-								hashMap.put("xiaoiMode", xiaoiMode);
+								
+								Map<String, Object> beanToMap = BeanUtil.beanToMap(xiaoiMode);
+								HashMap sMap = (HashMap) beanToMap;
+								
+								//不用移除
 								json2.put("key", "appaddXiaoiModeAction");
 								json2.put("code", xiaoiMode.getId());
 								json2.put("xiaoNumber", xiaoi.getXiaoNumber());
-								pushState = PushMessage_XiaoiMode.push2Xiao(json2, hashMap);
+								pushState = PushMessage_XiaoiMode.push2Xiao(json2, sMap);
 								if(pushState){
 									flag = true;
 								}
@@ -133,16 +136,14 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 						}
 						if(flag){
 							//当前家庭组有在线小艾推送成功,执行添加情景模式
-							success = xiaoiModeService.insertMode(xiaoiMode);
+							xr.setSuccess(xiaoiModeService.insertMode(xiaoiMode));
 							json1.put("modeId", xiaoiMode.getMode());
-							if (success == false) {
-								code = XiaoiModeCode.insertFail;
-								message = "添加情景模式失败!";
+							if (!xr.isSuccess()) {
+								xr=XiaoiResult.build("添加情景模式失败!", XiaoiModeCode.insertFail);
 							}
 						}else{
 							//当前家庭组没有任何一台小艾在线，推送失败，拒绝添加房间！
-							code = XiaoiCode.noExistOnlinBean;
-							message = "没有在线小艾!";
+							xr=XiaoiResult.build("没有在线小艾!", XiaoiCode.noExistOnlinBean);
 						}
 						
 					} catch (Exception e) {
@@ -212,7 +213,7 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 						if(flag){
 							//当前家庭组有在线小艾推送成功,执行添加情景模式
 							xr.setSuccess(xiaoiModeService.deleteMode(xiaoiMode));
-							if (success == false) {
+							if (!xr.isSuccess()) {
 								xr=XiaoiResult.build("删除情景模式失败!", XiaoiModeCode.deleteFail);
 							}
 						}else{

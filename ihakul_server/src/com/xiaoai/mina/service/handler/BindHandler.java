@@ -38,6 +38,7 @@ public class BindHandler implements RequestHandler{
 		DefaultSessionManager sessionManager=(DefaultSessionManager) ContextHolder.getBean("XiaoaiSessionManage");
 		try {
 			String account=(String) body.getData().get(XiaoaiConstant.SESSION_KEY);      //接收信息
+			logger.info("body:"+body);
 			newSession.setXiaoNumber(account);
 			newSession.setGid(UUID.randomUUID().toString());
 			newSession.setHost(InetAddress.getLocalHost().getHostAddress());
@@ -99,12 +100,18 @@ public class BindHandler implements RequestHandler{
 	}
 
 	public JSONObject insertUpdateXiaoai(JSONObject json){
+		logger.info("绑定终端--插入或更新小艾,入参为："+json);
 		Xiaoi xiao1=new Xiaoi();
 		JSONObject json1=new JSONObject();
 		String xiaoNumber=json.getString("xiaoNumber");
 		String xiaoName=json.getString("xiaoName");
 		String groupNumber=json.getString("groupNumber");
 		String xiaoIp=json.getString("xiaoIp");
+		String versionNumber=json.getString("versionNumber");
+		if(XATools.isNull(xiaoNumber)){
+			json1.put("code", XiaoaiMessage.XiaoiCode.emptyId);
+			return json1;
+		}
 		String xiaoType=xiaoNumber.substring(xiaoNumber.length()-1, xiaoNumber.length());
 		Familygroup	family=familyService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
 		   if(family!=null){
@@ -120,6 +127,10 @@ public class BindHandler implements RequestHandler{
 					xiao.setXiaoIp(xiaoIp);
 					xiao.setActivationTime(XATools.getNowTime());
 					xiao.setVolume(50); //设置默认音量
+					//更新versionNumber
+					family.setVersionNumber(Integer.parseInt(versionNumber));
+					//更新家庭组
+					familyService.updateFamily(family);
 				 success=false;
 				 json1.put("code", XiaoaiMessage.OK);
 				 xiaoiService.insertXiaoi(xiao);
@@ -131,7 +142,7 @@ public class BindHandler implements RequestHandler{
 					  //json1.put("code", XiaoaiMessage.deletedXiaoi);
 					  
 					  reloadXiaoi(xiao1, json1, xiaoNumber, xiaoName, xiaoIp,
-							xiaoType, family);
+							xiaoType, family,versionNumber);
 				  }else if(xiao1.getState()==3){
 					  /*首选方案（已替换小艾不允许绑定）*/
 					  //小艾已经被替换
@@ -139,10 +150,10 @@ public class BindHandler implements RequestHandler{
 					 // json1.put("code", XiaoaiMessage.changedXiaoi);
 					  
 					  reloadXiaoi(xiao1, json1, xiaoNumber, xiaoName, xiaoIp,
-							xiaoType, family);
+							xiaoType, family,versionNumber);
 				  }else{
 					  reloadXiaoi(xiao1, json1, xiaoNumber, xiaoName, xiaoIp,
-							xiaoType, family);
+							xiaoType, family,versionNumber);
 				  }
 				  
 			  }
@@ -162,7 +173,7 @@ public class BindHandler implements RequestHandler{
 	 * @param family
 	 */
 	private void reloadXiaoi(Xiaoi xiao1, JSONObject json1, String xiaoNumber,
-			String xiaoName, String xiaoIp, String xiaoType, Familygroup family) {
+			String xiaoName, String xiaoIp, String xiaoType, Familygroup family,String versionNumber) {
 		xiao1.setXname(xiaoName);
 		  xiao1.setXiaoNumber(xiaoNumber);
 		  xiao1.setXiaoType(Integer.parseInt(xiaoType));
@@ -172,6 +183,10 @@ public class BindHandler implements RequestHandler{
 		  xiao1.setActivationTime(XATools.getNowTime());
 		  xiao1.setVolume(50); //设置默认音量
 		  xiaoiService.updateXiaoi(xiao1);
+		//更新versionNumber
+			family.setVersionNumber(Integer.parseInt(versionNumber));
+			//更新家庭组
+			familyService.updateFamily(family);
 		  success=true;
 		  json1.put("code", XiaoaiMessage.OK);
 	}

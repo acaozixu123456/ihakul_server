@@ -29,6 +29,7 @@ public class ServerMessageEncoder extends ProtocolEncoderAdapter{
 	    buff.put(XiaoaiConstant.MESSAGE_SEPARATE);
 	    buff.flip();
 		out.write(buff);
+		
 		logger.info("发送前加密的消息:"+buff);
 		logger.debug(message);
 	}

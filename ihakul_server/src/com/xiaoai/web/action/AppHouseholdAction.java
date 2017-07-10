@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xiaoai.dao.IFamilygroupDao;
+import com.xiaoai.dao.IHouseholdDao;
 import com.xiaoai.dao.impl.HouseholdDao;
 import com.xiaoai.dao.impl.RoomDao;
 import com.xiaoai.dao.impl.XiaoiDao;
@@ -42,6 +44,7 @@ import com.xiaoai.util.Page;
 import com.xiaoai.util.XATools;
 import com.xiaoai.util.XiaoaiMessage;
 import com.xiaoai.util.XiaoiResult;
+import com.xiaoleilu.hutool.util.BeanUtil;
 
 /**
  * 家电管理操作实现类
@@ -62,7 +65,7 @@ public class AppHouseholdAction extends XiaoaiMessage {
 	@Resource(name = "roomDao")
 	private RoomDao roomDao;
 	@Resource(name = "houseHoldDao")
-	private HouseholdDao householdDao;
+	private IHouseholdDao householdDao;
 	@Resource(name = "familyDao")
 	private IFamilygroupDao familyDao;
 	@Resource(name = "familyService")
@@ -262,10 +265,24 @@ public class AppHouseholdAction extends XiaoaiMessage {
 												//在线，推送
 												hashMap = new HashMap();
 												hashMap.put("households", households);
+												
+												//com.alibaba.fastjson.JSONObject j_ = new com.alibaba.fastjson.JSONObject();
+												//Object json3 = j_.toJSON(households);
+												Map<String, Object> beanToMap = BeanUtil.beanToMap(households);
+												HashMap sMap = (HashMap) beanToMap;
+												
+												//JSONObject j_ = new JSONObject();
+												//j_.toJavaObject(clazz)
+												//排除
+												sMap.remove("xiaoiLogs");
+												sMap.remove("familygroup");
+												sMap.remove("room");
+												
+												sMap.put("roomNumber", room.getRoomNumber());
 												json2.put("key", "appinserthouseHold");
 												json2.put("code", 0);
 												json2.put("xiaoNumber", xiaoi.getXiaoNumber());
-												pushState = PushMessage_Room.push2Xiao(json2, hashMap);
+												pushState = PushMessage_Room.push2Xiao(json2, sMap);
 												if(pushState){
 													flag = true;
 												}

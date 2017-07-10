@@ -4,6 +4,7 @@ import java.util.List;
 
 
 
+import com.xiaoai.entity.Familygroup;
 import com.xiaoai.entity.Household;
 
 /**
@@ -74,6 +75,7 @@ public interface IHouseholdDao {
 	 */
 	public Household getRoomByRoomNumber(String hidNumber);
 	
+	public List<Household> getRoomByRoomNumber1(Familygroup familygroup,String eaNumber);
 	/**
 	 * 根据家庭组编号查询
 	 * @param groupId

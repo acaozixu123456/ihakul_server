@@ -131,6 +131,7 @@ public class AppXiaoitask extends XiaoaiMessage{
 			xiaoitask.setRules(rules);
 			xiaoitask.setOrders(orders);
 			
+			success=xiaoitaskService.insertXiaoitask(xiaoitask);
 			if(success){
 				JSONObject json2=new JSONObject();
 				json2.put("key", "appgetXiaoitask");
@@ -144,6 +145,7 @@ public class AppXiaoitask extends XiaoaiMessage{
 					for (Xiaoi xiaoi2 : xiaois) {
 						//判断当前小艾是否在线
 						if(xiaoi2.getState()==1){
+							//success=xiaoitaskService.insertXiaoitask(xiaoitask);
 							//在线，推送
 							json2=new JSONObject();
 							json2.put("key", "appgetXiaoitask");
@@ -151,7 +153,7 @@ public class AppXiaoitask extends XiaoaiMessage{
 							json2.put("xiaoNumber", xiaoi2.getXiaoNumber());
 							flag = PushMessage.push2Xiao(json2);
 							if(flag){
-								success=xiaoitaskService.insertXiaoitask(xiaoitask);
+								//success=xiaoitaskService.insertXiaoitask(xiaoitask);
 								break;
 							}
 						}else{
@@ -161,7 +163,7 @@ public class AppXiaoitask extends XiaoaiMessage{
 						}
 					}
 				}else{
-					success=xiaoitaskService.insertXiaoitask(xiaoitask);
+					//success=xiaoitaskService.insertXiaoitask(xiaoitask);
 				}
 				json1.put("taskId", xiaoitask.getId());
 			}else{

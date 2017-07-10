@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,7 @@ import com.xiaoai.util.MyRequest;
 import com.xiaoai.util.XATools;
 import com.xiaoai.util.XiaoaiMessage;
 import com.xiaoai.util.XiaoiResult;
+import com.xiaoleilu.hutool.util.BeanUtil;
 
 @Controller("appXiaoiAction")
 @Scope("prototype")
@@ -212,12 +214,23 @@ public class AppXiaoiAction extends XiaoaiMessage {
 										//判断当前小艾是否在线
 										if(xiaoi.getState()==1){
 											//在线，推送
-											hashMap = new HashMap();
-											hashMap.put("xiaoi", xiaos);
+											//hashMap = new HashMap();
+											//hashMap.put("xiaoi", xiaos);
+											
+											Map<String, Object> beanToMap = BeanUtil.beanToMap(xiaos);
+											HashMap sMap = (HashMap) beanToMap;
+											
+											//移除
+											sMap.remove("familygroup");
+											sMap.remove("xiaoilogs");
+											
+											//添加
+											sMap.put("groupNumber", familygroup.getGroupNumber());
+											
 											json2.put("key", "appupdateXiaoiName");
 											json2.put("code", 0);
 											json2.put("xiaoNumber", xiaoi.getXiaoNumber());
-											pushState = PushMessage_Xiaoi.push2Xiao(json2, hashMap);
+											pushState = PushMessage_Xiaoi.push2Xiao(json2, sMap);
 											if(pushState){
 												flag = true;
 											}
@@ -453,12 +466,22 @@ public class AppXiaoiAction extends XiaoaiMessage {
 													//判断当前小艾是否在线
 													if(xiaoi_.getState()==1){
 														//在线，推送
-														hashMap = new HashMap();
-														hashMap.put("xiaoi", xiaoi);
+														//hashMap = new HashMap();
+														//hashMap.put("xiaoi", xiaoi);
+														Map<String, Object> beanToMap = BeanUtil.beanToMap(xiaoi);
+														HashMap sMap = (HashMap) beanToMap;
+														
+														//移除
+														sMap.remove("familygroup");
+														sMap.remove("xiaoilogs");
+														
+														//添加
+														sMap.put("groupNumber", family.getGroupNumber());
+														
 														json2.put("key", "appchangeXiaoi");
 														json2.put("code", 0);
 														json2.put("xiaoNumber", xiaoi.getXiaoNumber());
-														pushState = PushMessage_Xiaoi.push2Xiao(json2, hashMap);
+														pushState = PushMessage_Xiaoi.push2Xiao(json2, sMap);
 														if(pushState){
 															flag = true;
 														}
