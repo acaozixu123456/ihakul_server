@@ -6,17 +6,26 @@
   <diskStore path="java.io.tmpdir/ehcache"/>
 
   <!-- 默认缓存 -->
+<!--           maxEntriesLocalHeap="1000" -->
+<!--           maxEntriesLocalDisk="10000000" -->
   <defaultCache
-          maxEntriesLocalHeap="10000"
           eternal="false"
           timeToIdleSeconds="120"
           timeToLiveSeconds="120"
-          maxEntriesLocalDisk="10000000"
           diskExpiryThreadIntervalSeconds="120"
           memoryStoreEvictionPolicy="LRU"/>
 
   <!-- 家电缓存 -->
   <cache name="hakuCache_houseHold"
+         maxElementsInMemory="1000"
+         eternal="false"
+         timeToIdleSeconds="120"
+         timeToLiveSeconds="120"
+         overflowToDisk="false"
+         memoryStoreEvictionPolicy="LRU"/>
+         
+  <!-- 房间缓存 -->
+  <cache name="hakuCache_room"
          maxElementsInMemory="1000"
          eternal="false"
          timeToIdleSeconds="120"

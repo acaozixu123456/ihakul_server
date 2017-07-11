@@ -544,12 +544,12 @@
         </action>
         
         <!-- 安卓调用添加小艾-->
-    	<!-- <action name="appaddXiaoi" class="appXiaoiAction" method="insert">
+    	<action name="appaddXiaoi" class="appXiaoiAction" method="insert">
     		<result  type="json" ></result>
-    		 添加defaultStack保证不执行拦截器  
-        <interceptor-ref name="defaultStack"></interceptor-ref> -->
-       <!-- 
-        </action> -->
+    		 <!-- 添加defaultStack保证不执行拦截器 -->  
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+       
+        </action>
          <!-- 安卓调用修改-->
     	<action name="appupdateXiaoi" class="appXiaoiAction" method="update">
     		<result name="success" type="json" ></result>

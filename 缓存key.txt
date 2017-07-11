@@ -22,3 +22,12 @@
 @Cacheable(value="hakuCache_houseHold",key="'selectHouseholdByroomID'+#roomId"),
 
 @Cacheable(value="hakuCache_houseHold",key="'selectHouseholdByid'+#id"),
+
+#·¿¼ä»º´æ
+@Cacheable(value="hakuCache_room",key="'getRoomByRoomNumber'+#roomNumber+#family.getGroupNumber()"),
+
+@Cacheable(value="hakuCache_room",key="'getRoomByGroupId'+#roomNumber+#family.getGroupNumber()"),
+
+@Cacheable(value="hakuCache_room",key="'getRoomByGroupId'+#groupId"),
+
+@Cacheable(value="hakuCache_room",key="'getRoomByid'+#id")
