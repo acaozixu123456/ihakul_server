@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IChannelDao;
 import com.xiaoai.entity.Channel;
@@ -24,7 +25,8 @@ public class ChannelService implements IChannelService {
 		
 		return channelDao.getChannelByid(cid);
 	}
-
+	
+	@Transactional
 	@Override
 	public boolean insertChannel(Channel channel) {
 		boolean fals=true;
@@ -37,6 +39,7 @@ public class ChannelService implements IChannelService {
 		return fals;
 	}
 
+	@Transactional
 	@Override
 	public boolean updateChannel(Channel channel) {
 		boolean fals=true;
@@ -49,6 +52,7 @@ public class ChannelService implements IChannelService {
 		return fals;
 	}
 
+	@Transactional
 	@Override
 	public boolean delectChannel(Channel channel) {
 		boolean fals=true;

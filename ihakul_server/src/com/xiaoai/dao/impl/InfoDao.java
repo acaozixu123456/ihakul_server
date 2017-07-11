@@ -15,7 +15,7 @@ import com.xiaoai.entity.Info;
  * @Data 2017-7-3 上午10:36:20
  * @Description 公告daoImpl
  */
-@Repository
+@Repository("infoDao")
 public class InfoDao implements IInfoDao{
 
 	@Resource(name="hibernateTemplate")

@@ -15,7 +15,7 @@ import com.xiaoai.entity.XiaoiMode;
  * @Data 2017-6-22 下午6:25:06
  * @Description 
  */
-@Repository
+@Repository("xiaoiModeDao")
 public class XiaoiModeDao implements IXiaoiModeDao {
 
 	@Resource

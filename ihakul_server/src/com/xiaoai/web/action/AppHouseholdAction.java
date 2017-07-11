@@ -20,11 +20,6 @@ import org.springframework.stereotype.Controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.xiaoai.dao.IFamilygroupDao;
-import com.xiaoai.dao.IHouseholdDao;
-import com.xiaoai.dao.impl.HouseholdDao;
-import com.xiaoai.dao.impl.RoomDao;
-import com.xiaoai.dao.impl.XiaoiDao;
 import com.xiaoai.entity.FamilyUser;
 import com.xiaoai.entity.Familygroup;
 import com.xiaoai.entity.Household;
@@ -62,18 +57,10 @@ public class AppHouseholdAction extends XiaoaiMessage {
 	private IRoomService roomService;
 	@Resource(name = "usersService")
 	private IUsersService usersService;
-	@Resource(name = "roomDao")
-	private RoomDao roomDao;
-	@Resource(name = "houseHoldDao")
-	private IHouseholdDao householdDao;
-	@Resource(name = "familyDao")
-	private IFamilygroupDao familyDao;
 	@Resource(name = "familyService")
 	private IFamilygroupService familyService;
 	@Resource(name = "xiaoiService")
 	private IXiaoiService xiaoiService;
-	@Resource(name = "xiaoiDao")
-	private XiaoiDao xiaoiDao;
 	
 	@Resource(name = "fauserService")
 	private IFamilyUserService fauserService;
@@ -220,7 +207,7 @@ public class AppHouseholdAction extends XiaoaiMessage {
 			try {
 				users = usersService.selectUsersByid(Integer.parseInt(userId));
 				if (users != null) {
-					family = familyDao.getFamilygroupByNumber(Integer
+					family = familyService.getFamilygroupByNumber(Integer
 							.parseInt(groupNumber));
 					if (family != null) {
 						fu1 = fauserService.selectFamilyUserByGNU(users, family);
@@ -239,11 +226,9 @@ public class AppHouseholdAction extends XiaoaiMessage {
 									eaNumber.append("#");
 									eaNumber.append(prop);
 								}
-								List<Household> kk = householdDao
-										.getRoomByRoomNumber1(family, eaNumber.toString() );
+								List<Household> kk = houseHoldService.getRoomByRoomNumber1(family, eaNumber.toString() );
 								if (XATools.isNull(kk)) { // 判断该家庭组是否已经添加了该电器
-									room = roomDao.getRoomByGroupId(family,
-											roomNumber);
+									room = roomService.getRoomByGroupId(family, roomNumber);
 									if (room != null) {
 										households.setFamilygroup(family);
 										households.setRoom(room);
@@ -254,7 +239,7 @@ public class AppHouseholdAction extends XiaoaiMessage {
 										households.setCreateTime(XATools
 												.getTNowTime());
 										//推送
-										List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
+										List<Xiaoi> allOnlineXiaois = xiaoiService.selectXiaoiByFaAll(family);
 										com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
 										HashMap hashMap = null;
 										boolean flag = false;
@@ -381,7 +366,7 @@ public class AppHouseholdAction extends XiaoaiMessage {
 	private void buildPort(Household households, Familygroup family) {
 		//生成逻辑地址（port）
 		//1.先遍历当前家庭组下的所有家电
-		List<Household> hoList = householdDao.selectHouseholdBygroupId(family.getGroupId());
+		List<Household> hoList =houseHoldService.selectHouseholdBygroupId(family.getGroupId());
 		Set set = new HashSet();
 		Set tempSet = new HashSet();
 		Integer poInteger = null;
@@ -430,7 +415,7 @@ public class AppHouseholdAction extends XiaoaiMessage {
 		Household houseHolds = new Household();
 		Familygroup family = null;
 		if (groupId != null && !groupId.equals("")) {
-			family = familyDao.getFamilygroupByid(Integer.parseInt(groupId));
+			family = familyService.getFamilygroupByid(Integer.parseInt(groupId));
 		}
 		if (family != null) {
 			houseHolds.setFamilygroup(family);
@@ -546,17 +531,17 @@ public class AppHouseholdAction extends XiaoaiMessage {
 			try {
 				users = usersService.selectUsersByid(Integer.parseInt(userId));
 				if (users != null) {
-					family = familyDao.getFamilygroupByNumber(Integer
+					family = familyService.getFamilygroupByNumber(Integer
 							.parseInt(groupNumber));
 					if (family != null) {
 						fu1 = fauserService.selectFamilyUserByGNU(users, family);
 						if (fu1 != null) {
 							if (userId.equals(fu1.getDna())) { // 判断该家庭组是不是该用户创建
-								Household houseHold = householdDao
-										.getRoomByRoomNumber(eaNumber);
+								List<Household> houseHolds =houseHoldService.getRoomByRoomNumber1(family, eaNumber);
+								Household houseHold = houseHolds.get(0);
 								if (houseHold != null) {
 									//推送
-									List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
+									List<Xiaoi> allOnlineXiaois =xiaoiService.selectXiaoiByFaAll(family);
 									com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
 									boolean pushState = false;
 									boolean flag = false;
@@ -578,8 +563,7 @@ public class AppHouseholdAction extends XiaoaiMessage {
 									}
 									if(flag){
 										//当前家庭组有在线小艾推送成功,执行删除电器
-										success = householdDao
-												.deleteHousehold(houseHold);
+										success = houseHoldService.deleteHousehold(houseHold);
 										if (success == false) {
 											code = HouseholdCode.deleteFalse;
 											success = false;
@@ -671,12 +655,11 @@ public class AppHouseholdAction extends XiaoaiMessage {
 
 		if (success) {
 			try {
-				family = familyDao.getFamilygroupByNumber(Integer
+				family = familyService.getFamilygroupByNumber(Integer
 						.parseInt(groupNumber));
 				if (family != null) {
 					json.put("versionNumber", family.getVersionNumber()); // 版本号
-					List<Household> lh = householdDao.getRoomByRoomNumber1(family,
-							eaNumber);
+					List<Household> lh = houseHoldService.getRoomByRoomNumber1(family, eaNumber);
 					if (!XATools.isNull(lh)) {
 						houseHold = lh.get(0);
 						json2.put("eaNumber", houseHold.getEaNumber()); // 家电编号
@@ -790,8 +773,7 @@ public class AppHouseholdAction extends XiaoaiMessage {
 				}
 				Familygroup family = null;
 				if (groupId != null && !groupId.equals("")) {
-					family = familyDao
-							.getFamilygroupByid(Integer.parseInt(groupId));
+					family = familyService.getFamilygroupByid(Integer.parseInt(groupId));
 					houseHold.setFamilygroup(family);
 				}
 				// 执行修改持久化操作
@@ -976,8 +958,9 @@ public class AppHouseholdAction extends XiaoaiMessage {
 					// 取得小艾
 					Xiaoi xiaoi = xiaoiService.selectXiaoiByFa(familygroup);
 					if (xiaoi != null) {
-						Household household = householdDao
-								.getRoomByRoomNumber(eaNumber);
+						List<Household> hoList = houseHoldService.getRoomByRoomNumber1(familygroup, eaNumber);
+						Household household =hoList.get(0);
+						
 						HashMap data = new HashMap();
 						if (!XATools.isNull(eaNumber)) {
 							data.put("eaNumber", eaNumber);

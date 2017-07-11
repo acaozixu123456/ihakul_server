@@ -1,13 +1,11 @@
 package com.xiaoai.service.impl;
 
-import java.text.SimpleDateFormat;
-
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import com.xiaoai.dao.IAdministrateDao;
@@ -63,19 +61,19 @@ public class AdministraterService implements IAdministraterService {
 		return adminDao.selectAdminByid(aid);
 	}
 
-	
+	@Transactional
 	public boolean updateAdmin(Administrate admin) {
 		
 		return adminDao.updateAdmin(admin);
 	}
 
-	
+	@Transactional
 	public boolean insertAdmin(Administrate admin) {
 		admin.setCreatedate(XATools.getNowTime());
 		return adminDao.insertAdmin(admin);
 	}
 
-	
+	@Transactional
 	public boolean deleteAdminByid(Administrate admin) {
 		
 		return adminDao.deleteAdminByid(admin);

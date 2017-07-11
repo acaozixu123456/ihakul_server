@@ -52,6 +52,7 @@ public class XiaoilogAction extends ActionSupport{
 	 * @return
 	 * @throws IOException 
 	 */
+	@SuppressWarnings("unused")
 	public String select() throws IOException{
 		HttpServletRequest request=ServletActionContext.getRequest();
 		request.setCharacterEncoding("utf-8");

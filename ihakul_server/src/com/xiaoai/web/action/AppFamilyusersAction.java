@@ -14,9 +14,6 @@ import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.xiaoai.dao.IHouseholdDao;
-import com.xiaoai.dao.IRoomDao;
-import com.xiaoai.dao.impl.XiaoiDao;
 import com.xiaoai.entity.FamilyUser;
 import com.xiaoai.entity.Familygroup;
 import com.xiaoai.entity.Household;
@@ -25,7 +22,10 @@ import com.xiaoai.entity.Users;
 import com.xiaoai.entity.Xiaoi;
 import com.xiaoai.service.IFamilyUserService;
 import com.xiaoai.service.IFamilygroupService;
+import com.xiaoai.service.IHouseholdService;
+import com.xiaoai.service.IRoomService;
 import com.xiaoai.service.IUsersService;
+import com.xiaoai.service.IXiaoiService;
 import com.xiaoai.util.MyRequest;
 import com.xiaoai.util.XATools;
 import com.xiaoai.util.XiaoaiMessage;
@@ -39,16 +39,15 @@ public class AppFamilyusersAction extends XiaoaiMessage {
 	private IUsersService usersService;
 	@Resource(name = "familyService")
 	private IFamilygroupService familyService;
-	@Resource(name="roomDao")
-	private IRoomDao roomDao;
+	@Resource(name="roomService")
+	private IRoomService roomService;
 	
-	@Resource(name="houseHoldDao")
-	private IHouseholdDao householdDao;
+	@Resource(name="houseHoldService")
+	private IHouseholdService householdService;
 	
+	@Resource(name="xiaoiService")
+	private IXiaoiService xiaoiService;
 	
-	@Resource(name="xiaoiDao")
-	private XiaoiDao xiaoiDao;
-
 	private boolean success; // 成功、失败标记
 	private String message; // 信息
 	private int code; // 标记
@@ -207,7 +206,7 @@ public class AppFamilyusersAction extends XiaoaiMessage {
 						json2.put(Users.USER_NAME, us.getUserName()); //创建家庭组用户名称
 					}
 				}
-				List<Xiaoi> xiaoList=xiaoiDao.selectXiaoiByid(family.getGroupId());
+				List<Xiaoi> xiaoList=xiaoiService.selectXiaoiByid(family.getGroupId());
 				 if(!XATools.isNull(xiaoList)){
 				 for(Xiaoi xiaoi:xiaoList){
 					json5.put(Xiaoi.X_NAME, xiaoi.getXname());
@@ -222,7 +221,7 @@ public class AppFamilyusersAction extends XiaoaiMessage {
 				 }
 				 }
 				
-				List<Room> roomList=roomDao.getRoomByGroupId(family.getGroupId());
+				List<Room> roomList=roomService.getRoomByGroupId(family.getGroupId());
 			    if(!XATools.isNull(roomList)){
 			    	 for(Room room:roomList){
 			    		 JSONArray array4=new JSONArray();
@@ -233,7 +232,7 @@ public class AppFamilyusersAction extends XiaoaiMessage {
 			    		 json3.put(Room.FLOOR, room.getFloor()); //房间楼层(默认 0)
 			    		 json3.put(Room.PARENT_ID, room.getParentId()); //父节点标识
 			    		 json3.put(Room.ROOM_NUMBER, room.getRoomNumber()); //房间编号
-			    		 List<Household> householdList =householdDao.selectHouseholdByroomIDandGroupId(room.getId(),family.getGroupId());
+			    		 List<Household> householdList = householdService.selectHouseholdByroomIDandGroupId(room.getId(),family.getGroupId());
 			    		 if(!XATools.isNull(householdList)){
 			    		 for(Household household:householdList){
 			    			 JSONObject json4=new JSONObject();

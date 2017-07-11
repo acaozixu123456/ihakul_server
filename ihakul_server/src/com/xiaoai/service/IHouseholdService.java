@@ -4,6 +4,7 @@ import java.util.List;
 
 
 
+import com.xiaoai.entity.Familygroup;
 import com.xiaoai.entity.Household;
 
 /**
@@ -65,4 +66,32 @@ public interface IHouseholdService {
 	 * @return 查询出的家电对象集合
 	 */
 	public List<Household> selectHouseholdByeaName(String eaName);
+	/**
+	 * 根据家庭组ID和房间ID查询
+	 * @param groupId,roomId
+	 * @return
+	 */
+	public List<Household> selectHouseholdByroomIDandGroupId(Integer id,
+			Integer groupId);
+	
+	/**
+	 * 根据家庭组和eaNumber来查找电器
+	 * @param family
+	 * @param string
+	 * @return
+	 */
+	public List<Household> getRoomByRoomNumber1(Familygroup family,
+			String string);
+	/**
+	 * 根据家庭组编号查询
+	 * @param groupId
+	 * @return
+	 */
+	public List<Household> selectHouseholdBygroupId(Integer groupId);
+	/**
+	 * 删除家庭组
+	 * @param houseHold
+	 * @return
+	 */
+	public boolean deleteHousehold(Household houseHold);
 }

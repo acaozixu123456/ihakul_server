@@ -16,14 +16,13 @@ import org.springframework.stereotype.Controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.xiaoai.dao.IFamilygroupDao;
 import com.xiaoai.entity.Familygroup;
 import com.xiaoai.entity.Xiaoi;
 import com.xiaoai.entity.Xiaoitask;
 import com.xiaoai.mina.service.push.PushMessage;
+import com.xiaoai.service.IFamilygroupService;
 import com.xiaoai.service.IXiaoiService;
 import com.xiaoai.service.IXiaoitaskService;
-import com.xiaoai.service.impl.XiaoiService;
 import com.xiaoai.util.MyRequest;
 import com.xiaoai.util.XATools;
 import com.xiaoai.util.XiaoaiMessage;
@@ -43,8 +42,8 @@ public class AppXiaoitask extends XiaoaiMessage{
 	
 	@Resource(name = "xiaoitaskService")
 	private IXiaoitaskService xiaoitaskService;
-	@Resource(name="familyDao")
-	private IFamilygroupDao familyDao;
+	@Resource(name="familyService")
+	private IFamilygroupService familygroupService;
 	
 	@Resource(name="xiaoiService")
 	private IXiaoiService xiaoiService;
@@ -117,7 +116,7 @@ public class AppXiaoitask extends XiaoaiMessage{
 		
 	if(success){
 		try {
-			Familygroup  family=familyDao.getFamilygroupByNumber(Integer.parseInt(groupNumber));
+			Familygroup  family = familygroupService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
 			if(family!=null){
 			//Xiaoi xiaoi=xiaoiService.selectXiaoiByFa(family);
 			Xiaoi xiaoi = xiaoiService.selectXiaoiByNumber(xiaoNumber);
@@ -263,7 +262,7 @@ public class AppXiaoitask extends XiaoaiMessage{
 			try {
 				xiaoitask=xiaoitaskService.selectXiaoitaskById(Long.parseLong(taskId));
 				if(xiaoitask!=null){
-					Familygroup  family=familyDao.getFamilygroupByNumber(Integer.parseInt(groupNumber));
+					Familygroup  family = familygroupService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
 					if(family!=null){
 					Xiaoi xiaoi=xiaoiService.selectXiaoiByFa(family);
 					success=xiaoitaskService.deleteXiaoitask(xiaoitask);
@@ -380,7 +379,7 @@ public class AppXiaoitask extends XiaoaiMessage{
 		}		
 		if(success){
 			try {
-				Familygroup  family=familyDao.getFamilygroupByNumber(Integer.parseInt(groupNumber));
+				Familygroup  family=familygroupService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
 				if(family!=null){
 					xiaoitasklist=xiaoitaskService.selectXiaoitaskByGroupId(family.getGroupId());
 				 if(!XATools.isNull(xiaoitasklist)){

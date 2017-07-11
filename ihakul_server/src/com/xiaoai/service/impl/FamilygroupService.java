@@ -7,6 +7,10 @@ import java.util.List;
 import javax.annotation.Resource;
 
 
+import org.apache.log4j.Logger;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +34,7 @@ import com.xiaoai.entity.Xiaoitask;
 import com.xiaoai.service.IFamilygroupService;
 import com.xiaoai.util.XATools;
 import com.xiaoai.util.XiaoaiMessage.FamilyCode;
+import com.xiaoai.web.action.AppFamilygroupAction;
 /**
  * 家庭组业务实现
  * @author Administrator
@@ -55,6 +60,7 @@ public class FamilygroupService implements IFamilygroupService {
 	@Resource(name="houseHoldDao")
 	private IHouseholdDao householdDao;
 	
+	private static Logger logger = Logger.getLogger(AppFamilygroupAction.class);
 	
 	
 	public List<Familygroup> queryFamilygroup( int offset, int length,Familygroup familygroup) {
@@ -92,13 +98,17 @@ public class FamilygroupService implements IFamilygroupService {
 		return familyDao.getAllRowCount(sql.toString(),familygroup);
 	}
 
+	//清空缓存
+	/*@Caching(
+			evict={
+				@CacheEvict(value="hakuCache",key="'getFamilyGroupByXiaoi'+#familygroup.getGroupNumber()"),
+				@CacheEvict(value="hakuCache",key="'getFamilyGroup'+#familygroup.getGroupNumber()")
+			}
+	)*/
 	@Transactional
 	public boolean insertFamilygroup(Familygroup family) {
 		boolean fals=true;
 		try{
-//			Date date=new Date();
-//			SimpleDateFormat sf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-//			String nowTime=sf.format(date);
 			family.setCreationTime(XATools.getTNowTime()); //转换成 Timestamp 的时间格式必须是 yyyy-MM-dd hh:mm:ss
 			familyDao.insertFamilygroup(family);
 		}catch(Exception e){
@@ -108,6 +118,8 @@ public class FamilygroupService implements IFamilygroupService {
 		return fals;
 	}
 
+	//清空缓存
+	//@CacheEvict(value="hakuCache",allEntries=true)
 	@Transactional
 	public boolean deleteFamilygroup(Familygroup family) {
 		boolean fals=true;
@@ -172,6 +184,13 @@ public class FamilygroupService implements IFamilygroupService {
 		return familyDao.getFamilygroupByNumber(groupNumber);
 	}
 
+	//清空缓存
+	/*@Caching(
+			evict={
+				@CacheEvict(value="hakuCache",key="'getFamilyGroupByXiaoi'+#familygroup.getGroupNumber()"),
+				@CacheEvict(value="hakuCache",key="'getFamilyGroup'+#familygroup.getGroupNumber()")
+			}
+	)*/
 	@Transactional
 	public boolean updateFamily(Familygroup familygroup) {
 		boolean fals=true;
@@ -205,7 +224,9 @@ public class FamilygroupService implements IFamilygroupService {
 		
 		return familyDao.selectusersByFamilygroup(fa);
 	}
-		
+	
+	//缓存处理
+	//@Cacheable(value="hakuCache",key="'getFamilyGroup'+#groupNumber")
 	@Override
 	public  JSONObject getFamilyGroup(String groupNumber){
 		boolean success =true;
@@ -329,8 +350,12 @@ public class FamilygroupService implements IFamilygroupService {
 	}
 
 
+	//缓存处理
+	//@Cacheable(value="hakuCache",key="'getFamilyGroupByXiaoi'+#groupNumber")
 	@Override
 	public JSONObject getFamilyGroupByXiaoi(String groupNumber) {
+		
+		logger.info("---方法被调用---");
 		boolean success =true;
 		String	message =null;
 		Integer code=0;
@@ -412,16 +437,19 @@ public class FamilygroupService implements IFamilygroupService {
 		    			 JSONObject json4=new JSONObject();
 		    			 json5.put("roomNumber", room.getRoomNumber()); //房间编号
 		    			 json4.put("roomNumber", room.getRoomNumber());
-		    			 json4.put("eaName", household.getEaName());  //家电呢称
 		    			 json4.put("classId", household.getClassId());//家电类别  1 智能家电,2红外线家电
-		    			 json4.put("brand", household.getBrand()); //品牌
 		    			 json4.put("model", household.getHid()); //型号 
 		    			 json4.put("eaNumber", household.getEaNumber()); //家电编号 
-		    			 //json4.put("type", household.getType()); //家电类型 
-		    			 json4.put("prop", household.getProp()); //通讯参数 
+		    			 json4.put("brand", household.getBrand()); //品牌
+		    			 if(household.getClassId()==2){
+		    				 //智能电器需要的额外参数
+		    				 json4.put("prop", household.getProp()); //通讯参数 
+		    				 json4.put("port", household.getPort()); //
+		    				 json4.put("eaName", household.getEaName());  //家电呢称
+		    			 }
+		    			 json4.put("type", household.getType()); //家电类型 
 		    			 json4.put("stub", household.getStub()); //智能索引
 		    			 json4.put("status", household.getStatus()); //
-		    			 json4.put("port", household.getPort()); //
 		    			 array4.add(json4);
 		    			 json3.put("household", array4);//家电信息
 		    		 }

@@ -166,6 +166,11 @@ public class UsersService implements  IUsersService{
 		return null;
 	}
 
+	@Override
+	public Users usersByuserLogin(String userLogin) {
+		return usersDao.usersByuserLogin(userLogin);
+	}
+
 	
 
 	

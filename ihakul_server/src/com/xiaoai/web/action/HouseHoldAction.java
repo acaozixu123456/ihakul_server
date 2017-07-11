@@ -56,6 +56,7 @@ public class HouseHoldAction extends ActionSupport{
 	 * @return houseList 家电对象集合
 	 * @throws IOException 
 	 */
+	@SuppressWarnings("unused")
 	public String findAll() throws IOException{
 		HttpServletRequest request=ServletActionContext.getRequest();
 		HttpServletResponse response=ServletActionContext.getResponse();

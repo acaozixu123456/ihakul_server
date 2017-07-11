@@ -99,4 +99,10 @@ public interface IUsersService {
 	 * @return 用户对象集合
 	 */
 	public List<Users> selectUsersByfg(Familygroup familygroup);
+	/**
+	 * 用户登入检查账号
+	 * @param userLogin 用户账号(可以为手机号或用户名)
+	 * @return
+	 */
+	public Users usersByuserLogin(String userLogin);
 }

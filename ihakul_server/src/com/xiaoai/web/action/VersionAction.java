@@ -52,6 +52,7 @@ public class VersionAction extends ActionSupport {
 	 * @return versionList(版本对象集合),pageNow(当前页),totalPage(总页数)
 	 * @throws Exception 
 	 */
+	@SuppressWarnings("unused")
 	public String findAllVersion() throws Exception{
 		HttpServletRequest request=ServletActionContext.getRequest();
 		request.setCharacterEncoding("utf-8");

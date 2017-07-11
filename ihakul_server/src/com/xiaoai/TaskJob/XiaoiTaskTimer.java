@@ -33,7 +33,7 @@ public class XiaoiTaskTimer {
 		//判断
 		long currentTimeMillis = System.currentTimeMillis();
 		for (Xiaoitask xiaoitask : list) {
-			if(currentTimeMillis>xiaoitask.getTriggerTime()){
+			if(currentTimeMillis>xiaoitask.getTriggerTime()&&xiaoitask.getRules().equals("OFF")){
 				//清除
 				xiaoitaskService.deleteXiaoitask(xiaoitask);
 				logger.info("计划任务定时清除器被触发清除了:"+xiaoitask.getId());

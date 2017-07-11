@@ -20,7 +20,7 @@ import com.xiaoai.service.IXiaoiModeService;
 
 public class XiaoiModeService implements IXiaoiModeService {
 
-	@Resource
+	@Resource(name="xiaoiModeDao")
 	private IXiaoiModeDao xiaoiModeDao;
 	@Override
 	@Transactional

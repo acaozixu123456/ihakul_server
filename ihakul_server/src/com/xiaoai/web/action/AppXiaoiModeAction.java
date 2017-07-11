@@ -7,31 +7,25 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
-import com.xiaoai.dao.impl.XiaoiDao;
 import com.xiaoai.entity.Familygroup;
 import com.xiaoai.entity.Xiaoi;
 import com.xiaoai.entity.XiaoiMode;
-import com.xiaoai.mina.service.push.PushMessage_Room;
 import com.xiaoai.mina.service.push.PushMessage_XiaoiMode;
 import com.xiaoai.service.IFamilygroupService;
 import com.xiaoai.service.IXiaoiModeService;
+import com.xiaoai.service.IXiaoiService;
 import com.xiaoai.util.MyRequest;
 import com.xiaoai.util.XATools;
 import com.xiaoai.util.XiaoaiMessage;
 import com.xiaoai.util.XiaoiResult;
-import com.xiaoai.util.XiaoaiMessage.RoomCode;
-import com.xiaoai.util.XiaoaiMessage.XiaoiCode;
 import com.xiaoleilu.hutool.util.BeanUtil;
 
 /**
@@ -43,14 +37,14 @@ import com.xiaoleilu.hutool.util.BeanUtil;
 @Scope("prototype")
 public class AppXiaoiModeAction extends XiaoaiMessage {
 
-	@Resource
+	@Resource(name="xiaoiModeService")
 	private IXiaoiModeService xiaoiModeService;
 
-	@Resource
-	private IFamilygroupService familygroupService;
+	@Resource(name="familyService")
+	private IFamilygroupService familyService;
 
-	@Resource(name = "xiaoiDao")
-	private XiaoiDao xiaoiDao;
+	@Resource(name="xiaoiService")
+	private IXiaoiService xiaoiService;
 	
 	boolean success;
 	String message;
@@ -62,7 +56,7 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 	 * @return
 	 * @throws IOException
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "rawtypes" })
 	public String insertMode() throws IOException {
 		success = true;
 		message = null;
@@ -104,16 +98,15 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 		if (xr.isSuccess()) {
 			try {
 				// 首先检查家庭组id是否存在
-				Familygroup family = familygroupService
+				Familygroup family = familyService
 						.getFamilygroupByNumber(Integer.parseInt(groupNumber));
 				if (family != null) {
 					XiaoiMode xiaoiMode = new XiaoiMode();
 					xiaoiMode=JSON.toJavaObject(jsonObject, XiaoiMode.class);
 					try {
 						//获取当前在线的小艾
-						List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
+						List<Xiaoi> allOnlineXiaois = xiaoiService.selectXiaoiByFaAll(family);
 						com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
-						HashMap hashMap = null;
 						boolean pushState = false;
 						boolean flag = false;
 						for (Xiaoi xiaoi : allOnlineXiaois) {
@@ -191,9 +184,9 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 					//?是否需要判断有没有删除权限
 						XiaoiMode xiaoiMode = list.get(0);
 						//获得家庭组
-						Familygroup family=familygroupService.getFamilygroupByNumber(xiaoiMode.getGroupNumber());
+						Familygroup family=familyService.getFamilygroupByNumber(xiaoiMode.getGroupNumber());
 						//获取当前在线的小艾
-						List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
+						List<Xiaoi> allOnlineXiaois = xiaoiService.selectXiaoiByFaAll(family);
 						com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
 						boolean pushState = false;
 						boolean flag = false;
@@ -300,7 +293,7 @@ public class AppXiaoiModeAction extends XiaoaiMessage {
 		}
 		if(xiaoiResult.isSuccess()){
 			try {
-				Familygroup  family=familygroupService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
+				Familygroup  family=familyService.getFamilygroupByNumber(Integer.parseInt(groupNumber));
 				if(family!=null){
 					findModeByGroupNum = xiaoiModeService.findModeByGroupNum(family.getGroupNumber());
 					if(!XATools.isNull(findModeByGroupNum)){

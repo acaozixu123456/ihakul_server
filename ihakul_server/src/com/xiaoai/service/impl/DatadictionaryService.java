@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IDatadictionaryDao;
 import com.xiaoai.entity.Datadictionary;
@@ -24,6 +25,7 @@ public class DatadictionaryService implements IDatadictionaryService {
 		return datadicDao.findAll();
 	}
 
+	@Transactional
 	//修改数据字典数据
 	public boolean update(Datadictionary datadictionary) {
 		boolean fals=true;
@@ -37,6 +39,7 @@ public class DatadictionaryService implements IDatadictionaryService {
 		return fals;
 	}
 
+	@Transactional
 	//添加数据字典数据
 	public boolean insert(Datadictionary datadictionary) {
 		boolean fals=true;
@@ -50,6 +53,7 @@ public class DatadictionaryService implements IDatadictionaryService {
 		return fals;
 	}
 
+	@Transactional
 	//删除数据字典数据
 	public boolean delete(Datadictionary datadictionary) {
 		boolean fals=true;

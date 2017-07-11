@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IHouseholdDao;
 import com.xiaoai.dao.IRoomDao;
+import com.xiaoai.entity.Familygroup;
 import com.xiaoai.entity.Household;
 import com.xiaoai.entity.Room;
 import com.xiaoai.service.IRoomService;
@@ -121,6 +122,14 @@ public class RoomService implements IRoomService {
 	public List<Room> getRoomByGroupId(int groupId) {
 		
 		return roomDao.getRoomByGroupId(groupId);
+	}
+	@Override
+	public Room getRoomByGroupId(Familygroup family, String roomNumber) {
+		return roomDao.getRoomByGroupId(family,roomNumber);
+	}
+	@Override
+	public Room getRoomByRoomNumber(String roomNumber, Familygroup family) {
+		return roomDao.getRoomByRoomNumber(roomNumber,family);
 	}
 
 }

@@ -6,6 +6,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/spring"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/config"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/struts2"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/cache"/>
         <property name="java-output-path" value="/ihakul_server/WebRoot/WEB-INF/classes"/>
         <property name="context-root" value="/ihakul_server"/>
     </wb-module>

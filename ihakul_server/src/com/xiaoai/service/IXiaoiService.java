@@ -91,7 +91,7 @@ public interface IXiaoiService {
 	
 	
 	/**
-	 * 查询家庭组下的在线的终端
+	 * 查询家庭组下的在线的终端(默认取第一个)
 	 * @param Familygroup
 	 * @return Xiaoi
 	 */
@@ -109,5 +109,12 @@ public interface IXiaoiService {
 	 * @param xiaoi
 	 */
 	public void cleanInfo(Xiaoi xiaoi);
+	
+	/**
+	 * 查询家庭组下的在线的终端(全部)
+	 * @param Familygroup
+	 * @return Xiaoi
+	 */
+	public List<Xiaoi> selectXiaoiByFaAll(Familygroup family);
 	
 }

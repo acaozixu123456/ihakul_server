@@ -2,6 +2,7 @@ package com.xiaoai.dao;
 
 import java.util.List;
 
+import com.xiaoai.entity.Familygroup;
 import com.xiaoai.entity.Room;
 import com.xiaoai.entity.Xiaoi;
 
@@ -78,5 +79,9 @@ public interface IRoomDao {
 	 * @return
 	 */
 	public List<Room> getRoomByCreateor(String createor);
+
+	public Room getRoomByGroupId(Familygroup family, String roomNumber);
+
+	public Room getRoomByRoomNumber(String roomNumber, Familygroup family);
 	
 }

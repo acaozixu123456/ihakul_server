@@ -225,6 +225,11 @@ public class XiaoiService implements IXiaoiService {
 		updateXiaoi(xiaoi);
 	}
 
+	@Override
+	public List<Xiaoi> selectXiaoiByFaAll(Familygroup family) {
+		return xiaoiDao.selectXiaoiByFa(family);
+	}
+
 	
 
 }

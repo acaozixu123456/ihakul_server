@@ -2,6 +2,7 @@ package com.xiaoai.service;
 
 import java.util.List;
 
+import com.xiaoai.entity.Familygroup;
 import com.xiaoai.entity.Room;
 
 /**
@@ -55,4 +56,6 @@ public interface IRoomService {
 	 * @return 查询出的房间对象集合
 	 */
 	public List<Room> getRoomByGroupId(int groupId);
+	public Room getRoomByGroupId(Familygroup family, String string);
+	public Room getRoomByRoomNumber(String roomNumber, Familygroup family);
 }

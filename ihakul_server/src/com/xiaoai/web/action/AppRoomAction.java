@@ -12,15 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import oracle.net.aso.r;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.xiaoai.dao.IHouseholdDao;
-import com.xiaoai.dao.impl.RoomDao;
-import com.xiaoai.dao.impl.XiaoiDao;
 import com.xiaoai.entity.FamilyUser;
 import com.xiaoai.entity.Familygroup;
 import com.xiaoai.entity.Household;
@@ -30,13 +26,13 @@ import com.xiaoai.entity.Xiaoi;
 import com.xiaoai.mina.service.push.PushMessage_Room;
 import com.xiaoai.service.IFamilyUserService;
 import com.xiaoai.service.IFamilygroupService;
+import com.xiaoai.service.IHouseholdService;
 import com.xiaoai.service.IRoomService;
 import com.xiaoai.service.IUsersService;
+import com.xiaoai.service.IXiaoiService;
 import com.xiaoai.util.MyRequest;
 import com.xiaoai.util.XATools;
 import com.xiaoai.util.XiaoaiMessage;
-import com.xiaoleilu.hutool.json.JSON;
-import com.xiaoleilu.hutool.json.JSONUtil;
 import com.xiaoleilu.hutool.util.BeanUtil;
 
 @Controller("appRoomAction")
@@ -48,15 +44,13 @@ public class AppRoomAction extends XiaoaiMessage {
 	private IFamilygroupService familyService;
 	@Resource(name = "usersService")
 	private IUsersService usersService;
-	@Resource(name = "roomDao")
-	private RoomDao roomDao;
 
-	@Resource(name = "xiaoiDao")
-	private XiaoiDao xiaoiDao;
-
-	@Resource(name = "houseHoldDao")
-	private IHouseholdDao householdDao;
-
+	@Resource(name = "xiaoiService")
+	private IXiaoiService xiaoiService;
+	
+	@Resource(name = "houseHoldService")
+	private IHouseholdService houseHoldService;
+	
 	@Resource(name = "fauserService")
 	private IFamilyUserService fauserService;
 
@@ -85,7 +79,7 @@ public class AppRoomAction extends XiaoaiMessage {
 	 * @return success=true(添加成功)或者success=false(添加失败)
 	 * @throws IOException
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes", "static-access", "unused" })
+	@SuppressWarnings({ "rawtypes","unused" })
 	public String insert() throws IOException {
 		success = true;
 		message = null;
@@ -175,15 +169,15 @@ public class AppRoomAction extends XiaoaiMessage {
 						fu1 = fauserService.selectFamilyUserByGNU(users, family);
 						if (fu1 != null) {
 							if (userId.equals(fu1.getDna())) { // 判断该家庭组是不是该用户创建
-								Xiaoi xil = xiaoiDao
-										.selectXiaoiByNumber(xiaoNumber);
+								
+								Xiaoi xil =xiaoiService.selectXiaoiByNumber(xiaoNumber);
+								
 								if (xil != null) {
 									//拼接roomNumber
 									StringBuffer roomNumber = new StringBuffer("0-0-");
 									roomNumber.append(roomName);
 				
-									Room kk = roomDao.getRoomByGroupId(family,
-											roomNumber.toString());
+									Room kk = roomService.getRoomByGroupId(family,roomNumber.toString());
 									if (kk == null) { // 判断该家庭组是否已经添加了该房间
 										room.setRoomNumber(roomNumber.toString());
 										room.setFamilygroup(family);
@@ -191,7 +185,7 @@ public class AppRoomAction extends XiaoaiMessage {
 										room.setCreateTime(XATools.getTNowTime());
 										room.setCreator(xiaoNumber);
 										
-										List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
+										List<Xiaoi> allOnlineXiaois =xiaoiService.selectXiaoiByFaAll(family);
 										com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
 										HashMap hashMap = null;
 										boolean pushState = false;
@@ -201,8 +195,6 @@ public class AppRoomAction extends XiaoaiMessage {
 											if(xiaoi.getState()==1){
 												//在线，推送
 												hashMap = new HashMap();
-												//com.alibaba.fastjson.JSONObject j_ = new com.alibaba.fastjson.JSONObject();
-												//Object json3 = j_.toJSON(room);
 												
 												Map<String, Object> beanToMap = BeanUtil.beanToMap(room);
 												HashMap sMap = (HashMap) beanToMap;
@@ -303,7 +295,7 @@ public class AppRoomAction extends XiaoaiMessage {
 	 * @return success=true(修改成功)或者success=false(修改失败)
 	 * @throws IOException
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes", "static-access", "unused" })
+	@SuppressWarnings({"rawtypes", "static-access", "unused" })
 	public String update() throws IOException {
 		success = true;
 		message = null;
@@ -343,7 +335,7 @@ public class AppRoomAction extends XiaoaiMessage {
 						room.setRoomName(roomName);
 						success = roomService.updateRoom(room);
 						//推送
-						List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(room.getFamilygroup());
+						List<Xiaoi> allOnlineXiaois = xiaoiService.selectXiaoiByFaAll(room.getFamilygroup());
 						com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
 						HashMap hashMap = null;
 						for (Xiaoi xiaoi : allOnlineXiaois) {
@@ -460,10 +452,10 @@ public class AppRoomAction extends XiaoaiMessage {
 						fu1 = fauserService.selectFamilyUserByGNU(users, family);
 						if (fu1 != null) {
 							if (userId.equals(fu1.getDna())) { // 判断该家庭组是不是该用户创建
-								room = roomDao.getRoomByGroupId(family, roomNumber);
+								room = roomService.getRoomByGroupId(family, roomNumber);
 								if (room != null) { // 判断该家庭组是否已经添加了该房间
 									//推送
-									List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
+									List<Xiaoi> allOnlineXiaois =xiaoiService.selectXiaoiByFaAll(family);
 									com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
 									
 									boolean pushState = false;
@@ -553,8 +545,6 @@ public class AppRoomAction extends XiaoaiMessage {
 		String roomNumber = request.getParameter("roomNumber");
 		String groupNumber = request.getParameter("groupNumber");
 		
-		//Room requestParamToBean = BeanUtil.requestParamToBean(request, Room.class, true);
-		
 		Room room = null;
 		Familygroup family = null;
 		JSONObject json = new JSONObject();
@@ -583,9 +573,7 @@ public class AppRoomAction extends XiaoaiMessage {
 						.parseInt(groupNumber));
 				json.put("versionNumber", family.getVersionNumber()); // 版本号
 				if (family != null) {
-					room = roomDao.getRoomByGroupId(family, roomNumber);
-					//Object json3 = com.alibaba.fastjson.JSONObject.toJSON(room);
-					//com.alibaba.fastjson.JSONObject.
+					room = roomService.getRoomByGroupId(family, roomNumber);
 					if (room != null) { // 判断该家庭组是否已经添加了该房间
 						JSONArray array4 = new JSONArray();
 						json2.put("roomName", room.getRoomName()); // 房间名称
@@ -595,8 +583,8 @@ public class AppRoomAction extends XiaoaiMessage {
 						json2.put("roomNumber", room.getRoomNumber()); // 房间编号
 						json2.put("robot", room.getRobot()); // 终端绑定的编号
 
-						List<Household> householdList = householdDao
-								.selectHouseholdByroomID(room.getId());
+						List<Household> householdList =houseHoldService.selectHouseholdByroomID(room.getId());
+						
 						if (!XATools.isNull(householdList)) {
 							for (Household household : householdList) {
 								JSONObject json4 = new JSONObject();
@@ -712,17 +700,16 @@ public class AppRoomAction extends XiaoaiMessage {
 						FamilyUser fau = fauserService.selectFamilyUserByGNU(users, family);
 						if(fau!=null){
 							if(fau.getDna().equals(userId)){
-								room = roomDao.getRoomByRoomNumber(roomNumber,family);
-								List<Room> rooms = roomDao.getRoomByGroupId(family.getGroupId());
+								room = roomService.getRoomByRoomNumber(roomNumber,family);
+								List<Room> rooms = roomService.getRoomByGroupId(family.getGroupId());
 								String robot = null;
 
-								//TODO
 								if (room != null) {
 									if (XATools.isNull(room.getRobot())) {
 										//遍历该家庭组下的所有房间，看看是否一个终端绑定了两个房间，有的话解除前一个
 										////推送
 										//推送
-										List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
+										List<Xiaoi> allOnlineXiaois =xiaoiService.selectXiaoiByFaAll(family);
 										com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
 										
 										boolean pushState = false;
@@ -754,11 +741,11 @@ public class AppRoomAction extends XiaoaiMessage {
 													if(robot.equals(xiaoNumber)){
 														//解除绑定
 														room_.setRobot("");
-														roomDao.updateRoom(room_);
+														roomService.updateRoom(room_);
 													}
 												}
 												room.setRobot(xiaoNumber);
-												roomDao.updateRoom(room);
+												roomService.updateRoom(room);
 											} catch (Exception e) {
 												if (success == false) {
 													code = RoomCode.changeFalse;

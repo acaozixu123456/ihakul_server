@@ -16,13 +16,12 @@ import org.apache.struts2.ServletActionContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.xiaoai.dao.IUsersDao;
-import com.xiaoai.dao.IVersionDao;
 import com.xiaoai.entity.Familygroup;
 import com.xiaoai.entity.Users;
 import com.xiaoai.entity.Versions;
 import com.xiaoai.service.IFamilygroupService;
 import com.xiaoai.service.IUsersService;
+import com.xiaoai.service.IVersionService;
 import com.xiaoai.util.MyRequest;
 import com.xiaoai.util.Page;
 import com.xiaoai.util.XATools;
@@ -35,12 +34,9 @@ public class AppUsersAction extends XiaoaiMessage {
 	private IUsersService usersService;
 	@Resource(name="familyService")
 	private IFamilygroupService familyService;
-	@Resource(name="usersDao")
-	private IUsersDao userdao;
 	
-	@Resource(name="versionDao")
-	private IVersionDao  versionDao;
-	
+	@Resource(name="versionService")
+	private IVersionService versionService;
 	
 	private boolean success ;         //成功、失败标记
 	private  String message ;       //信息
@@ -83,7 +79,7 @@ public class AppUsersAction extends XiaoaiMessage {
 			message="密码不能为空!";
 		}	
 		if(success){
-			users=userdao.usersByuserLogin(userLogin);	 
+			users=usersService.usersByuserLogin(userLogin);
 		if(users!=null){ //判断账号是否存在
 		if(userPassword.equals(users.getUserPassword())){ //判断密码是否正确
 			users.setLoginLastTimes(XATools.getTNowTime());
@@ -175,7 +171,7 @@ public class AppUsersAction extends XiaoaiMessage {
 			success =false;
 		}
 		if(success){
-			users1=userdao.usersByuserLogin(userPhoneNumber);	 
+			users1=usersService.usersByuserLogin(userPhoneNumber);
 			if(users1==null){
 				Users users=new Users();
 				users.setUserName(userName);      
@@ -448,28 +444,12 @@ public class AppUsersAction extends XiaoaiMessage {
 			success =false;
 		}
 		if(success){
-		Versions version = versionDao.selectMaxVersions(versionPackage);
+		Versions version =versionService.selectMaxVersions(versionPackage);
 		if(version!=null){
-//			Xiaoiurl xu= xiaoiurlDao.selectXiaoiupdateBynumber(10001);
-//			if(xu!=null){
-//			String data=MyHttpRequest.sendGet(xu.getVersionUrl(), "");
-//			JSONObject json3=JSONObject.fromObject(data);
-			
-		//	path="http://"+xu.getUrl()+":"+XATools.getLocalPort()+request.getContextPath()+version.getVersionUrl();
 			path=request.getContextPath()+version.getVersionUrl();
-			//如果不是最新版本就返回链接url
-			//if(version.getVersionNumber()>Integer.parseInt(versionNumber)){ 
 				json2.put("url", path);
 				json2.put("versionNumber", version.getVersionNumber());
 				json2.put("upgradeClass", version.getUpgradeClass());
-//			}else{
-//				json2.put("url", "");
-//				json2.put("versionNumber", version.getVersionNumber());
-//			}
-//		}else{
-//			code=VersionCode.emptyUrl;
-//			message="服务器URL不能为空!";	
-//		}
 		}else{
 			code=VersionCode.noExistBean;
 			message="没有该包名!";	

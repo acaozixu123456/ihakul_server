@@ -147,6 +147,12 @@ public class VersionService implements IVersionService {
 		return versionDao.selectVersion();
 	}
 
+	@Override
+	public Versions selectMaxVersions(String versionPackage) {
+		
+		return versionDao.selectMaxVersions(versionPackage);
+	}
+
 	
 
 }

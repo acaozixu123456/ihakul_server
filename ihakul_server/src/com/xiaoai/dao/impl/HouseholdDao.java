@@ -9,7 +9,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.xiaoai.dao.IHouseholdDao;
 import com.xiaoai.entity.Familygroup;
@@ -53,7 +52,6 @@ public class HouseholdDao implements IHouseholdDao {
 	}
 
 	//删除
-	@Transactional
 	public boolean deleteHousehold(Household houseHold) {
 		boolean success=true;
 		try{

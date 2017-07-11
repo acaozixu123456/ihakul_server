@@ -75,4 +75,9 @@ public interface IVersionService {
 	 * @return
 	 */
 	public List<Versions> selectVersion();
+	/**
+	 * 查询包名下最大版本号的值
+	 * @return
+	 */
+	public Versions selectMaxVersions(String versionPackage);
 }

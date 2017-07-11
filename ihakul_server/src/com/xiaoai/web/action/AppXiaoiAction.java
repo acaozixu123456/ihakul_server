@@ -17,13 +17,10 @@ import org.springframework.stereotype.Controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.xiaoai.dao.IFamilygroupDao;
-import com.xiaoai.dao.impl.XiaoiDao;
 import com.xiaoai.entity.FamilyUser;
 import com.xiaoai.entity.Familygroup;
 import com.xiaoai.entity.Users;
 import com.xiaoai.entity.Xiaoi;
-import com.xiaoai.mina.service.push.PushMessage;
 import com.xiaoai.mina.service.push.PushMessage_Xiaoi;
 import com.xiaoai.service.IFamilyUserService;
 import com.xiaoai.service.IFamilygroupService;
@@ -47,14 +44,7 @@ public class AppXiaoiAction extends XiaoaiMessage {
 	private IFamilygroupService familyService;
 	@Resource(name = "usersService")
 	private IUsersService usersService;
-	@Resource(name = "familyDao")
-	private IFamilygroupDao familyDao;
-	@Resource(name = "xiaoiDao")
-	private XiaoiDao xiaoiDao;
 	
-	private boolean success; // 成功、失败标记
-	private String message; // 信息
-	private int code; // 标记
 	private static Logger logger = Logger.getLogger(AppXiaoiAction.class);
 
 	/**
@@ -158,7 +148,7 @@ public class AppXiaoiAction extends XiaoaiMessage {
 	 * @return fals=false(修改失败)或者fals=true(修改成功)
 	 * @throws IOException
 	 */
-	@SuppressWarnings({ "static-access", "unchecked", "rawtypes" })
+	@SuppressWarnings({"unchecked", "rawtypes", "unused" })
 	public String update() throws IOException {
 		HttpServletRequest request = ServletActionContext.getRequest();
 		request.setCharacterEncoding("utf-8");
@@ -205,7 +195,7 @@ public class AppXiaoiAction extends XiaoaiMessage {
 								if(familyUser.getDna().equals(userId)){
 									//推送
 									//获取当前在线的小艾
-									List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(familygroup);
+									List<Xiaoi> allOnlineXiaois = xiaoiService.selectXiaoiByFaAll(familygroup);
 									com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
 									boolean pushState = false;
 									boolean flag = false;
@@ -285,7 +275,7 @@ public class AppXiaoiAction extends XiaoaiMessage {
 	 *            用户id
 	 * @throws IOException
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	public String delete() throws IOException {
 		JSONObject json = new JSONObject();
 		XiaoiResult xr = new XiaoiResult();
@@ -457,11 +447,10 @@ public class AppXiaoiAction extends XiaoaiMessage {
 											if (userId.equals(fu1.getDna())) { // 判断该家庭组是不是该用户创建
 												//推送
 												//获取当前在线的小艾
-												List<Xiaoi> allOnlineXiaois = xiaoiDao.selectXiaoiByFa(family);
+												List<Xiaoi> allOnlineXiaois = xiaoiService.selectXiaoiByFaAll(family);
 												com.alibaba.fastjson.JSONObject json2 = new com.alibaba.fastjson.JSONObject();
 												boolean pushState = false;
 												boolean flag = false;
-												HashMap hashMap = null;
 												for (Xiaoi xiaoi_ : allOnlineXiaois) {
 													//判断当前小艾是否在线
 													if(xiaoi_.getState()==1){
