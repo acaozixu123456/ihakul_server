@@ -1,0 +1,24 @@
+
+#缓存key命名为：方法名+参数（若参数为对象，则为对象的唯一标识如groupNumber）
+
+
+#家庭组缓存
+@Caching(
+			evict={
+				@CacheEvict(value="hakuCache",key="'getFamilyGroupByXiaoi'+#familygroup.getGroupNumber()"),
+				@CacheEvict(value="hakuCache",key="'getFamilyGroup'+#familygroup.getGroupNumber()")
+			}
+	)
+
+#家电缓存
+@Cacheable(value="hakuCache_houseHold",key="'getRoomByRoomNumber1'+#family.getGroupNumber()+#string"),
+
+@Cacheable(value="hakuCache_houseHold",key="'selectHouseholdBygroupId'+#groupId"),
+
+@Cacheable(value="hakuCache_houseHold",key="'selectHouseholdByroomIDandGroupId'+#id+#groupId"),
+
+@Cacheable(value="hakuCache_houseHold",key="'selectHouseholdByeaName'+#eaName"),
+
+@Cacheable(value="hakuCache_houseHold",key="'selectHouseholdByroomID'+#roomId"),
+
+@Cacheable(value="hakuCache_houseHold",key="'selectHouseholdByid'+#id"),
